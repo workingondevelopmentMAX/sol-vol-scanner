@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SOL Vol Scanner</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a1a19">
+<style>
+:root {
+  color-scheme: light;
+  --surface-0:#f4f3f0; --surface-1:#fcfcfb; --border:#e3e1dc;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#7a7974;
+  --grid:#e9e7e2;
+  --series-iv:#2a78d6; --series-rv:#eb6834; --series-faded:#a8a7a1; --series-price:#52514e;
+  --rich:#d03b3b; --rich-band:rgba(208,59,59,.10);
+  --cheap:#0b7d0b; --cheap-band:rgba(12,163,12,.10);
+  --fair:#7a7974; --good:#0b7d0b; --bad:#c42f2f;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --surface-0:#111110; --surface-1:#1a1a19; --border:#2e2e2b;
+    --text-primary:#f0efec; --text-secondary:#c3c2b7; --text-muted:#8f8e86;
+    --grid:#2a2a27;
+    --series-iv:#3987e5; --series-rv:#d95926; --series-faded:#5c5b56; --series-price:#c3c2b7;
+    --rich:#e66767; --rich-band:rgba(230,103,103,.14);
+    --cheap:#0ca30c; --cheap-band:rgba(12,163,12,.14);
+    --fair:#8f8e86; --good:#3fbf3f; --bad:#e66767;
+  }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--surface-0); color:var(--text-primary);
+  font:15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+main { max-width:none; margin:0 auto; padding:12px 12px 40px; }
+.grid { display:grid; gap:12px; grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"verdict" "hist" "term" "idea" "exit" "greeks" "log"; }
+.grid > .card { margin:0; min-width:0; }
+.a-idea, .a-greeks, .a-log, .a-exit { align-self:start; }
+.a-verdict { grid-area:verdict; } .a-hist { grid-area:hist; } .a-term { grid-area:term; }
+.a-idea { grid-area:idea; } .a-greeks { grid-area:greeks; } .a-log { grid-area:log; }
+.step { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%;
+  background:var(--text-primary); color:var(--surface-1); font-size:11px; font-weight:700; margin-right:8px; letter-spacing:0; vertical-align:1px; }
+.gitems .greek:first-child { border-top:0; padding-top:0; }
+/* iPad / tablet: same top-down order, wider cards */
+@media (min-width:700px) {
+  main { padding:20px 20px 48px; }
+  .grid { grid-template-columns:repeat(2, minmax(0,1fr));
+    grid-template-areas:"verdict term" "hist hist" "idea exit" "greeks greeks" "log log"; }
+  .grid.no-greeks { grid-template-areas:"verdict term" "hist hist" "idea log"; }
+  header h1 { font-size:20px; }
+}
+/* desktop: 1 market read -> 2-3 context -> 4-5 the idea and its risk -> 6 track record */
+@media (min-width:1100px) {
+  main { padding:24px 28px 56px; }
+  .grid { grid-template-columns:repeat(3, minmax(0,1fr));
+    grid-template-areas:"verdict verdict verdict" "hist hist term" "idea exit exit" "idea greeks greeks" "log log log"; }
+  .grid .esteps { grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .grid.no-greeks { grid-template-areas:"verdict verdict verdict" "hist hist term" "idea log log"; }
+  .grid .stats { grid-template-columns:repeat(4, minmax(0,1fr)); }
+  .gitems { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); column-gap:24px; }
+  .gitems .greek:nth-child(2) { border-top:0; padding-top:0; }
+  .vbody { display:grid; grid-template-columns:auto minmax(0,1fr); gap:28px; align-items:center; }
+  .vbody .stats { margin-top:0; }
+  .verdict { flex-direction:column; align-items:flex-start; gap:8px; max-width:260px; }
+  .a-greeks table { max-width:720px; }
+  .a-log table { max-width:900px; }
+}
+@media (max-width:380px) { .badge { font-size:24px; } .stat .v { font-size:18px; } }
+header { display:flex; justify-content:space-between; align-items:baseline; padding:6px 4px 10px; }
+header h1 { font-size:17px; margin:0; letter-spacing:.2px; }
+header .upd { font-size:12px; color:var(--text-muted); text-align:right; }
+.banner { border-radius:10px; padding:10px 12px; margin:0 0 10px; font-size:13px; border:1px solid; }
+.banner.warn { border-color:var(--rich); color:var(--text-primary); background:var(--rich-band); }
+.banner.info { border-color:var(--border); color:var(--text-secondary); background:var(--surface-1); }
+.card { background:var(--surface-1); border:1px solid var(--border); border-radius:14px; padding:14px; margin-bottom:12px; }
+.card h2 { font-size:13px; text-transform:uppercase; letter-spacing:.6px; color:var(--text-secondary); margin:0 0 10px; font-weight:600; }
+.verdict { display:flex; align-items:center; gap:14px; }
+.badge { font-size:30px; font-weight:800; letter-spacing:1px; padding:6px 14px; border-radius:12px; border:2px solid currentColor; }
+.badge.RICH { color:var(--rich); } .badge.CHEAP { color:var(--cheap); } .badge.FAIR, .badge.UNKNOWN { color:var(--fair); }
+.reason { font-size:13px; color:var(--text-secondary); margin-top:10px; }
+.stats { display:grid; grid-template-columns:repeat(2,1fr); gap:10px 14px; margin-top:12px; }
+.stat .k { font-size:12px; color:var(--text-muted); } .stat .v { font-size:20px; font-weight:650; font-variant-numeric:tabular-nums; }
+.controls { display:flex; gap:8px; flex-wrap:wrap; }
+.seg { display:inline-flex; border:1px solid var(--border); border-radius:9px; overflow:hidden; margin-bottom:8px; }
+.seg button { background:none; border:0; color:var(--text-secondary); padding:6px 12px; font:inherit; font-size:13px; }
+.seg button.on { background:var(--text-primary); color:var(--surface-1); }
+.legend { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:var(--text-secondary); margin:4px 0 2px; }
+.legend i { display:inline-block; width:14px; height:3px; border-radius:2px; vertical-align:middle; margin-right:5px; }
+.legend i.band { height:10px; width:12px; border-radius:2px; }
+.chart { position:relative; }
+.chart svg { display:block; width:100%; height:auto; touch-action:pan-y; }
+.tip { position:absolute; pointer-events:none; background:var(--surface-1); border:1px solid var(--border);
+  border-radius:8px; padding:6px 8px; font-size:12px; box-shadow:0 2px 8px rgba(0,0,0,.15); display:none; white-space:nowrap; max-width:100%; }
+.tip .muted { font-size:11px; }
+.tip b { font-weight:650; }
+.kv { display:grid; grid-template-columns:1fr auto; gap:6px 10px; font-size:14px; }
+.kv .k { color:var(--text-secondary); } .kv .v { text-align:right; font-weight:600; font-variant-numeric:tabular-nums; }
+.legs { font-size:14px; margin-bottom:10px; }
+.legs div { padding:3px 0; } .legs .act { display:inline-block; width:38px; font-weight:700; }
+.muted { color:var(--text-muted); font-size:12px; }
+.greek { border-top:1px solid var(--border); padding:10px 0; }
+.greek:first-of-type { border-top:0; padding-top:0; }
+.greek .h { display:flex; justify-content:space-between; font-weight:650; }
+.greek .h span:last-child { font-variant-numeric:tabular-nums; color:var(--text-secondary); font-weight:500; font-size:13px; }
+.greek p { margin:4px 0 0; font-size:13.5px; } .greek p.s { color:var(--text-secondary); }
+table { width:100%; border-collapse:collapse; font-size:13px; font-variant-numeric:tabular-nums; }
+th, td { padding:6px 4px; text-align:right; border-bottom:1px solid var(--border); }
+th:first-child, td:first-child { text-align:left; }
+th { color:var(--text-muted); font-weight:500; font-size:12px; }
+.pos { color:var(--good); } .neg { color:var(--bad); }
+details summary { cursor:pointer; color:var(--text-secondary); font-size:13px; margin-top:8px; }
+.why { margin-top:14px; border-top:1px solid var(--border); padding-top:12px; }
+.why h3 { font-size:13px; margin:14px 0 6px; color:var(--text-primary); }
+.why ul { margin:0; padding-left:18px; font-size:13.5px; } .why li { margin:4px 0; }
+.conv { border:1px solid var(--border); border-radius:10px; padding:10px 12px; }
+.conv-top { display:flex; justify-content:space-between; align-items:baseline; font-weight:700; }
+.conv-top .sc { font-variant-numeric:tabular-nums; color:var(--text-secondary); font-weight:600; }
+.conv.High { border-color:var(--good); } .conv.High .lbl { color:var(--good); }
+.conv.Medium { border-color:#c98500; } .conv.Medium .lbl { color:#b07400; }
+.conv.Low .lbl, .conv.None .lbl { color:var(--text-secondary); }
+@media (prefers-color-scheme: dark) { .conv.Medium .lbl { color:#eda100; } }
+.meter { position:relative; height:8px; border-radius:4px; background:var(--grid); margin:8px 0 6px; overflow:hidden; }
+.meter b { position:absolute; left:0; top:0; bottom:0; border-radius:4px; background:var(--text-secondary); }
+.conv.High .meter b { background:var(--good); } .conv.Medium .meter b { background:#c98500; }
+.meter i { position:absolute; top:0; bottom:0; width:2px; background:var(--surface-1); }
+.conv-act { font-size:13.5px; } .conv .muted { margin-top:4px; }
+.parts { width:100%; margin-top:6px; } .parts td { text-align:left; vertical-align:top; font-size:12.5px; }
+.parts td.pt { text-align:right; white-space:nowrap; color:var(--text-secondary); }
+.a-exit { grid-area:exit; }
+.exit-sum { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px 16px; margin-bottom:6px; }
+.esteps { display:grid; gap:10px; margin-top:10px; grid-template-columns:minmax(0,1fr); }
+.estep { border:1px solid var(--border); border-radius:10px; padding:10px 12px; }
+.estep .eh { font-weight:700; font-size:14px; }
+.estep .el { font-weight:600; font-variant-numeric:tabular-nums; margin-top:2px; }
+.estep p { margin:4px 0 0; font-size:13px; } .estep p.s { color:var(--text-secondary); }
+.estep.price_stop, .estep.vol_stop { border-left:3px solid var(--rich); }
+.estep.take_profit { border-left:3px solid var(--good); }
+.ticket { margin-top:8px; font:12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:var(--surface-0);
+  border-radius:8px; padding:7px 9px; color:var(--text-primary); overflow-wrap:anywhere; }
+.ticket span { display:block; font:600 10px/1.4 -apple-system, "Segoe UI", sans-serif; letter-spacing:.6px; text-transform:uppercase; color:var(--text-muted); }
+.after { font-size:13.5px; margin:12px 0 6px; }
+h3.sub { font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:var(--text-muted); margin:6px 0 4px; font-weight:600; }
+.tryl summary { margin-top:10px; }
+.tl-grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; margin:8px 0; }
+.tl-grid label { font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px; }
+.tl-grid input { font:inherit; font-size:14px; padding:6px 8px; border:1px solid var(--border); border-radius:8px; background:var(--surface-0); color:var(--text-primary); width:100%; }
+.tl-out { font-size:13.5px; margin-bottom:6px; }
+footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
+.no-trade { font-size:16px; font-weight:650; margin-bottom:6px; }
+</style>
+</head>
+<body>
+<main id="app"><p class="muted">Loading…</p></main>
+<script src="data/data.js"></script>
+<script>
+(async function () {
+  let D = window.SCANNER_DATA;
+  if (!D) { try { D = await (await fetch("data/latest.json", {cache:"no-store"})).json(); } catch (e) {} }
+  const app = document.getElementById("app");
+  if (!D || !D.latest) {
+    app.innerHTML = `<div class="card"><h2>No data yet</h2><p>Run <b>run_scan.bat</b> on the laptop once, then reload.</p>
+      ${D && D.error ? `<p class="muted">Last error: ${esc(D.error)}</p>` : ""}</div>`;
+    return;
+  }
+  const L = D.latest, V = L.verdict, S = L.suggestion;
+  const pct = x => x == null ? "n/a" : (x * 100).toFixed(1) + "%";
+  const usd = (x, d = 2) => x == null ? "n/a" : (x < 0 ? "-$" : "$") + Math.abs(x).toLocaleString(undefined, {minimumFractionDigits:d, maximumFractionDigits:d});
+  const sgt = iso => new Date(iso).toLocaleString("en-SG", {timeZone:"Asia/Singapore", day:"numeric", month:"short", hour:"2-digit", minute:"2-digit"});
+  function esc(s) { return String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+  function whyBlock(S) {
+    const C = S.conviction, Y = S.why;
+    if (!C || !Y) return "";
+    const low = C.label === "Low";
+    return `<div class="why">
+      <div class="conv ${C.label}"><div class="conv-top"><span class="lbl">Conviction: ${C.label}</span><span class="sc">${C.score}/100</span></div>
+        <div class="meter" role="img" aria-label="Conviction ${C.score} out of 100"><b style="width:${C.score}%"></b><i style="left:${D.config?.conviction?.medium ?? 45}%"></i><i style="left:${D.config?.conviction?.high ?? 70}%"></i></div>
+        <div class="conv-act"><b>${esc(C.action)}</b></div>
+        ${C.caps.map(c => `<div class="muted">${esc(c)}</div>`).join("")}
+        <details><summary>What drives the score</summary><table class="parts">
+          ${C.parts.map(p => `<tr><td><b>${esc(p.name)}</b><br><span class="muted">${esc(p.why)}</span></td><td class="pt">${Math.round(p.weight * p.score)} / ${p.weight}</td></tr>`).join("")}
+        </table></details></div>
+      ${low ? `<p class="muted" style="margin:10px 0 0">It is fine not to trade. Below is why the rules picked this spread, so you can see what is missing.</p>` : ""}
+      <h3>${low ? "Why it was considered" : "Why this trade"}: market conditions</h3><ul>${Y.market.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+      <h3>How it fits your plan</h3><ul>${Y.goals.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+    </div>`;
+  }
+
+  const ageH = (Date.now() - new Date(D.last_good_at || L.generated_at)) / 36e5;
+  let html = `<header><h1>SOL Vol Scanner</h1><div class="upd">Updated ${sgt(D.last_good_at || L.generated_at)} SGT<br>SOL ${usd(L.index_price)}</div></header>`;
+  if (D.sample) html += `<div class="banner info"><b>Sample data.</b> These numbers are synthetic, made for testing. Run the scanner for real data.</div>`;
+  if (D.status === "error") html += `<div class="banner warn"><b>Stale data.</b> The last run failed (${esc(D.error)}). Showing data from ${sgt(D.last_good_at)} SGT.</div>`;
+  else if (ageH > 36 && !D.sample) html += `<div class="banner warn"><b>Stale data.</b> Last update was ${Math.round(ageH)} hours ago. Is the laptop's daily task running?</div>`;
+  if (L.checks && L.checks.price_units && L.checks.price_units.ok === false) html += `<div class="banner warn">${esc(L.checks.price_units.note)}</div>`;
+
+  // ---- verdict
+  const metric = V.mode === "percentile"
+    ? `<div class="stat"><div class="k">IV percentile</div><div class="v">${Math.round(V.percentile)}</div></div>`
+    : `<div class="stat"><div class="k">IV / RV30 (bootstrap)</div><div class="v">${V.iv_rv_ratio ? V.iv_rv_ratio.toFixed(2) + "×" : "n/a"}</div></div>`;
+  html += `<div class="grid${S ? "" : " no-greeks"}"><section class="card a-verdict"><h2><span class="step">1</span>Is volatility rich or cheap?</h2>
+    <div class="vbody"><div class="verdict"><span class="badge ${V.label}">${V.label}</span>
+      <div class="muted">${V.mode === "percentile" ? `vs ${V.history_days} days of IV history` : `${V.history_days || 0} of ${D.config?.vol?.min_history_days ?? 60} days of IV history collected — using IV vs realised vol until then`}</div></div>
+    <div class="stats">
+      <div class="stat"><div class="k">ATM implied vol (30-day)</div><div class="v">${pct(V.atm_iv)}</div></div>
+      ${metric}
+      <div class="stat"><div class="k">Realised vol, 20 days</div><div class="v">${pct(V.rv20)}</div></div>
+      <div class="stat"><div class="k">Realised vol, 30 days</div><div class="v">${pct(V.rv30)}</div></div>
+    </div></div>
+    <div class="reason">${esc(V.reason)}</div></section>`;
+
+  // ---- charts
+  html += `<section class="card a-hist"><h2><span class="step">2</span>Implied vs realised volatility</h2>
+    <div class="controls"><div class="seg" id="rng">${["1M","3M","6M","1Y"].map((r,i)=>`<button data-d="${[30,91,182,365][i]}" class="${r==="3M"?"on":""}">${r}</button>`).join("")}</div>
+      <div class="seg"><button id="pricebtn" aria-pressed="false">SOL price</button></div></div>
+    <div class="legend"><span><i style="background:var(--series-iv)"></i>Implied vol (30-day ATM)</span><span><i style="background:var(--series-rv)"></i>Realised vol (30-day)</span><span id="pricelegend" hidden><i style="background:var(--series-price)"></i>SOL price (lower panel)</span>
+      <span><i class="band" style="background:var(--rich-band);outline:1px solid var(--rich)"></i>IV was rich</span><span><i class="band" style="background:var(--cheap-band);outline:1px solid var(--cheap)"></i>IV was cheap</span></div>
+    <div class="chart" id="hist"></div>
+    <div class="muted" id="histnote"></div></section>`;
+  html += `<section class="card a-term"><h2><span class="step">3</span>Term structure (IV by expiry)</h2>
+    <div class="legend"><span><i style="background:var(--series-iv)"></i>Today</span>${L.term_structure_last_week ? `<span><i style="background:var(--series-faded)"></i>${L.term_structure_last_week.date}</span>` : ""}</div>
+    <div class="chart" id="term"></div>
+    <div class="muted">Normally longer expiries cost more. If the short end sits above the long end, the market is stressed.</div></section>`;
+
+  // ---- suggestion
+  if (!S) {
+    const W = L.why_no_trade || {market:[L.no_trade_reason], goals:[]};
+    html += `<section class="card a-idea"><h2><span class="step">4</span>Today's idea</h2><div class="no-trade">No trade today</div>
+      <div class="why" style="border-top:0;margin-top:4px;padding-top:0">
+        <div class="conv None"><div class="conv-top"><span class="lbl">Conviction: none</span><span class="sc">no trade</span></div>
+          <div class="conv-act">Sitting out is the right call today. Nothing passed the rules.</div></div>
+        <h3>Market conditions</h3><ul>${W.market.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+        ${W.goals.length ? `<h3>How this fits your plan</h3><ul>${W.goals.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+      </div></section>`;
+  } else {
+    const z = S.sizing;
+    html += `<section class="card a-idea"><h2><span class="step">4</span>Today's idea: bull put spread</h2>
+      <div class="legs"><div><span class="act">Sell</span>${esc(S.short_leg.name)} <span class="muted">delta ${S.short_delta.toFixed(2)}</span></div>
+      <div><span class="act">Buy</span>${esc(S.long_leg.name)}</div></div>
+      <div class="kv">
+        <div class="k">Expiry</div><div class="v">${S.expiry} (${Math.round(S.dte)} days)</div>
+        <div class="k">Credit, conservative / mid</div><div class="v">${usd(S.credit_conservative)} / ${usd(S.credit_mid)} per SOL</div>
+        <div class="k">Max loss</div><div class="v">${usd(S.max_loss)} per SOL</div>
+        <div class="k">Break-even</div><div class="v">${usd(S.break_even)}</div>
+        <div class="k">Approx. chance of profit</div><div class="v">${Math.round(S.prob_profit_approx * 100)}%</div>
+        <div class="k">Size</div><div class="v">${z.contracts} × ${S.contract_size} SOL</div>
+        <div class="k">Total at risk / credit</div><div class="v">${usd(z.usd_at_risk)} / ${usd(z.credit_usd)}</div>
+        <div class="k">Liquidity</div><div class="v">OI ≥ ${Math.round(S.liquidity.min_oi)} · spread ≤ ${Math.round(S.liquidity.worst_spread_pct)}%</div>
+      </div>
+      ${z.note ? `<div class="banner warn" style="margin-top:10px">${esc(z.note)}</div>` : ""}
+      <details class="tryl"><summary>Try different loss limits</summary>
+        <div class="tl-grid">
+          <label>Max loss per trade ($)<input id="tl-per" type="number" min="0" step="10" value="${D.config.risk.max_loss_per_trade_usd}"></label>
+          <label>Max loss, all spreads ($)<input id="tl-tot" type="number" min="0" step="10" value="${D.config.risk.max_total_spread_risk_usd}"></label>
+          <label>Already open ($)<input id="tl-open" type="number" min="0" step="10" value="${D.config.risk.current_open_risk_usd}"></label>
+        </div>
+        <div id="tl-out" class="tl-out"></div>
+        <div class="muted">Preview only. To keep new limits, double-click <b>set_limits.bat</b> on the laptop, then rescan.</div>
+      </details>
+      <div class="chart" id="payoff" style="margin-top:10px"></div>
+      <div class="muted">Payoff at expiry per SOL. Settles in USDC — to own more SOL, buy spot separately.</div>
+      ${L.alternates && L.alternates.length ? `<details><summary>${L.alternates.length} alternate(s)</summary><table><tr><th>Expiry</th><th>Strikes</th><th>Credit</th><th>Max loss</th></tr>
+        ${L.alternates.map(a => `<tr><td>${a.expiry}</td><td>${a.short_leg.strike}/${a.long_leg.strike}</td><td>${usd(a.credit_conservative)}</td><td>${usd(a.max_loss)}</td></tr>`).join("")}</table></details>` : ""}
+      ${whyBlock(S)}
+    </section>`;
+    const E = S.exit_plan;
+    if (E) html += `<section class="card a-exit"><h2><span class="step">5</span>Exit plan: set these the moment you enter</h2>
+      <div class="exit-sum">
+        <div class="stat"><div class="k">Loss if the stop fires</div><div class="v">≈ ${usd(E.loss_at_stop_usd, 0)}</div><div class="muted">instead of ${usd(E.max_loss_usd, 0)} maximum</div></div>
+        <div class="stat"><div class="k">Win rate needed to break even</div><div class="v">${Math.round(E.breakeven_win_rate * 100)}%</div><div class="muted">this trade's rough chance of profit: ${Math.round(E.prob_profit_approx * 100)}%</div></div>
+      </div>
+      ${E.illustrative_one_contract ? `<div class="muted">Order sizes shown for 1 contract (your limits currently allow 0).</div>` : ""}
+      <div class="esteps">${E.steps.map(st => `<div class="estep ${st.key}"><div class="eh">${esc(st.title)}</div>
+        <div class="el">${esc(st.level)}</div><p>${esc(st.result)}</p><p class="s">${esc(st.why)}</p>
+        <div class="ticket"><span>Order</span>${esc(st.ticket)}</div></div>`).join("")}</div>
+      <p class="after"><b>If a stop fires:</b> ${esc(E.after_stop)}</p>
+      <div class="muted">${esc(E.order_note)} Settings: take profit ${E.settings.take_profit_pct}%${E.settings.split_take_profit ? " on half" : ""} · stop ${E.settings.stop_multiple}× credit · IV +${E.settings.iv_points_per_pct_drop} pt per 1% drop · close ${E.settings.time_exit_dte} days before expiry (change in config.toml, [exits]). Levels are model estimates.</div>
+    </section>`;
+    const P = S.greeks_panel;
+    html += `<section class="card a-greeks"><h2><span class="step">6</span>The Greeks, in plain language</h2><div class="muted" style="margin-bottom:8px">${esc(P.size_note)}</div>
+      <div class="gitems">${P.items.map(g => `<div class="greek"><div class="h"><span>${g.greek}</span><span>${(g.greek === "Gamma" ? g.value.toFixed(4) : usd(g.value))} ${esc(g.unit)}</span></div>
+        <p>${esc(g.now)}</p><p class="s"><b>When it shifts:</b> ${esc(g.shift)}</p></div>`).join("")}</div>
+      <div class="greek gsum"><p><b>Hurts most:</b> ${esc(P.summary.hurts_most)}</p><p><b>Helps most:</b> ${esc(P.summary.helps_most)}</p></div>
+      <h2 style="margin-top:12px">What if… (approximate)</h2>
+      <table><tr><th>SOL tomorrow</th>${P.what_if.price_tomorrow.map(r => `<th>${r.move_pct > 0 ? "+" : ""}${r.move_pct}%</th>`).join("")}</tr>
+        <tr><td>P&amp;L</td>${P.what_if.price_tomorrow.map(r => `<td class="${r.pnl_usd >= 0 ? "pos" : "neg"}">${usd(r.pnl_usd, 0)}</td>`).join("")}</tr></table>
+      <table style="margin-top:6px"><tr><th>IV today</th>${P.what_if.iv_today.map(r => `<th>${r.iv_points > 0 ? "+" : ""}${r.iv_points} pts</th>`).join("")}</tr>
+        <tr><td>P&amp;L</td>${P.what_if.iv_today.map(r => `<td class="${r.pnl_usd >= 0 ? "pos" : "neg"}">${usd(r.pnl_usd, 0)}</td>`).join("")}</tr></table>
+      <div class="muted" style="margin-top:6px">${esc(P.what_if.label)}</div></section>`;
+  }
+
+  // ---- log
+  const log = (D.log || []).filter(r => r.trade === "yes").slice(0, 20);
+  html += `<section class="card a-log"><h2><span class="step">7</span>Track record</h2>
+    ${(() => { const pr = D.premium || {trades:0};
+      return pr.trades ? `<div class="exit-sum" style="margin-bottom:10px"><div class="stat"><div class="k">SOL bought with premium</div><div class="v">${pr.sol_bought.toFixed(3)} SOL</div></div>
+        <div class="stat"><div class="k">Premium collected</div><div class="v">${usd(pr.credit_usd)}</div><div class="muted">from ${pr.trades} trade(s)</div></div></div>`
+      : `<div class="muted" style="margin-bottom:10px">To track SOL bought with premium, add each trade you take to <b>my_premium_log.csv</b> (opens in Excel): date, spread, credit_usd, and the SOL price you bought at.</div>`; })()}
+    <h3 class="sub">Past suggestions</h3>${log.length ? `<table><tr><th>Date</th><th>Spread</th><th>Credit</th><th>Outcome</th></tr>
+    ${log.map(r => `<tr><td>${r.date}</td><td>${r.expiry?.slice(5)} ${(+r.short_strike)}/${(+r.long_strike)}</td><td>${usd(+r.credit_conservative)}</td>
+      <td>${r.outcome ? `${esc(r.outcome)}${r.pnl_per_sol ? ` <span class="${+r.pnl_per_sol >= 0 ? "pos" : "neg"}">${usd(+r.pnl_per_sol)}</span>` : ""}` : `<span class="muted">open</span>`}</td></tr>`).join("")}</table>`
+    : `<div class="muted">No trade suggestions yet.</div>`}</section>`;
+  html += `</div><footer>Snapshot from the last daily run, not live prices. Check live quotes on Deribit before trading. Suggestions only, not financial advice. This tool cannot place orders.</footer>`;
+  app.innerHTML = html;
+
+  // ================= charts (plain SVG) =================
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; }
+  function niceTicks(lo, hi, n = 4) {
+    const span = hi - lo || 1, step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+    const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => span / s <= n) || mag * 10;
+    const out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(10)); return out;
+  }
+  function frame(host, H = 220) {
+    host.innerHTML = ""; const W = Math.max(280, Math.round(host.clientWidth || 520)), m = {l:42, r:12, t:10, b:26};
+    const svg = el("svg", {viewBox:`0 0 ${W} ${H}`, role:"img"}, host);
+    const tip = document.createElement("div"); tip.className = "tip"; host.appendChild(tip);
+    return {svg, tip, W, H, m, iw:W - m.l - m.r, ih:H - m.t - m.b};
+  }
+  function axes(f, x, y, yt, fmtY, xt, fmtX) {
+    yt.forEach(v => { el("line", {x1:f.m.l, x2:f.W - f.m.r, y1:y(v), y2:y(v), stroke:css("--grid"), "stroke-width":1}, f.svg);
+      const t = el("text", {x:f.m.l - 6, y:y(v) + 4, "text-anchor":"end", "font-size":11, fill:css("--text-muted")}, f.svg); t.textContent = fmtY(v); });
+    xt.forEach((v, i) => { const t = el("text", {x:x(v), y:f.H - 8, "text-anchor":i === 0 && x(v) < f.m.l + 20 ? "start" : (i === xt.length - 1 && x(v) > f.W - f.m.r - 20 ? "end" : "middle"), "font-size":11, fill:css("--text-muted")}, f.svg); t.textContent = fmtX(v); });
+  }
+  function path(pts) { let d = "", pen = false; pts.forEach(p => { if (p == null) { pen = false; return; } d += (pen ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1); pen = true; }); return d; }
+  function hover(f, xs, onMove) {
+    const ov = el("rect", {x:f.m.l, y:f.m.t, width:f.iw, height:f.ih, fill:"transparent"}, f.svg);
+    const cross = el("line", {y1:f.m.t, y2:f.m.t + f.ih, stroke:css("--text-muted"), "stroke-width":1, "stroke-dasharray":"3 3", visibility:"hidden"}, f.svg);
+    const move = ev => {
+      const r = f.svg.getBoundingClientRect(), px = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
+      const sx = px * f.W / r.width; let best = 0;
+      xs.forEach((v, i) => { if (Math.abs(v - sx) < Math.abs(xs[best] - sx)) best = i; });
+      cross.setAttribute("x1", xs[best]); cross.setAttribute("x2", xs[best]); cross.setAttribute("visibility", "visible");
+      f.tip.innerHTML = onMove(best); f.tip.style.display = "block";
+      const tx = Math.min(Math.max(xs[best] * r.width / f.W - f.tip.offsetWidth / 2, 0), r.width - f.tip.offsetWidth);
+      f.tip.style.left = tx + "px"; f.tip.style.top = "-6px";
+    };
+    const out = () => { cross.setAttribute("visibility", "hidden"); f.tip.style.display = "none"; };
+    ov.addEventListener("mousemove", move); ov.addEventListener("touchstart", move, {passive:true}); ov.addEventListener("touchmove", move, {passive:true});
+    ov.addEventListener("mouseleave", out); ov.addEventListener("touchend", () => setTimeout(out, 1500));
+  }
+
+  const byDate = {}; D.history.forEach(r => byDate[r.date] = r);
+  const addDays = (d, n) => new Date(new Date(d + "T00:00:00Z").getTime() + n * 864e5).toISOString().slice(0, 10);
+  const signed = v => (v >= 0 ? "+" : "") + (v * 100).toFixed(1) + "%";
+  function aftermath(r) {
+    // What happened over the following 30 days: price move and realised vol vs the IV priced on this day.
+    const later = byDate[addDays(r.date, 30)];
+    if (!later) return `<span class="muted">Next 30 days: not known yet</span>`;
+    const move = r.index_price && later.index_price ? later.index_price / r.index_price - 1 : null;
+    let out = `Next 30 days: SOL ${move == null ? "n/a" : signed(move)}`;
+    if (later.rv30 != null && r.atm_iv_30d != null) {
+      out += `, realised ${pct(later.rv30)} vs implied ${pct(r.atm_iv_30d)}<br><span class="muted">`
+        + (later.rv30 < r.atm_iv_30d ? "Moves were smaller than priced: option sellers were paid" : "Moves were bigger than priced: option buyers were paid") + `</span>`;
+    }
+    return out;
+  }
+
+  let showPrice = false; try { showPrice = localStorage.getItem("solvol.showPrice") === "1"; } catch (e) {}
+  function drawHistory(days) {
+    const host = document.getElementById("hist");
+    const w = host.clientWidth || 520, base = Math.round(Math.min(Math.max(w * (w > 700 ? 0.5 : 0.42), 210), w > 700 ? 430 : 340));
+    const H = showPrice ? base + 160 : base, f = frame(host, H);
+    const gap = 22, h1 = showPrice ? base - 50 : f.ih, top2 = f.m.t + h1 + gap, h2 = showPrice ? f.ih - h1 - gap : 0;
+    const end = new Date(D.history.length ? D.history[D.history.length - 1].date : Date.now());
+    const start = new Date(end - days * 864e5);
+    const rows = D.history.filter(r => new Date(r.date) >= start && (r.atm_iv_30d != null || r.rv30 != null || r.index_price != null));
+    if (!rows.length) { host.innerHTML = `<p class="muted">No history yet.</p>`; return; }
+    const t = r => new Date(r.date).getTime();
+    const t0 = t(rows[0]), t1 = Math.max(t(rows[rows.length - 1]), t0 + 864e5);
+    const vals = rows.flatMap(r => [r.atm_iv_30d, r.rv30]).filter(v => v != null);
+    const lo = Math.max(0, Math.min(...vals) * 0.9), hi = Math.max(...vals) * 1.08;
+    const x = v => f.m.l + (v - t0) / (t1 - t0) * f.iw, y = v => f.m.t + h1 - (v - lo) / (hi - lo) * h1;
+    const dayW = f.iw / Math.max(1, (t1 - t0) / 864e5);
+    // Shade runs of consecutive RICH / CHEAP days (across both panels), at least 8px wide so a lone day is visible.
+    const clipId = "clip" + Math.random().toString(36).slice(2);
+    el("rect", {x:f.m.l, y:f.m.t, width:f.iw, height:f.ih}, el("clipPath", {id:clipId}, el("defs", {}, f.svg)));
+    const bands = el("g", {"clip-path":`url(#${clipId})`}, f.svg);
+    const runs = []; let run = null;
+    rows.forEach((r, i) => {
+      const v = (r.verdict === "RICH" || r.verdict === "CHEAP") ? r.verdict : null;
+      if (v && run && run.v === v && run.end === i - 1) { run.end = i; return; }
+      if (run) runs.push(run);
+      run = v ? {v, start:i, end:i} : null;
+    });
+    if (run) runs.push(run);
+    const right = f.m.l + f.iw;
+    runs.forEach(u => {
+      let a = x(t(rows[u.start])) - dayW / 2, b = x(t(rows[u.end])) + dayW / 2;
+      if (b - a < 8) { const c = (a + b) / 2; a = c - 4; b = c + 4; }
+      if (b > right) { a -= b - right; b = right; }
+      if (a < f.m.l) { b += f.m.l - a; a = f.m.l; }
+      const fill = css(u.v === "RICH" ? "--rich-band" : "--cheap-band");
+      el("rect", {x:a, y:f.m.t, width:b - a, height:h1, fill}, bands);
+      if (showPrice) el("rect", {x:a, y:top2, width:b - a, height:h2, fill}, bands);
+    });
+    if (rows.filter(r => r.atm_iv_30d != null).length < 10) {
+      const note = el("text", {x:f.m.l + 8, y:f.m.t + 14, "font-size":11, fill:css("--text-muted")}, f.svg);
+      note.textContent = "Shading fills in as daily IV history builds up";
+    }
+    const xt = []; for (let i = 0; i <= 3; i++) xt.push(t0 + (t1 - t0) * i / 3);
+    axes(f, x, y, niceTicks(lo, hi), v => Math.round(v * 100) + "%", xt, v => new Date(v).toLocaleDateString("en-SG", {day:"numeric", month:"short"}));
+    el("path", {d:path(rows.map(r => r.rv30 == null ? null : [x(t(r)), y(r.rv30)])), fill:"none", stroke:css("--series-rv"), "stroke-width":2, "stroke-linejoin":"round"}, f.svg);
+    el("path", {d:path(rows.map(r => r.atm_iv_30d == null ? null : [x(t(r)), y(r.atm_iv_30d)])), fill:"none", stroke:css("--series-iv"), "stroke-width":2, "stroke-linejoin":"round"}, f.svg);
+    const lastIv = [...rows].reverse().find(r => r.atm_iv_30d != null);
+    if (lastIv) el("circle", {cx:x(t(lastIv)), cy:y(lastIv.atm_iv_30d), r:4, fill:css("--series-iv"), stroke:css("--surface-1"), "stroke-width":2}, f.svg);
+
+    if (showPrice) {   // second panel with its own axis (never a dual-axis chart)
+      const pv = rows.map(r => r.index_price).filter(v => v != null);
+      const plo = Math.min(...pv) * 0.97, phi = Math.max(...pv) * 1.03;
+      const py = v => top2 + h2 - (v - plo) / (phi - plo) * h2;
+      const lab = el("text", {x:f.m.l, y:top2 - 6, "font-size":11, fill:css("--text-secondary")}, f.svg); lab.textContent = "SOL price (USD)";
+      niceTicks(plo, phi, 3).forEach(v => {
+        el("line", {x1:f.m.l, x2:f.W - f.m.r, y1:py(v), y2:py(v), stroke:css("--grid"), "stroke-width":1}, f.svg);
+        const tx = el("text", {x:f.m.l - 6, y:py(v) + 4, "text-anchor":"end", "font-size":11, fill:css("--text-muted")}, f.svg); tx.textContent = "$" + v;
+      });
+      el("path", {d:path(rows.map(r => r.index_price == null ? null : [x(t(r)), py(r.index_price)])), fill:"none", stroke:css("--series-price"), "stroke-width":2, "stroke-linejoin":"round"}, f.svg);
+    }
+    hover(f, rows.map(r => x(t(r))), i => { const r = rows[i];
+      const src = r.iv_source === "trades_backfill" ? " (backfill)" : r.iv_source === "imported" ? " (imported)" : "";
+      return `<b>${r.date}</b> · SOL ${r.index_price != null ? usd(r.index_price) : "n/a"}<br>IV ${pct(r.atm_iv_30d)}${src} · RV30 ${pct(r.rv30)}${r.verdict ? ` · <b>${r.verdict}</b>` : ""}<br>${aftermath(r)}`; });
+    const nIv = D.history.filter(r => r.atm_iv_30d != null).length, nBf = D.history.filter(r => r.iv_source === "trades_backfill").length;
+    document.getElementById("histnote").textContent = `${nIv} day(s) of implied vol recorded${nBf ? `, ${nBf} of them approximated from past trades` : ""}. Realised vol comes from daily SOL prices. Hover a day to see what happened over the next 30 days.`
+      + (nIv < 30 && !nBf ? " Only days with implied vol can be shaded rich or cheap. To fill in the past 90 days, run: run_scan.bat --backfill" : "");
+  }
+
+  function drawTerm(Hfix) {
+    const host = document.getElementById("term"), f = frame(host, Hfix || Math.round(Math.min(Math.max((host.clientWidth || 520) * 0.5, 180), 240)));
+    const today = L.term_structure.filter(r => r.dte >= 1), wk = L.term_structure_last_week ? L.term_structure_last_week.rows.filter(r => r.dte >= 1) : [];
+    if (!today.length) { host.innerHTML = `<p class="muted">No term structure.</p>`; return; }
+    const ds = today.concat(wk).map(r => r.dte), vs = today.concat(wk).map(r => r.atm_iv);
+    const x0 = 0, x1 = Math.max(...ds) * 1.03, lo = Math.min(...vs) * 0.92, hi = Math.max(...vs) * 1.06;
+    const x = v => f.m.l + (v - x0) / (x1 - x0) * f.iw, y = v => f.m.t + f.ih - (v - lo) / (hi - lo) * f.ih;
+    axes(f, x, y, niceTicks(lo, hi), v => Math.round(v * 100) + "%", niceTicks(0, x1, 4), v => v + "d");
+    if (wk.length) el("path", {d:path(wk.map(r => [x(r.dte), y(r.atm_iv)])), fill:"none", stroke:css("--series-faded"), "stroke-width":2}, f.svg);
+    el("path", {d:path(today.map(r => [x(r.dte), y(r.atm_iv)])), fill:"none", stroke:css("--series-iv"), "stroke-width":2}, f.svg);
+    today.forEach(r => el("circle", {cx:x(r.dte), cy:y(r.atm_iv), r:4, fill:css("--series-iv"), stroke:css("--surface-1"), "stroke-width":2}, f.svg));
+    hover(f, today.map(r => x(r.dte)), i => `<b>${today[i].expiry}</b> (${Math.round(today[i].dte)}d)<br>ATM IV ${pct(today[i].atm_iv)}`);
+  }
+
+  function drawPayoff() {
+    if (!S) return;
+    const host = document.getElementById("payoff"), f = frame(host, Math.round(Math.min(Math.max((host.clientWidth || 520) * 0.42, 160), 220)));
+    const ks = S.short_leg.strike, kl = S.long_leg.strike, cr = S.credit_conservative, spot = L.index_price;
+    const lo = Math.min(kl * 0.85, spot * 0.8), hi = Math.max(ks * 1.12, spot * 1.12);
+    const pnl = s => cr - (Math.max(0, ks - s) - Math.max(0, kl - s));
+    const xs = []; for (let i = 0; i <= 120; i++) xs.push(lo + (hi - lo) * i / 120);
+    const ymin = -S.max_loss * 1.15, ymax = cr * 1.6;
+    const x = v => f.m.l + (v - lo) / (hi - lo) * f.iw, y = v => f.m.t + f.ih - (v - ymin) / (ymax - ymin) * f.ih;
+    axes(f, x, y, niceTicks(ymin, ymax, 4), v => (v < 0 ? "-$" : "$") + Math.abs(v), niceTicks(lo, hi, 4), v => "$" + v);
+    el("line", {x1:f.m.l, x2:f.W - f.m.r, y1:y(0), y2:y(0), stroke:css("--text-muted"), "stroke-width":1}, f.svg);
+    el("line", {x1:x(spot), x2:x(spot), y1:f.m.t, y2:f.m.t + f.ih, stroke:css("--text-muted"), "stroke-dasharray":"3 3"}, f.svg);
+    const st = el("text", {x:x(spot) + 4, y:f.m.t + f.ih - 6, "font-size":11, fill:css("--text-secondary")}, f.svg); st.textContent = "SOL now";
+    el("path", {d:path(xs.map(s => [x(s), y(pnl(s))])), fill:"none", stroke:css("--series-iv"), "stroke-width":2}, f.svg);
+    if (S.exit_plan && S.exit_plan.price_stop_spot > lo) {
+      const xs0 = x(S.exit_plan.price_stop_spot);
+      el("line", {x1:xs0, x2:xs0, y1:f.m.t, y2:f.m.t + f.ih, stroke:css("--rich"), "stroke-dasharray":"4 3"}, f.svg);
+      const tt = el("text", {x:xs0 - 4, y:f.m.t + 12, "text-anchor":"end", "font-size":11, fill:css("--rich")}, f.svg); tt.textContent = "stop";
+    }
+    const be = el("text", {x:x(S.break_even) + 6, y:y(0) + 14, "text-anchor":"start", "font-size":11, fill:css("--text-secondary")}, f.svg); be.textContent = "BE " + S.break_even.toFixed(2);
+    hover(f, xs.map(x), i => `SOL at expiry <b>${usd(xs[i])}</b><br>P&L ${usd(pnl(xs[i]))} per SOL`);
+  }
+
+  let days = 91;
+  const pb = document.getElementById("pricebtn"), pl = document.getElementById("pricelegend");
+  const syncPrice = () => { pb.classList.toggle("on", showPrice); pb.setAttribute("aria-pressed", showPrice); pl.hidden = !showPrice; };
+  function layoutCharts() {
+    drawHistory(days); drawTerm(); drawPayoff();
+    // Desktop: term structure sits beside the history chart, so stretch it to the same height (price panel on or off)
+    // Tablet: term structure sits beside the verdict instead, so match that card.
+    if (window.innerWidth >= 700) {
+      const hc = document.querySelector(window.innerWidth >= 1100 ? ".a-hist" : ".a-verdict"), tc = document.querySelector(".a-term"), th = document.getElementById("term");
+      tc.style.alignSelf = "start";
+      const extra = tc.offsetHeight - th.offsetHeight, target = hc.offsetHeight - extra;
+      tc.style.alignSelf = "";
+      if (target > 150) drawTerm(Math.min(target, 700));
+    }
+  }
+  syncPrice(); layoutCharts();
+  if (S) {   // "try different loss limits" preview
+    const per = document.getElementById("tl-per"), tot = document.getElementById("tl-tot"), opn = document.getElementById("tl-open"), out = document.getElementById("tl-out");
+    const calc = () => {
+      const pc = S.sizing.max_loss_per_contract_usd, budget = Math.min(+per.value || 0, Math.max(0, (+tot.value || 0) - (+opn.value || 0)));
+      const n = pc > 0 ? Math.floor(budget / pc) : 0, sol = n * S.contract_size, credit = n * S.credit_conservative * S.contract_size;
+      out.innerHTML = n ? `<b>${n} contract(s)</b> (${sol} SOL): ${usd(n * pc)} at risk, ${usd(credit)} credit ≈ ${(credit / L.index_price).toFixed(3)} SOL at today's price.`
+        + (S.exit_plan ? ` With the stop: ≈ ${usd(S.exit_plan.loss_at_stop_usd / (S.sizing.contracts || 1) * n, 0)} if it fires.` : "")
+        : `0 contracts: one contract risks ${usd(pc)}, but the budget is ${usd(budget)}.`;
+    };
+    [per, tot, opn].forEach(i => i && i.addEventListener("input", calc)); if (per) calc();
+  }
+  // Redraw charts when the window or a rotated tablet changes size
+  let lastW = app.clientWidth, rt;
+  window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => {
+    if (app.clientWidth === lastW) return; lastW = app.clientWidth; layoutCharts(); }, 150); });
+  pb.onclick = () => { showPrice = !showPrice; try { localStorage.setItem("solvol.showPrice", showPrice ? "1" : "0"); } catch (e) {} syncPrice(); layoutCharts(); };
+  document.querySelectorAll("#rng button").forEach(b => b.onclick = () => {
+    document.querySelectorAll("#rng button").forEach(o => o.classList.toggle("on", o === b)); days = +b.dataset.d; layoutCharts(); });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => location.reload());
+})();
+</script>
+</body>
+</html>
