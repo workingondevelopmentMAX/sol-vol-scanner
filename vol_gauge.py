@@ -271,14 +271,14 @@ def verdict(cfg: dict, iv, rv30, prior_ivs: list[float]) -> dict:
     ratio = iv / rv30 if rv30 else None
     out["iv_rv_ratio"] = ratio
     if len(prior_ivs) >= int(v["min_history_days"]):
-        pct = percentile_rank(iv, prior_ivs[-365:] + [iv])
+        pct = percentile_rank(iv, prior_ivs + [iv])
         out.update(mode="percentile", percentile=pct)
         if pct >= v["iv_percentile_min"]:
-            out.update(label="RICH", reason=f"IV is at the {pct:.0f}th percentile of the last {min(len(prior_ivs), 365)} days (threshold {v['iv_percentile_min']})")
+            out.update(label="RICH", reason=f"IV is at the {pct:.0f}th percentile of {len(prior_ivs)} days of IV in the last 12 months (threshold {v['iv_percentile_min']})")
         elif pct <= v["iv_percentile_cheap"]:
-            out.update(label="CHEAP", reason=f"IV is at the {pct:.0f}th percentile, low in its range")
+            out.update(label="CHEAP", reason=f"IV is at the {pct:.0f}th percentile of {len(prior_ivs)} days of IV in the last 12 months, low in its range")
         else:
-            out.update(label="FAIR", reason=f"IV is at the {pct:.0f}th percentile, below the {v['iv_percentile_min']} threshold")
+            out.update(label="FAIR", reason=f"IV is at the {pct:.0f}th percentile of {len(prior_ivs)} days of IV in the last 12 months, below the {v['iv_percentile_min']} threshold")
         return out
     out.update(mode="ratio", percentile=None)
     if ratio is None:
@@ -294,13 +294,16 @@ def verdict(cfg: dict, iv, rv30, prior_ivs: list[float]) -> dict:
 
 def annotate_history(cfg: dict, rows: list[dict]) -> list[dict]:
     """Add a point-in-time verdict to each row with IV (using only data before that day) for chart shading."""
-    out, prior = [], []
+    from datetime import date, timedelta
+    out, prior = [], []          # prior: (date, iv) seen so far
     for r in rows:
         r = dict(r)
         if r.get("atm_iv_30d") is not None:
-            vd = verdict(cfg, r["atm_iv_30d"], r.get("rv30"), prior)
+            start = (date.fromisoformat(r["date"]) - timedelta(days=365)).isoformat()
+            window = [iv for d, iv in prior if d >= start]      # same 12-month window as today's verdict
+            vd = verdict(cfg, r["atm_iv_30d"], r.get("rv30"), window)
             r["verdict"] = vd["label"]
-            prior.append(r["atm_iv_30d"])
+            prior.append((r["date"], r["atm_iv_30d"]))
         else:
             r["verdict"] = None
         out.append(r)

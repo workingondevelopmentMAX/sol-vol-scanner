@@ -5,6 +5,7 @@ authenticate or send an order: only public/* GET methods are called.
 """
 from __future__ import annotations
 
+import http.client
 import json
 import time
 import urllib.error
@@ -66,7 +67,8 @@ class Client:
                 except Exception:
                     detail = ""
                 raise DeribitError(f"{name}: HTTP {e.code} {detail}") from e
-            except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            except (urllib.error.URLError, http.client.HTTPException, OSError, ValueError) as e:
+                # network blips, cut-off responses (IncompleteRead), half-received JSON: wait and retry
                 last_err = e
                 time.sleep(delay)
                 delay *= 2

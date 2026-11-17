@@ -162,9 +162,9 @@ def run_backfill(cfg: dict, quiet: bool) -> None:
             continue
         try:
             trades, scanned = data_fetch.fetch_trades_for_day(cfg, client, day)
-        except data_fetch.DeribitError as e:
+        except Exception as e:  # one bad day must never stop the whole backfill
             if not quiet:
-                print(f"  {key}: skipped ({e})")
+                print(f"  {key}: skipped ({type(e).__name__}: {str(e)[:120]})")
             continue
         iv, n = vol_gauge.iv_from_trades(trades, b["min_dte"], b["max_dte"], b["max_moneyness_pct"] / 100,
                                          int(b["min_trades_per_day"]))
@@ -200,7 +200,9 @@ def analyse(cfg: dict, snap: dict) -> dict:
         hist, info = vol_gauge.merge_dvol(hist, dv["rows"])
         dvol_info.update(info)
         hist = vol_gauge.merge_history(hist, closes)  # realised vol + price for any newly added days
-    prior = [r["atm_iv_30d"] for r in hist if r["date"] < today and r.get("atm_iv_30d") is not None]
+    window_start = (now - timedelta(days=365)).strftime("%Y-%m-%d")   # compare with the last 12 calendar months only
+    prior = [r["atm_iv_30d"] for r in hist
+             if window_start <= r["date"] < today and r.get("atm_iv_30d") is not None]
     vd = vol_gauge.verdict(cfg, atm30, rv30, prior)
     vd["rv20"] = rv20
 

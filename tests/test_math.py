@@ -154,6 +154,16 @@ class Dvol(unittest.TestCase):
         self.assertFalse(r["available"])
 
 
+class Window(unittest.TestCase):
+    def test_old_regime_does_not_count(self):
+        # 100 very high-IV days two years ago, then 70 calmer days recently: today's shading uses the recent year only
+        from datetime import date, timedelta
+        rows = [{"date": (date(2024, 6, 1) + timedelta(days=i)).isoformat(), "atm_iv_30d": 1.0, "rv30": 0.8} for i in range(100)]
+        rows += [{"date": (date(2026, 8, 1) + timedelta(days=i)).isoformat(), "atm_iv_30d": 0.40 + 0.003 * i, "rv30": 0.5} for i in range(70)]
+        out = vol_gauge.annotate_history(CFG, rows)
+        self.assertEqual(out[-1]["verdict"], "RICH")   # highest of the recent 70 days
+
+
 class NoOrderCode(unittest.TestCase):
     def test_no_private_methods_anywhere(self):
         for p in ROOT.glob("*.py"):
