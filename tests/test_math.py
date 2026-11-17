@@ -128,6 +128,32 @@ class ExitPlan(unittest.TestCase):
         self.assertEqual(p["time_exit_date"], "2026-12-18")
 
 
+class Dvol(unittest.TestCase):
+    def test_scaled_fill_keeps_own_readings(self):
+        rows = [{"date": f"2026-10-{d:02d}", "atm_iv_30d": 0.6, "iv_source": "snapshot"} for d in range(1, 26)]
+        dv = [(f"2026-09-{d:02d}", 70.0) for d in range(1, 31)] + [(f"2026-10-{d:02d}", 75.0) for d in range(1, 26)]
+        out, info = vol_gauge.merge_dvol(rows, dv)
+        by = {r["date"]: r for r in out}
+        self.assertAlmostEqual(info["ratio"], 0.8)
+        self.assertAlmostEqual(by["2026-09-05"]["atm_iv_30d"], 0.56)
+        self.assertEqual(by["2026-09-05"]["iv_source"], "dvol_scaled")
+        self.assertEqual(by["2026-10-05"]["atm_iv_30d"], 0.6)       # own reading untouched
+
+    def test_too_little_overlap_fills_nothing(self):
+        rows = [{"date": "2026-10-01", "atm_iv_30d": 0.6, "iv_source": "snapshot"}]
+        out, info = vol_gauge.merge_dvol(rows, [("2026-09-01", 70.0), ("2026-10-01", 75.0)])
+        self.assertEqual(info["filled"], 0)
+
+    def test_fetch_never_raises(self):
+        import data_fetch
+        from datetime import datetime, timezone
+        class Bad:
+            def get(self, *a, **k):
+                raise data_fetch.DeribitError("currency not supported")
+        r = data_fetch.fetch_dvol({}, Bad(), datetime.now(timezone.utc))
+        self.assertFalse(r["available"])
+
+
 class NoOrderCode(unittest.TestCase):
     def test_no_private_methods_anywhere(self):
         for p in ROOT.glob("*.py"):

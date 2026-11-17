@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 HISTORY_CSV = ROOT / "data" / "iv_history.csv"
-HISTORY_FIELDS = ["date", "index_price", "atm_iv_30d", "rv20", "rv30", "iv_source"]
+HISTORY_FIELDS = ["date", "index_price", "atm_iv_30d", "rv20", "rv30", "iv_source", "dvol"]
 
 DAY_MS = 86400 * 1000
 YEAR_DAYS = 365.0
@@ -190,7 +190,7 @@ def load_history() -> list[dict]:
     with HISTORY_CSV.open(newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
     for r in rows:
-        for k in ("index_price", "atm_iv_30d", "rv20", "rv30"):
+        for k in ("index_price", "atm_iv_30d", "rv20", "rv30", "dvol"):
             r[k] = float(r[k]) if r.get(k) not in (None, "") else None
     return rows
 
@@ -228,6 +228,30 @@ def merge_history(rows: list[dict], closes_by_day, today: str | None = None, tod
         if today in rv:
             r["rv20"], r["rv30"] = rv[today]
     return sorted(by.values(), key=lambda r: r["date"])
+
+
+# ---------------------------------------------------------------- DVOL
+def merge_dvol(rows: list[dict], dvol_rows: list, min_overlap: int = 20) -> tuple[list[dict], dict]:
+    """Store Deribit's SOL DVOL beside our ATM IV and use it to fill days that have no IV.
+
+    DVOL is computed across the whole smile, so it usually reads a few points above at-the-money IV.
+    We scale it by the median ATM/DVOL ratio over days that have both (at least `min_overlap`), so
+    filled days line up with our own measure. Our own readings are never replaced.
+    """
+    by = {r["date"]: dict(r) for r in rows}
+    for d, close in dvol_rows:
+        by.setdefault(d, {"date": d, "atm_iv_30d": None, "iv_source": "price_only"})["dvol"] = close / 100.0
+    pairs = [r["atm_iv_30d"] / r["dvol"] for r in by.values()
+             if r.get("dvol") and r.get("atm_iv_30d") and r.get("iv_source") in ("snapshot", "trades_backfill", "imported")]
+    info = {"overlap_days": len(pairs), "ratio": None, "filled": 0}
+    if len(pairs) >= min_overlap:
+        ratio = statistics.median(pairs)
+        info["ratio"] = ratio
+        for r in by.values():
+            if r.get("dvol") and (r.get("atm_iv_30d") is None or r.get("iv_source") == "dvol_scaled"):
+                r["atm_iv_30d"], r["iv_source"] = r["dvol"] * ratio, "dvol_scaled"
+                info["filled"] += 1
+    return sorted(by.values(), key=lambda r: r["date"]), info
 
 
 # ---------------------------------------------------------------- verdict

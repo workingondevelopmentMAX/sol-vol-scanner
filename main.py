@@ -190,6 +190,12 @@ def analyse(cfg: dict, snap: dict) -> dict:
     rv20, rv30 = vol_gauge.realised_vol(vals, 20), vol_gauge.realised_vol(vals, 30)
 
     hist = vol_gauge.merge_history(vol_gauge.load_history(), closes, today, atm30, snap["index_price"])
+    dv = snap.get("dvol") or {"available": False, "rows": [], "error": "not fetched"}
+    dvol_info = {"available": dv["available"], "error": dv.get("error"), "days": len(dv["rows"])}
+    if dv["available"]:
+        hist, info = vol_gauge.merge_dvol(hist, dv["rows"])
+        dvol_info.update(info)
+        hist = vol_gauge.merge_history(hist, closes)  # realised vol + price for any newly added days
     prior = [r["atm_iv_30d"] for r in hist if r["date"] < today and r.get("atm_iv_30d") is not None]
     vd = vol_gauge.verdict(cfg, atm30, rv30, prior)
     vd["rv20"] = rv20
@@ -199,7 +205,7 @@ def analyse(cfg: dict, snap: dict) -> dict:
         "index_price": snap["index_price"],
         "verdict": vd,
         "term_structure": ts,
-        "checks": {"price_units": price_unit_check(chain), "options_in_chain": len(chain)},
+        "checks": {"price_units": price_unit_check(chain), "options_in_chain": len(chain), "dvol": dvol_info},
         "suggestion": None,
         "alternates": [],
         "no_trade_reason": None,
@@ -272,7 +278,7 @@ def save_outputs(cfg: dict, snap: dict, out: dict, sample: bool = False) -> dict
         "status": "ok",
         "last_good_at": result["generated_at"],
         "latest": result,
-        "history": annotated[-400:],
+        "history": annotated[-800:],
         "log": list(reversed(rows))[:60],
         "premium": premium,
         "config": {"risk": cfg["risk"], "vol": cfg["vol"], "spread": cfg["spread"], "conviction": cfg.get("conviction", {})},

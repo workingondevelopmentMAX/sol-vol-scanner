@@ -103,7 +103,7 @@ def fetch_snapshot(cfg: dict) -> dict:
                    if i.get("instrument_name", "").startswith(prefix)]
     book = [b for b in c.get("get_book_summary_by_currency", currency="USDC", kind="option")
             if b.get("instrument_name", "").startswith(prefix)]
-    start = int((now - timedelta(days=400)).timestamp() * 1000)
+    start = int((now - timedelta(days=int(cfg.get("dvol", {}).get("days", 730)) + 40)).timestamp() * 1000)
     end = int(now.timestamp() * 1000)
     chart = c.get("get_tradingview_chart_data", instrument_name=d["perp_instrument"],
                   start_timestamp=start, end_timestamp=end, resolution="1D")
@@ -112,8 +112,11 @@ def fetch_snapshot(cfg: dict) -> dict:
     except DeribitError:
         delivery = {"data": []}
 
+    dvol = fetch_dvol(cfg, c, now)
+
     snap = {
         "fetched_at": now.isoformat(),
+        "dvol": dvol,
         "index_price": index["index_price"],
         "instruments": instruments,
         "book_summary": book,
@@ -125,6 +128,36 @@ def fetch_snapshot(cfg: dict) -> dict:
     if not instruments or not book:
         raise DeribitError("Deribit returned no SOL options - instrument prefix may have changed")
     return snap
+
+
+def fetch_dvol(cfg: dict, client: Client, now: datetime) -> dict:
+    """Deribit's 30-day volatility index (DVOL) for SOL, daily, if Deribit publishes one.
+
+    Returns {"available": bool, "rows": [[date, close_pct], ...], "error": str|None}. Never raises.
+    """
+    d = cfg.get("dvol", {})
+    if not d.get("enabled", True):
+        return {"available": False, "rows": [], "error": "disabled in config"}
+    start = int((now - timedelta(days=int(d.get("days", 730)))).timestamp() * 1000)
+    end = int(now.timestamp() * 1000)
+    rows = {}
+    try:
+        for _ in range(int(d.get("max_pages", 10))):
+            res = client.get("get_volatility_index_data", currency=d.get("currency", "SOL"),
+                             start_timestamp=start, end_timestamp=end, resolution="1D")
+            data = res.get("data", []) if isinstance(res, dict) else []
+            for ts, _o, _h, _l, close in data:
+                if close:
+                    rows[datetime.fromtimestamp(ts / 1000, timezone.utc).strftime("%Y-%m-%d")] = float(close)
+            cont = res.get("continuation") if isinstance(res, dict) else None
+            if not data or not cont or int(cont) <= start:
+                break
+            end = int(cont)
+    except DeribitError as e:
+        return {"available": False, "rows": [], "error": str(e)[:200]}
+    if not rows:
+        return {"available": False, "rows": [], "error": "Deribit returned no SOL volatility index data"}
+    return {"available": True, "rows": sorted(rows.items()), "error": None}
 
 
 def load_sample() -> dict:

@@ -216,7 +216,7 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
 
   // ---- charts
   html += `<section class="card a-hist"><h2><span class="step">2</span>Implied vs realised volatility</h2>
-    <div class="controls"><div class="seg" id="rng">${["1M","3M","6M","1Y"].map((r,i)=>`<button data-d="${[30,91,182,365][i]}" class="${r==="3M"?"on":""}">${r}</button>`).join("")}</div>
+    <div class="controls"><div class="seg" id="rng">${["1M","3M","6M","1Y","2Y"].map((r,i)=>`<button data-d="${[30,91,182,365,730][i]}" class="${r==="3M"?"on":""}">${r}</button>`).join("")}</div>
       <div class="seg"><button id="pricebtn" aria-pressed="false">SOL price</button></div></div>
     <div class="legend"><span><i style="background:var(--series-iv)"></i>Implied vol (30-day ATM)</span><span><i style="background:var(--series-rv)"></i>Realised vol (30-day)</span><span id="pricelegend" hidden><i style="background:var(--series-price)"></i>SOL price (lower panel)</span>
       <span><i class="band" style="background:var(--rich-band);outline:1px solid var(--rich)"></i>IV was rich</span><span><i class="band" style="background:var(--cheap-band);outline:1px solid var(--cheap)"></i>IV was cheap</span></div>
@@ -424,10 +424,12 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
       el("path", {d:path(rows.map(r => r.index_price == null ? null : [x(t(r)), py(r.index_price)])), fill:"none", stroke:css("--series-price"), "stroke-width":2, "stroke-linejoin":"round"}, f.svg);
     }
     hover(f, rows.map(r => x(t(r))), i => { const r = rows[i];
-      const src = r.iv_source === "trades_backfill" ? " (backfill)" : r.iv_source === "imported" ? " (imported)" : "";
+      const src = r.iv_source === "trades_backfill" ? " (backfill)" : r.iv_source === "imported" ? " (imported)" : r.iv_source === "dvol_scaled" ? " (from DVOL)" : "";
       return `<b>${r.date}</b> · SOL ${r.index_price != null ? usd(r.index_price) : "n/a"}<br>IV ${pct(r.atm_iv_30d)}${src} · RV30 ${pct(r.rv30)}${r.verdict ? ` · <b>${r.verdict}</b>` : ""}<br>${aftermath(r)}`; });
     const nIv = D.history.filter(r => r.atm_iv_30d != null).length, nBf = D.history.filter(r => r.iv_source === "trades_backfill").length;
-    document.getElementById("histnote").textContent = `${nIv} day(s) of implied vol recorded${nBf ? `, ${nBf} of them approximated from past trades` : ""}. Realised vol comes from daily SOL prices. Hover a day to see what happened over the next 30 days.`
+    const nDv = D.history.filter(r => r.iv_source === "dvol_scaled").length, dvc = (L.checks || {}).dvol || {};
+    document.getElementById("histnote").textContent = `${nIv} day(s) of implied vol recorded${nBf ? `, ${nBf} approximated from past trades` : ""}${nDv ? `, ${nDv} from Deribit's SOL volatility index (DVOL, scaled ×${(dvc.ratio || 1).toFixed(2)} to match at-the-money IV)` : ""}. Realised vol comes from daily SOL prices. Hover a day to see what happened over the next 30 days.`
+      + (dvc.available === false && dvc.error && dvc.error !== "not fetched" ? ` SOL DVOL: not available (${dvc.error}).` : "")
       + (nIv < 30 && !nBf ? " Only days with implied vol can be shaded rich or cheap. To fill in the past 90 days, run: run_scan.bat --backfill" : "");
   }
 
