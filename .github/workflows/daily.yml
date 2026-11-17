@@ -57,8 +57,12 @@ jobs:
             echo "Nothing new to save."
           else
             git commit -m "Daily scan $(date -u +%Y-%m-%d)"
-            git pull --rebase --autostash origin main || true
-            git push
+            # If another run saved data meanwhile, keep this run's files (they include everything older plus today).
+            for i in 1 2 3; do
+              git pull --rebase -X theirs origin main && git push && break
+              git rebase --abort 2>/dev/null || true
+              sleep 10
+            done
           fi
 
       - uses: actions/configure-pages@v5
