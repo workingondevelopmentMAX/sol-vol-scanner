@@ -3,11 +3,13 @@
 # Lines starting with # are notes and are ignored.
 
 [risk]
-# YOUR LIMITS - set these before trusting any sizing. Easiest way to change them: double-click set_limits.bat
-portfolio_value_usd = 0             # optional, lets set_limits.bat accept limits like "2%"
-max_loss_per_trade_usd = 200        # most you are willing to lose on one spread trade
-max_total_spread_risk_usd = 600     # cap on max-loss across ALL open spreads
-current_open_risk_usd = 0           # max-loss of spreads you already hold (update by hand)
+# PUBLIC COPY: reference limits, not real ones. Every size on the dashboard is "per $1,000 of max loss":
+# scale it to your own size in your head (e.g. risking $3,000 = 3x the contracts and dollars shown).
+reference_sizing = true
+portfolio_value_usd = 0
+max_loss_per_trade_usd = 1000       # reference: $1,000 max loss per trade
+max_total_spread_risk_usd = 3000    # reference: up to 3 trades open at once
+current_open_risk_usd = 0
 
 [vol]
 iv_percentile_min = 50     # RICH when today's IV is at or above this percentile of history

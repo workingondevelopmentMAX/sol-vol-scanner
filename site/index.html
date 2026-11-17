@@ -248,11 +248,12 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
         <div class="k">Max loss</div><div class="v">${usd(S.max_loss)} per SOL</div>
         <div class="k">Break-even</div><div class="v">${usd(S.break_even)}</div>
         <div class="k">Approx. chance of profit</div><div class="v">${Math.round(S.prob_profit_approx * 100)}%</div>
-        <div class="k">Size</div><div class="v">${z.contracts} × ${S.contract_size} SOL</div>
+        <div class="k">Size${D.config.risk.reference_sizing ? " (per $1,000 max loss)" : ""}</div><div class="v">${z.contracts} × ${S.contract_size} SOL</div>
         <div class="k">Total at risk / credit</div><div class="v">${usd(z.usd_at_risk)} / ${usd(z.credit_usd)}</div>
         <div class="k">Liquidity</div><div class="v">OI ≥ ${Math.round(S.liquidity.min_oi)} · spread ≤ ${Math.round(S.liquidity.worst_spread_pct)}%</div>
       </div>
       ${z.note ? `<div class="banner warn" style="margin-top:10px">${esc(z.note)}</div>` : ""}
+      ${D.config.risk.reference_sizing ? `<div class="muted" style="margin-top:6px">Reference sizing: every size and dollar figure assumes a $1,000 max loss per trade (up to $3,000 across open spreads). Scale to your own size: risking $2,500 means 2.5× the contracts and dollars shown.</div>` : ""}
       <details class="tryl"><summary>Try different loss limits</summary>
         <div class="tl-grid">
           <label>Max loss per trade ($)<input id="tl-per" type="number" min="0" step="10" value="${D.config.risk.max_loss_per_trade_usd}"></label>
