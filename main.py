@@ -151,9 +151,10 @@ def run_backfill(cfg: dict, quiet: bool) -> None:
     b = cfg["backfill"]
     client = data_fetch.Client(cfg, b.get("history_base_url"))
     hist = vol_gauge.load_history()
-    have = {r["date"] for r in hist if r.get("atm_iv_30d") is not None and r.get("iv_source") != "trades_backfill"}
+    have = {r["date"] for r in hist if r.get("atm_iv_30d") is not None}   # never re-fetch a day we already have
     today = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
     found = {}
+    started, filled = datetime.now(timezone.utc), 0
     for i in range(int(b["days"]), 0, -1):
         day = today - timedelta(days=i)
         key = day.strftime("%Y-%m-%d")
@@ -169,6 +170,9 @@ def run_backfill(cfg: dict, quiet: bool) -> None:
                                          int(b["min_trades_per_day"]))
         if iv is not None:
             found[key] = iv
+            filled += 1
+        if len(found) and len(found) % 25 == 0:   # save progress so a long run is never lost
+            vol_gauge.save_history(vol_gauge.merge_history(vol_gauge.load_history(), [], iv_overrides=found))
         if not quiet:
             print(f"  {key}: scanned {scanned} USDC option trades, {len(trades)} SOL, {n} usable -> "
                   + (f"IV {iv:.1%}" if iv else "not enough"))
@@ -278,7 +282,7 @@ def save_outputs(cfg: dict, snap: dict, out: dict, sample: bool = False) -> dict
         "status": "ok",
         "last_good_at": result["generated_at"],
         "latest": result,
-        "history": annotated[-800:],
+        "history": annotated[-1000:],
         "log": list(reversed(rows))[:60],
         "premium": premium,
         "config": {"risk": cfg["risk"], "vol": cfg["vol"], "spread": cfg["spread"], "conviction": cfg.get("conviction", {})},

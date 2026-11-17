@@ -69,7 +69,7 @@ keep_raw_cache_days = 14
 # Approximate past ATM IV from Deribit's public trade history (each trade carries its IV).
 # Deribit keeps full trade history on a separate host; the main API only has recent trades.
 history_base_url = "https://history.deribit.com/api/v2/public/"
-days = 90
+days = 900                   # SOL options have traded on Deribit since early 2024; days already filled are skipped
 windows_per_day = 4          # split each day into this many slices so trades are sampled across the day
 max_pages_per_window = 5     # up to 1000 trades per page (USDC options include busy BTC/ETH linear options)
 min_dte = 7

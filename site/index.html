@@ -216,7 +216,7 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
 
   // ---- charts
   html += `<section class="card a-hist"><h2><span class="step">2</span>Implied vs realised volatility</h2>
-    <div class="controls"><div class="seg" id="rng">${["1M","3M","6M","1Y","2Y"].map((r,i)=>`<button data-d="${[30,91,182,365,730][i]}" class="${r==="3M"?"on":""}">${r}</button>`).join("")}</div>
+    <div class="controls"><div class="seg" id="rng">${["1M","3M","6M","1Y","All"].map((r,i)=>`<button data-d="${[30,91,182,365,1000][i]}" class="${r==="3M"?"on":""}">${r}</button>`).join("")}</div>
       <div class="seg"><button id="pricebtn" aria-pressed="false">SOL price</button></div></div>
     <div class="legend"><span><i style="background:var(--series-iv)"></i>Implied vol (30-day ATM)</span><span><i style="background:var(--series-rv)"></i>Realised vol (30-day)</span><span id="pricelegend" hidden><i style="background:var(--series-price)"></i>SOL price (lower panel)</span>
       <span><i class="band" style="background:var(--rich-band);outline:1px solid var(--rich)"></i>IV was rich</span><span><i class="band" style="background:var(--cheap-band);outline:1px solid var(--cheap)"></i>IV was cheap</span></div>

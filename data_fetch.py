@@ -103,7 +103,8 @@ def fetch_snapshot(cfg: dict) -> dict:
                    if i.get("instrument_name", "").startswith(prefix)]
     book = [b for b in c.get("get_book_summary_by_currency", currency="USDC", kind="option")
             if b.get("instrument_name", "").startswith(prefix)]
-    start = int((now - timedelta(days=int(cfg.get("dvol", {}).get("days", 730)) + 40)).timestamp() * 1000)
+    hist_days = max(int(cfg.get("dvol", {}).get("days", 730)), int(cfg.get("backfill", {}).get("days", 90)))
+    start = int((now - timedelta(days=hist_days + 40)).timestamp() * 1000)
     end = int(now.timestamp() * 1000)
     chart = c.get("get_tradingview_chart_data", instrument_name=d["perp_instrument"],
                   start_timestamp=start, end_timestamp=end, resolution="1D")
