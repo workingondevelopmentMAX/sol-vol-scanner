@@ -1,0 +1,457 @@
+{
+ "period": [
+  "2024-04-21",
+  "2026-11-17"
+ ],
+ "results": {
+  "RICH days only, one trade at a time": {
+   "Your plan (TP 50%, stop 1.5x, close 7 days out)": {
+    "trades": 35,
+    "win_rate": 0.7142857142857143,
+    "avg_per_1000": -28.561151863737766,
+    "median_per_1000": 96.2402628199408,
+    "worst_per_1000": -680.9128783935397,
+    "best_per_1000": 111.60394294221405,
+    "total_per_1000": -999.6403152308218,
+    "max_drawdown_per_1000": -1302.4516801883335,
+    "avg_days": 11.771428571428572,
+    "avg_credit_pct_width": 0.16591595694671799,
+    "exits": {
+     "stop": 10,
+     "take profit": 24,
+     "time exit": 1
+    }
+   },
+   "Same, stop 1x": {
+    "trades": 42,
+    "win_rate": 0.5476190476190477,
+    "avg_per_1000": -45.44820051774339,
+    "median_per_1000": 93.28476473562992,
+    "worst_per_1000": -448.22873638281703,
+    "best_per_1000": 111.60394294221405,
+    "total_per_1000": -1908.8244217452223,
+    "max_drawdown_per_1000": -1961.8387584648972,
+    "avg_days": 9.30952380952381,
+    "avg_credit_pct_width": 0.16620719887260366,
+    "exits": {
+     "stop": 19,
+     "take profit": 23
+    }
+   },
+   "Same, stop 2x": {
+    "trades": 31,
+    "win_rate": 0.7741935483870968,
+    "avg_per_1000": -3.16540673341391,
+    "median_per_1000": 97.02585131280638,
+    "worst_per_1000": -680.9128783935397,
+    "best_per_1000": 111.60394294221405,
+    "total_per_1000": -98.12760873583122,
+    "max_drawdown_per_1000": -1238.015459723321,
+    "avg_days": 13.290322580645162,
+    "avg_credit_pct_width": 0.16692174673060886,
+    "exits": {
+     "time exit": 3,
+     "take profit": 23,
+     "stop": 5
+    }
+   },
+   "Your plan, vol jump 0.3 (measured)": {
+    "trades": 37,
+    "win_rate": 0.7027027027027027,
+    "avg_per_1000": -37.31663779275851,
+    "median_per_1000": 97.02585131280638,
+    "worst_per_1000": -680.9128783935397,
+    "best_per_1000": 111.60394294221405,
+    "total_per_1000": -1380.715598332065,
+    "max_drawdown_per_1000": -1523.5492079464773,
+    "avg_days": 11.08108108108108,
+    "avg_credit_pct_width": 0.1663448909368902,
+    "exits": {
+     "stop": 11,
+     "take profit": 26
+    }
+   },
+   "No stop (TP 50%, close 7 days out)": {
+    "trades": 27,
+    "win_rate": 0.8148148148148148,
+    "avg_per_1000": 17.909167525406005,
+    "median_per_1000": 97.02585131280638,
+    "worst_per_1000": -663.8417689085771,
+    "best_per_1000": 120.01307072305679,
+    "total_per_1000": 483.5475231859622,
+    "max_drawdown_per_1000": -1353.6486352467343,
+    "avg_days": 14.703703703703704,
+    "avg_credit_pct_width": 0.1678853446389708,
+    "exits": {
+     "time exit": 6,
+     "take profit": 21
+    }
+   },
+   "Hold to expiry, no exits": {
+    "trades": 17,
+    "win_rate": 0.8235294117647058,
+    "avg_per_1000": 54.366286287242836,
+    "median_per_1000": 193.65320713444817,
+    "worst_per_1000": -1000.0,
+    "best_per_1000": 217.6121956864061,
+    "total_per_1000": 924.2268668831282,
+    "max_drawdown_per_1000": -1214.4787559623467,
+    "avg_days": 30,
+    "avg_credit_pct_width": 0.1671326609137163,
+    "exits": {
+     "expiry": 17
+    }
+   },
+   "TP 50%, stop 2x, no time exit": {
+    "trades": 31,
+    "win_rate": 0.8064516129032258,
+    "avg_per_1000": -6.462900813985971,
+    "median_per_1000": 98.08244917695981,
+    "worst_per_1000": -680.9128783935397,
+    "best_per_1000": 111.60394294221405,
+    "total_per_1000": -200.3499252335651,
+    "max_drawdown_per_1000": -1507.643454894459,
+    "avg_days": 13.35483870967742,
+    "avg_credit_pct_width": 0.1664963975069777,
+    "exits": {
+     "take profit": 25,
+     "stop": 5,
+     "expiry": 1
+    }
+   },
+   "TP 50%, stop 3x, no time exit": {
+    "trades": 26,
+    "win_rate": 0.8846153846153846,
+    "avg_per_1000": 25.200236974034905,
+    "median_per_1000": 98.80078745325937,
+    "worst_per_1000": -688.3193409282336,
+    "best_per_1000": 111.31040826015075,
+    "total_per_1000": 655.2061613249075,
+    "max_drawdown_per_1000": -989.8845927842867,
+    "avg_days": 15.538461538461538,
+    "avg_credit_pct_width": 0.1659572924069937,
+    "exits": {
+     "take profit": 23,
+     "expiry": 1,
+     "stop": 2
+    }
+   },
+   "TP 50%, no stop, no time exit": {
+    "trades": 25,
+    "win_rate": 0.92,
+    "avg_per_1000": 48.77971711779753,
+    "median_per_1000": 99.51912572955894,
+    "worst_per_1000": -764.4497024256327,
+    "best_per_1000": 108.48458306178375,
+    "total_per_1000": 1219.4929279449384,
+    "max_drawdown_per_1000": -1066.014954281686,
+    "avg_days": 15.84,
+    "avg_credit_pct_width": 0.16608071544168126,
+    "exits": {
+     "take profit": 23,
+     "expiry": 2
+    }
+   }
+  },
+  "EVERY day, one trade at a time (no rich filter)": {
+   "Your plan (TP 50%, stop 1.5x, close 7 days out)": {
+    "trades": 83,
+    "win_rate": 0.6144578313253012,
+    "avg_per_1000": -63.130075547913705,
+    "median_per_1000": 80.273429814124,
+    "worst_per_1000": -680.9128783935397,
+    "best_per_1000": 111.60394294221405,
+    "total_per_1000": -5239.796270476838,
+    "max_drawdown_per_1000": -5330.650661125353,
+    "avg_days": 10.734939759036145,
+    "avg_credit_pct_width": 0.1540601405872964,
+    "exits": {
+     "take profit": 50,
+     "stop": 32,
+     "time exit": 1
+    }
+   },
+   "Same, stop 1x": {
+    "trades": 105,
+    "win_rate": 0.5428571428571428,
+    "avg_per_1000": -59.8867792040572,
+    "median_per_1000": 73.98692121044084,
+    "worst_per_1000": -519.7009903610002,
+    "best_per_1000": 111.60394294221405,
+    "total_per_1000": -6288.111816426006,
+    "max_drawdown_per_1000": -6378.9662070745235,
+    "avg_days": 8.523809523809524,
+    "avg_credit_pct_width": 0.15481545120328857,
+    "exits": {
+     "take profit": 56,
+     "stop": 49
+    }
+   },
+   "Same, stop 2x": {
+    "trades": 82,
+    "win_rate": 0.6463414634146342,
+    "avg_per_1000": -77.74009564291521,
+    "median_per_1000": 84.59849018878847,
+    "worst_per_1000": -698.2487206430073,
+    "best_per_1000": 112.18948667968895,
+    "total_per_1000": -6374.687842719048,
+    "max_drawdown_per_1000": -6465.542233367562,
+    "avg_days": 10.914634146341463,
+    "avg_credit_pct_width": 0.15594836604321619,
+    "exits": {
+     "take profit": 53,
+     "stop": 26,
+     "time exit": 3
+    }
+   },
+   "Your plan, vol jump 0.3 (measured)": {
+    "trades": 83,
+    "win_rate": 0.6144578313253012,
+    "avg_per_1000": -70.34053071460137,
+    "median_per_1000": 81.71683525221488,
+    "worst_per_1000": -680.9128783935397,
+    "best_per_1000": 111.60394294221405,
+    "total_per_1000": -5838.264049311913,
+    "max_drawdown_per_1000": -5929.118439960427,
+    "avg_days": 10.74698795180723,
+    "avg_credit_pct_width": 0.15461220586579882,
+    "exits": {
+     "take profit": 51,
+     "stop": 32
+    }
+   },
+   "No stop (TP 50%, close 7 days out)": {
+    "trades": 57,
+    "win_rate": 0.7368421052631579,
+    "avg_per_1000": -62.87678785478123,
+    "median_per_1000": 83.41987451705593,
+    "worst_per_1000": -1133.3015022254801,
+    "best_per_1000": 120.01307072305679,
+    "total_per_1000": -3583.97690772253,
+    "max_drawdown_per_1000": -3674.831298371043,
+    "avg_days": 15.631578947368421,
+    "avg_credit_pct_width": 0.15497755346897354,
+    "exits": {
+     "take profit": 39,
+     "time exit": 18
+    }
+   },
+   "Hold to expiry, no exits": {
+    "trades": 30,
+    "win_rate": 0.7666666666666667,
+    "avg_per_1000": -66.71931649435741,
+    "median_per_1000": 183.53573254514401,
+    "worst_per_1000": -1000.0,
+    "best_per_1000": 219.3907104702249,
+    "total_per_1000": -2001.5794948307225,
+    "max_drawdown_per_1000": -2374.374840736038,
+    "avg_days": 30,
+    "avg_credit_pct_width": 0.15568916082381754,
+    "exits": {
+     "expiry": 30
+    }
+   },
+   "TP 50%, stop 2x, no time exit": {
+    "trades": 78,
+    "win_rate": 0.6794871794871795,
+    "avg_per_1000": -70.90480817669555,
+    "median_per_1000": 86.4515814704892,
+    "worst_per_1000": -698.2487206430073,
+    "best_per_1000": 198.28300156889293,
+    "total_per_1000": -5530.575037782253,
+    "max_drawdown_per_1000": -5621.42942843077,
+    "avg_days": 11.461538461538462,
+    "avg_credit_pct_width": 0.15501441304531222,
+    "exits": {
+     "take profit": 52,
+     "stop": 24,
+     "expiry": 2
+    }
+   },
+   "TP 50%, stop 3x, no time exit": {
+    "trades": 62,
+    "win_rate": 0.7580645161290323,
+    "avg_per_1000": -79.27771860206107,
+    "median_per_1000": 87.64916767879191,
+    "worst_per_1000": -1000.0,
+    "best_per_1000": 112.18948667968895,
+    "total_per_1000": -4915.218553327786,
+    "max_drawdown_per_1000": -5006.072943976299,
+    "avg_days": 14.419354838709678,
+    "avg_credit_pct_width": 0.15381105565293302,
+    "exits": {
+     "take profit": 47,
+     "stop": 11,
+     "expiry": 4
+    }
+   },
+   "TP 50%, no stop, no time exit": {
+    "trades": 55,
+    "win_rate": 0.8181818181818182,
+    "avg_per_1000": -62.78415297830019,
+    "median_per_1000": 90.25653519363584,
+    "worst_per_1000": -1000.0,
+    "best_per_1000": 106.05155841029718,
+    "total_per_1000": -3453.1284138065103,
+    "max_drawdown_per_1000": -3883.720847558604,
+    "avg_days": 15.909090909090908,
+    "avg_credit_pct_width": 0.15458012635213136,
+    "exits": {
+     "take profit": 45,
+     "expiry": 10
+    }
+   }
+  },
+  "RICH days, a new trade every rich day (overlapping)": {
+   "Your plan (TP 50%, stop 1.5x, close 7 days out)": {
+    "trades": 290,
+    "win_rate": 0.7068965517241379,
+    "avg_per_1000": -28.874111611134566,
+    "median_per_1000": 100.52145865357772,
+    "worst_per_1000": -680.9128783935397,
+    "best_per_1000": 120.01307072305679,
+    "total_per_1000": -8373.492367229024,
+    "max_drawdown_per_1000": -18232.326305343144,
+    "avg_days": 11.317241379310344,
+    "avg_credit_pct_width": 0.1722391172081265,
+    "exits": {
+     "stop": 79,
+     "take profit": 202,
+     "time exit": 9
+    }
+   },
+   "Same, stop 1x": {
+    "trades": 291,
+    "win_rate": 0.6082474226804123,
+    "avg_per_1000": -38.773939311773134,
+    "median_per_1000": 98.82228860972984,
+    "worst_per_1000": -560.592659634303,
+    "best_per_1000": 118.45639673954093,
+    "total_per_1000": -11283.216339725983,
+    "max_drawdown_per_1000": -17950.79543007278,
+    "avg_days": 9.481099656357388,
+    "avg_credit_pct_width": 0.17211809018146512,
+    "exits": {
+     "stop": 114,
+     "take profit": 175,
+     "time exit": 2
+    }
+   },
+   "Same, stop 2x": {
+    "trades": 290,
+    "win_rate": 0.7758620689655172,
+    "avg_per_1000": -20.49525343587828,
+    "median_per_1000": 101.54083449102154,
+    "worst_per_1000": -890.83349616827,
+    "best_per_1000": 120.01307072305679,
+    "total_per_1000": -5943.623496404701,
+    "max_drawdown_per_1000": -17835.774974708194,
+    "avg_days": 12.758620689655173,
+    "avg_credit_pct_width": 0.1722391172081265,
+    "exits": {
+     "time exit": 20,
+     "take profit": 218,
+     "stop": 52
+    }
+   },
+   "Your plan, vol jump 0.3 (measured)": {
+    "trades": 290,
+    "win_rate": 0.7172413793103448,
+    "avg_per_1000": -26.90533688929519,
+    "median_per_1000": 100.8642660164858,
+    "worst_per_1000": -680.9128783935397,
+    "best_per_1000": 120.01307072305679,
+    "total_per_1000": -7802.547697895604,
+    "max_drawdown_per_1000": -17364.328021492467,
+    "avg_days": 11.489655172413793,
+    "avg_credit_pct_width": 0.1722391172081265,
+    "exits": {
+     "stop": 76,
+     "take profit": 205,
+     "time exit": 9
+    }
+   },
+   "No stop (TP 50%, close 7 days out)": {
+    "trades": 285,
+    "win_rate": 0.8140350877192982,
+    "avg_per_1000": -4.229572107048623,
+    "median_per_1000": 101.85249096000163,
+    "worst_per_1000": -1037.1741792914695,
+    "best_per_1000": 120.01307072305679,
+    "total_per_1000": -1205.4280505088575,
+    "max_drawdown_per_1000": -19892.956297518795,
+    "avg_days": 14.157894736842104,
+    "avg_credit_pct_width": 0.1727223872655574,
+    "exits": {
+     "time exit": 62,
+     "take profit": 223
+    }
+   },
+   "Hold to expiry, no exits": {
+    "trades": 285,
+    "win_rate": 0.8035087719298246,
+    "avg_per_1000": 19.527316514312744,
+    "median_per_1000": 204.64969941989466,
+    "worst_per_1000": -1000.0,
+    "best_per_1000": 240.02614144611357,
+    "total_per_1000": 5565.285206579132,
+    "max_drawdown_per_1000": -28515.620469715614,
+    "avg_days": 30,
+    "avg_credit_pct_width": 0.1727223872655574,
+    "exits": {
+     "expiry": 285
+    }
+   },
+   "TP 50%, stop 2x, no time exit": {
+    "trades": 290,
+    "win_rate": 0.7793103448275862,
+    "avg_per_1000": -37.14962256082554,
+    "median_per_1000": 101.6529003425362,
+    "worst_per_1000": -890.83349616827,
+    "best_per_1000": 220.8826125598206,
+    "total_per_1000": -10773.390542639409,
+    "max_drawdown_per_1000": -22901.765987107032,
+    "avg_days": 12.962068965517242,
+    "avg_credit_pct_width": 0.1722391172081265,
+    "exits": {
+     "take profit": 225,
+     "stop": 63,
+     "expiry": 2
+    }
+   },
+   "TP 50%, stop 3x, no time exit": {
+    "trades": 287,
+    "win_rate": 0.8432055749128919,
+    "avg_per_1000": -38.37551001606367,
+    "median_per_1000": 103.11061784901835,
+    "worst_per_1000": -1129.9596009348422,
+    "best_per_1000": 220.8826125598206,
+    "total_per_1000": -11013.771374610275,
+    "max_drawdown_per_1000": -28664.134353888054,
+    "avg_days": 14.662020905923345,
+    "avg_credit_pct_width": 0.17255208807974248,
+    "exits": {
+     "take profit": 238,
+     "expiry": 24,
+     "stop": 25
+    }
+   },
+   "TP 50%, no stop, no time exit": {
+    "trades": 285,
+    "win_rate": 0.8491228070175438,
+    "avg_per_1000": -33.25792760953833,
+    "median_per_1000": 103.120039305932,
+    "worst_per_1000": -1000.0,
+    "best_per_1000": 220.8826125598206,
+    "total_per_1000": -9478.509368718424,
+    "max_drawdown_per_1000": -28515.62046971562,
+    "avg_days": 15.470175438596492,
+    "avg_credit_pct_width": 0.1727223872655574,
+    "exits": {
+     "take profit": 238,
+     "expiry": 47
+    }
+   }
+  }
+ }
+}
