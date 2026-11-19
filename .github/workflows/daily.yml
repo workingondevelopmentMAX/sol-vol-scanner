@@ -13,7 +13,7 @@ on:
         default: false
   push:
     branches: [main]
-    paths: ["site/**", "*.py", "config.toml", "my_premium_log.csv", ".github/workflows/daily.yml"]
+    paths: ["site/**", "*.py", "config.toml", "strategies/**", "my_premium_log.csv", ".github/workflows/daily.yml"]
 
 permissions:
   contents: write   # save the updated history and log back to the repository
@@ -48,11 +48,12 @@ jobs:
             python main.py
           fi
 
-      - name: Save history, log and dashboard data
+      - name: Save history, log, today's option chain (data/chains/) and dashboard data
         run: |
           git config user.name "sol-vol-scanner bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/iv_history.csv data/term_history.json logs/suggestions.csv site/data/
+          if [ -d data/chains ]; then git add data/chains/; fi
           if git diff --cached --quiet; then
             echo "Nothing new to save."
           else

@@ -184,10 +184,11 @@ def rolling_rv(closes_by_day: list[tuple[str, float]]) -> dict:
 
 
 # ---------------------------------------------------------------- history file
-def load_history() -> list[dict]:
-    if not HISTORY_CSV.exists():
+def load_history(path: Path | str | None = None) -> list[dict]:
+    path = Path(path) if path else HISTORY_CSV
+    if not path.exists():
         return []
-    with HISTORY_CSV.open(newline="", encoding="utf-8") as f:
+    with path.open(newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
     for r in rows:
         for k in ("index_price", "atm_iv_30d", "rv20", "rv30", "dvol"):

@@ -2,6 +2,16 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-19 · Fixed, recorded data (step 2)
+Each daily scan stores the SOL option chain in `data/chains/YYYY-MM-DD.json.gz`: SOL options only, only the fields
+the engine reads, about 30 KB a day. The first snapshot of each UTC day is kept and never overwritten, so a stored
+day (and its fingerprint) never changes; later runs the same day (e.g. after a push) leave it alone. Files are
+written reproducibly (sorted keys, gzip without a timestamp). On days with a stored chain the backtest picks the
+trade from real quotes and values open trades from real quotes (short put's offer, long put's bid, short put's
+mark for the stop); if a leg is missing that day it falls back to the model. The backtest ignores
+`config.local.toml` so a laptop and the cloud always get the same result, and lists the SHA-256 of every input
+file. At the time of this change no chain was stored yet, so every backtest number stayed exactly the same.
+
 ### 2026-11-19 · Private settings stay on the laptop
 `config.local.toml` and `my_premium_log.local.csv` are git-ignored. When `config.local.toml` exists, a laptop run
 starts from the latest shared history, writes to `private/` and `site/data/private/`, and the dashboard shows a

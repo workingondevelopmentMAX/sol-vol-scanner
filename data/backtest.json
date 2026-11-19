@@ -10,6 +10,13 @@
   "2024-04-21",
   "2026-11-19"
  ],
+ "inputs": {
+  "config.toml": "04cb012cae7745bb1fd291aeb5db45b5f1f4866323e22999cc9e9be17f518cb8",
+  "data/iv_history.csv": "175f9ddb3fb9c9301b38d2d3421cb8fa4b5e795d7243c08a1ad5032121094a7b",
+  "strategies/bull_put_spread.toml": "49b5dedc550be059c1c07478c8ab5e42e90d7236c746d4c93e7382a1b50b4938"
+ },
+ "data_fingerprint": "ada52f70d917",
+ "stored_chain_days": 0,
  "sections": {
   "Rich days only, one trade at a time": {
    "Strategy file as written": {
@@ -26,7 +33,8 @@
       "take profit": 18,
       "stop": 5,
       "time exit": 2
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": [
      {
@@ -42,7 +50,8 @@
       "pnl_per_1000": 117.5,
       "exit": "take profit",
       "exit_date": "2024-07-13",
-      "days": 29
+      "days": 29,
+      "chain": "model"
      },
      {
       "date": "2024-08-03",
@@ -57,7 +66,8 @@
       "pnl_per_1000": 134.4,
       "exit": "take profit",
       "exit_date": "2024-08-23",
-      "days": 20
+      "days": 20,
+      "chain": "model"
      },
      {
       "date": "2024-09-02",
@@ -72,7 +82,8 @@
       "pnl_per_1000": 133.6,
       "exit": "take profit",
       "exit_date": "2024-09-19",
-      "days": 17
+      "days": 17,
+      "chain": "model"
      },
      {
       "date": "2024-10-29",
@@ -87,7 +98,8 @@
       "pnl_per_1000": 131.7,
       "exit": "take profit",
       "exit_date": "2024-11-11",
-      "days": 13
+      "days": 13,
+      "chain": "model"
      },
      {
       "date": "2024-11-11",
@@ -102,7 +114,8 @@
       "pnl_per_1000": 137.3,
       "exit": "take profit",
       "exit_date": "2024-12-03",
-      "days": 22
+      "days": 22,
+      "chain": "model"
      },
      {
       "date": "2024-12-03",
@@ -117,7 +130,8 @@
       "pnl_per_1000": -549.9,
       "exit": "stop",
       "exit_date": "2024-12-21",
-      "days": 18
+      "days": 18,
+      "chain": "model"
      },
      {
       "date": "2024-12-21",
@@ -132,7 +146,8 @@
       "pnl_per_1000": 134.2,
       "exit": "take profit",
       "exit_date": "2025-01-02",
-      "days": 12
+      "days": 12,
+      "chain": "model"
      },
      {
       "date": "2025-01-02",
@@ -147,7 +162,8 @@
       "pnl_per_1000": 134.2,
       "exit": "take profit",
       "exit_date": "2025-01-18",
-      "days": 16
+      "days": 16,
+      "chain": "model"
      },
      {
       "date": "2025-01-18",
@@ -162,7 +178,8 @@
       "pnl_per_1000": -697.1,
       "exit": "stop",
       "exit_date": "2025-02-02",
-      "days": 15
+      "days": 15,
+      "chain": "model"
      },
      {
       "date": "2025-02-02",
@@ -177,7 +194,8 @@
       "pnl_per_1000": -805.0,
       "exit": "stop",
       "exit_date": "2025-02-24",
-      "days": 22
+      "days": 22,
+      "chain": "model"
      },
      {
       "date": "2025-02-24",
@@ -192,7 +210,8 @@
       "pnl_per_1000": 135.4,
       "exit": "take profit",
       "exit_date": "2025-03-23",
-      "days": 27
+      "days": 27,
+      "chain": "model"
      },
      {
       "date": "2025-03-30",
@@ -207,7 +226,8 @@
       "pnl_per_1000": -553.6,
       "exit": "stop",
       "exit_date": "2025-04-06",
-      "days": 7
+      "days": 7,
+      "chain": "model"
      },
      {
       "date": "2025-04-06",
@@ -222,7 +242,8 @@
       "pnl_per_1000": 141.0,
       "exit": "take profit",
       "exit_date": "2025-04-12",
-      "days": 6
+      "days": 6,
+      "chain": "model"
      },
      {
       "date": "2025-04-12",
@@ -237,7 +258,8 @@
       "pnl_per_1000": 138.4,
       "exit": "take profit",
       "exit_date": "2025-04-24",
-      "days": 12
+      "days": 12,
+      "chain": "model"
      },
      {
       "date": "2025-08-14",
@@ -252,7 +274,8 @@
       "pnl_per_1000": 123.8,
       "exit": "take profit",
       "exit_date": "2025-09-07",
-      "days": 24
+      "days": 24,
+      "chain": "model"
      },
      {
       "date": "2025-09-07",
@@ -267,7 +290,8 @@
       "pnl_per_1000": 137.7,
       "exit": "take profit",
       "exit_date": "2025-09-16",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2025-10-11",
@@ -282,7 +306,8 @@
       "pnl_per_1000": 134.1,
       "exit": "take profit",
       "exit_date": "2025-10-25",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2025-11-05",
@@ -297,7 +322,8 @@
       "pnl_per_1000": -274.6,
       "exit": "time exit",
       "exit_date": "2025-12-06",
-      "days": 31
+      "days": 31,
+      "chain": "model"
      },
      {
       "date": "2026-02-05",
@@ -312,7 +338,8 @@
       "pnl_per_1000": 128.0,
       "exit": "take profit",
       "exit_date": "2026-02-21",
-      "days": 16
+      "days": 16,
+      "chain": "model"
      },
      {
       "date": "2026-02-23",
@@ -327,7 +354,8 @@
       "pnl_per_1000": 122.6,
       "exit": "take profit",
       "exit_date": "2026-03-04",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2026-03-04",
@@ -342,7 +370,8 @@
       "pnl_per_1000": -6.9,
       "exit": "time exit",
       "exit_date": "2026-04-04",
-      "days": 31
+      "days": 31,
+      "chain": "model"
      },
      {
       "date": "2026-06-30",
@@ -357,7 +386,8 @@
       "pnl_per_1000": 118.3,
       "exit": "take profit",
       "exit_date": "2026-07-14",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2026-08-23",
@@ -372,7 +402,8 @@
       "pnl_per_1000": 129.1,
       "exit": "take profit",
       "exit_date": "2026-08-26",
-      "days": 3
+      "days": 3,
+      "chain": "model"
      },
      {
       "date": "2026-08-27",
@@ -387,7 +418,8 @@
       "pnl_per_1000": 125.4,
       "exit": "take profit",
       "exit_date": "2026-09-17",
-      "days": 21
+      "days": 21,
+      "chain": "model"
      },
      {
       "date": "2026-11-01",
@@ -402,7 +434,8 @@
       "pnl_per_1000": -449.1,
       "exit": "stop",
       "exit_date": "2026-11-12",
-      "days": 11
+      "days": 11,
+      "chain": "model"
      }
     ]
    },
@@ -420,7 +453,8 @@
       "stop": 11,
       "take profit": 18,
       "time exit": 2
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": [
      {
@@ -436,7 +470,8 @@
       "pnl_per_1000": -367.1,
       "exit": "stop",
       "exit_date": "2024-06-23",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2024-06-23",
@@ -451,7 +486,8 @@
       "pnl_per_1000": 139.6,
       "exit": "take profit",
       "exit_date": "2024-06-30",
-      "days": 7
+      "days": 7,
+      "chain": "model"
      },
      {
       "date": "2024-07-01",
@@ -466,7 +502,8 @@
       "pnl_per_1000": -335.0,
       "exit": "stop",
       "exit_date": "2024-07-04",
-      "days": 3
+      "days": 3,
+      "chain": "model"
      },
      {
       "date": "2024-08-03",
@@ -481,7 +518,8 @@
       "pnl_per_1000": 134.4,
       "exit": "take profit",
       "exit_date": "2024-08-23",
-      "days": 20
+      "days": 20,
+      "chain": "model"
      },
      {
       "date": "2024-09-02",
@@ -496,7 +534,8 @@
       "pnl_per_1000": 133.6,
       "exit": "take profit",
       "exit_date": "2024-09-19",
-      "days": 17
+      "days": 17,
+      "chain": "model"
      },
      {
       "date": "2024-10-29",
@@ -511,7 +550,8 @@
       "pnl_per_1000": 131.7,
       "exit": "take profit",
       "exit_date": "2024-11-11",
-      "days": 13
+      "days": 13,
+      "chain": "model"
      },
      {
       "date": "2024-11-11",
@@ -526,7 +566,8 @@
       "pnl_per_1000": 137.3,
       "exit": "take profit",
       "exit_date": "2024-12-03",
-      "days": 22
+      "days": 22,
+      "chain": "model"
      },
      {
       "date": "2024-12-03",
@@ -541,7 +582,8 @@
       "pnl_per_1000": -459.2,
       "exit": "stop",
       "exit_date": "2024-12-19",
-      "days": 16
+      "days": 16,
+      "chain": "model"
      },
      {
       "date": "2024-12-19",
@@ -556,7 +598,8 @@
       "pnl_per_1000": 127.3,
       "exit": "take profit",
       "exit_date": "2025-01-03",
-      "days": 15
+      "days": 15,
+      "chain": "model"
      },
      {
       "date": "2025-01-03",
@@ -571,7 +614,8 @@
       "pnl_per_1000": -326.4,
       "exit": "stop",
       "exit_date": "2025-01-10",
-      "days": 7
+      "days": 7,
+      "chain": "model"
      },
      {
       "date": "2025-01-10",
@@ -586,7 +630,8 @@
       "pnl_per_1000": 130.4,
       "exit": "take profit",
       "exit_date": "2025-01-18",
-      "days": 8
+      "days": 8,
+      "chain": "model"
      },
      {
       "date": "2025-01-18",
@@ -601,7 +646,8 @@
       "pnl_per_1000": -364.3,
       "exit": "stop",
       "exit_date": "2025-01-26",
-      "days": 8
+      "days": 8,
+      "chain": "model"
      },
      {
       "date": "2025-01-26",
@@ -616,7 +662,8 @@
       "pnl_per_1000": -360.5,
       "exit": "stop",
       "exit_date": "2025-02-16",
-      "days": 21
+      "days": 21,
+      "chain": "model"
      },
      {
       "date": "2025-02-18",
@@ -631,7 +678,8 @@
       "pnl_per_1000": -469.0,
       "exit": "stop",
       "exit_date": "2025-02-24",
-      "days": 6
+      "days": 6,
+      "chain": "model"
      },
      {
       "date": "2025-02-24",
@@ -646,7 +694,8 @@
       "pnl_per_1000": 135.4,
       "exit": "take profit",
       "exit_date": "2025-03-23",
-      "days": 27
+      "days": 27,
+      "chain": "model"
      },
      {
       "date": "2025-03-30",
@@ -661,7 +710,8 @@
       "pnl_per_1000": -553.6,
       "exit": "stop",
       "exit_date": "2025-04-06",
-      "days": 7
+      "days": 7,
+      "chain": "model"
      },
      {
       "date": "2025-04-06",
@@ -676,7 +726,8 @@
       "pnl_per_1000": 141.0,
       "exit": "take profit",
       "exit_date": "2025-04-12",
-      "days": 6
+      "days": 6,
+      "chain": "model"
      },
      {
       "date": "2025-04-12",
@@ -691,7 +742,8 @@
       "pnl_per_1000": 138.4,
       "exit": "take profit",
       "exit_date": "2025-04-24",
-      "days": 12
+      "days": 12,
+      "chain": "model"
      },
      {
       "date": "2025-08-14",
@@ -706,7 +758,8 @@
       "pnl_per_1000": 123.8,
       "exit": "take profit",
       "exit_date": "2025-09-07",
-      "days": 24
+      "days": 24,
+      "chain": "model"
      },
      {
       "date": "2025-09-07",
@@ -721,7 +774,8 @@
       "pnl_per_1000": 137.7,
       "exit": "take profit",
       "exit_date": "2025-09-16",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2025-10-11",
@@ -736,7 +790,8 @@
       "pnl_per_1000": 134.1,
       "exit": "take profit",
       "exit_date": "2025-10-25",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2025-11-05",
@@ -751,7 +806,8 @@
       "pnl_per_1000": -287.7,
       "exit": "stop",
       "exit_date": "2025-11-17",
-      "days": 12
+      "days": 12,
+      "chain": "model"
      },
      {
       "date": "2025-11-18",
@@ -766,7 +822,8 @@
       "pnl_per_1000": 3.2,
       "exit": "time exit",
       "exit_date": "2025-12-20",
-      "days": 32
+      "days": 32,
+      "chain": "model"
      },
      {
       "date": "2026-02-05",
@@ -781,7 +838,8 @@
       "pnl_per_1000": 128.0,
       "exit": "take profit",
       "exit_date": "2026-02-21",
-      "days": 16
+      "days": 16,
+      "chain": "model"
      },
      {
       "date": "2026-02-23",
@@ -796,7 +854,8 @@
       "pnl_per_1000": 122.6,
       "exit": "take profit",
       "exit_date": "2026-03-04",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2026-03-04",
@@ -811,7 +870,8 @@
       "pnl_per_1000": -6.9,
       "exit": "time exit",
       "exit_date": "2026-04-04",
-      "days": 31
+      "days": 31,
+      "chain": "model"
      },
      {
       "date": "2026-06-30",
@@ -826,7 +886,8 @@
       "pnl_per_1000": 118.3,
       "exit": "take profit",
       "exit_date": "2026-07-14",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2026-08-23",
@@ -841,7 +902,8 @@
       "pnl_per_1000": 129.1,
       "exit": "take profit",
       "exit_date": "2026-08-26",
-      "days": 3
+      "days": 3,
+      "chain": "model"
      },
      {
       "date": "2026-08-27",
@@ -856,7 +918,8 @@
       "pnl_per_1000": 125.4,
       "exit": "take profit",
       "exit_date": "2026-09-17",
-      "days": 21
+      "days": 21,
+      "chain": "model"
      },
      {
       "date": "2026-11-01",
@@ -871,7 +934,8 @@
       "pnl_per_1000": -317.9,
       "exit": "stop",
       "exit_date": "2026-11-10",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2026-11-10",
@@ -886,7 +950,8 @@
       "pnl_per_1000": -273.0,
       "exit": "stop",
       "exit_date": "2026-11-13",
-      "days": 3
+      "days": 3,
+      "chain": "model"
      }
     ]
    },
@@ -904,7 +969,8 @@
       "take profit": 17,
       "time exit": 3,
       "stop": 2
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": [
      {
@@ -920,7 +986,8 @@
       "pnl_per_1000": 117.5,
       "exit": "take profit",
       "exit_date": "2024-07-13",
-      "days": 29
+      "days": 29,
+      "chain": "model"
      },
      {
       "date": "2024-08-03",
@@ -935,7 +1002,8 @@
       "pnl_per_1000": 134.4,
       "exit": "take profit",
       "exit_date": "2024-08-23",
-      "days": 20
+      "days": 20,
+      "chain": "model"
      },
      {
       "date": "2024-09-02",
@@ -950,7 +1018,8 @@
       "pnl_per_1000": 133.6,
       "exit": "take profit",
       "exit_date": "2024-09-19",
-      "days": 17
+      "days": 17,
+      "chain": "model"
      },
      {
       "date": "2024-10-29",
@@ -965,7 +1034,8 @@
       "pnl_per_1000": 131.7,
       "exit": "take profit",
       "exit_date": "2024-11-11",
-      "days": 13
+      "days": 13,
+      "chain": "model"
      },
      {
       "date": "2024-11-11",
@@ -980,7 +1050,8 @@
       "pnl_per_1000": 137.3,
       "exit": "take profit",
       "exit_date": "2024-12-03",
-      "days": 22
+      "days": 22,
+      "chain": "model"
      },
      {
       "date": "2024-12-03",
@@ -995,7 +1066,8 @@
       "pnl_per_1000": 6.0,
       "exit": "time exit",
       "exit_date": "2025-01-04",
-      "days": 32
+      "days": 32,
+      "chain": "model"
      },
      {
       "date": "2025-01-04",
@@ -1010,7 +1082,8 @@
       "pnl_per_1000": 133.1,
       "exit": "take profit",
       "exit_date": "2025-01-29",
-      "days": 25
+      "days": 25,
+      "chain": "model"
      },
      {
       "date": "2025-01-29",
@@ -1025,7 +1098,8 @@
       "pnl_per_1000": -885.1,
       "exit": "stop",
       "exit_date": "2025-02-23",
-      "days": 25
+      "days": 25,
+      "chain": "model"
      },
      {
       "date": "2025-02-24",
@@ -1040,7 +1114,8 @@
       "pnl_per_1000": 135.4,
       "exit": "take profit",
       "exit_date": "2025-03-23",
-      "days": 27
+      "days": 27,
+      "chain": "model"
      },
      {
       "date": "2025-03-30",
@@ -1055,7 +1130,8 @@
       "pnl_per_1000": 134.1,
       "exit": "take profit",
       "exit_date": "2025-04-19",
-      "days": 20
+      "days": 20,
+      "chain": "model"
      },
      {
       "date": "2025-04-19",
@@ -1070,7 +1146,8 @@
       "pnl_per_1000": 137.5,
       "exit": "take profit",
       "exit_date": "2025-05-07",
-      "days": 18
+      "days": 18,
+      "chain": "model"
      },
      {
       "date": "2025-08-14",
@@ -1085,7 +1162,8 @@
       "pnl_per_1000": 123.8,
       "exit": "take profit",
       "exit_date": "2025-09-07",
-      "days": 24
+      "days": 24,
+      "chain": "model"
      },
      {
       "date": "2025-09-07",
@@ -1100,7 +1178,8 @@
       "pnl_per_1000": 137.7,
       "exit": "take profit",
       "exit_date": "2025-09-16",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2025-10-11",
@@ -1115,7 +1194,8 @@
       "pnl_per_1000": 134.1,
       "exit": "take profit",
       "exit_date": "2025-10-25",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2025-11-05",
@@ -1130,7 +1210,8 @@
       "pnl_per_1000": -274.6,
       "exit": "time exit",
       "exit_date": "2025-12-06",
-      "days": 31
+      "days": 31,
+      "chain": "model"
      },
      {
       "date": "2026-02-05",
@@ -1145,7 +1226,8 @@
       "pnl_per_1000": 128.0,
       "exit": "take profit",
       "exit_date": "2026-02-21",
-      "days": 16
+      "days": 16,
+      "chain": "model"
      },
      {
       "date": "2026-02-23",
@@ -1160,7 +1242,8 @@
       "pnl_per_1000": 122.6,
       "exit": "take profit",
       "exit_date": "2026-03-04",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2026-03-04",
@@ -1175,7 +1258,8 @@
       "pnl_per_1000": -6.9,
       "exit": "time exit",
       "exit_date": "2026-04-04",
-      "days": 31
+      "days": 31,
+      "chain": "model"
      },
      {
       "date": "2026-06-30",
@@ -1190,7 +1274,8 @@
       "pnl_per_1000": 118.3,
       "exit": "take profit",
       "exit_date": "2026-07-14",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2026-08-23",
@@ -1205,7 +1290,8 @@
       "pnl_per_1000": 129.1,
       "exit": "take profit",
       "exit_date": "2026-08-26",
-      "days": 3
+      "days": 3,
+      "chain": "model"
      },
      {
       "date": "2026-08-27",
@@ -1220,7 +1306,8 @@
       "pnl_per_1000": 125.4,
       "exit": "take profit",
       "exit_date": "2026-09-17",
-      "days": 21
+      "days": 21,
+      "chain": "model"
      },
      {
       "date": "2026-11-01",
@@ -1235,7 +1322,8 @@
       "pnl_per_1000": -626.6,
       "exit": "stop",
       "exit_date": "2026-11-13",
-      "days": 12
+      "days": 12,
+      "chain": "model"
      }
     ]
    },
@@ -1252,7 +1340,8 @@
      "exits": {
       "take profit": 18,
       "expiry": 2
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": [
      {
@@ -1268,7 +1357,8 @@
       "pnl_per_1000": 117.5,
       "exit": "take profit",
       "exit_date": "2024-07-13",
-      "days": 29
+      "days": 29,
+      "chain": "model"
      },
      {
       "date": "2024-08-03",
@@ -1283,7 +1373,8 @@
       "pnl_per_1000": 134.4,
       "exit": "take profit",
       "exit_date": "2024-08-23",
-      "days": 20
+      "days": 20,
+      "chain": "model"
      },
      {
       "date": "2024-09-02",
@@ -1298,7 +1389,8 @@
       "pnl_per_1000": 133.6,
       "exit": "take profit",
       "exit_date": "2024-09-19",
-      "days": 17
+      "days": 17,
+      "chain": "model"
      },
      {
       "date": "2024-10-29",
@@ -1313,7 +1405,8 @@
       "pnl_per_1000": 131.7,
       "exit": "take profit",
       "exit_date": "2024-11-11",
-      "days": 13
+      "days": 13,
+      "chain": "model"
      },
      {
       "date": "2024-11-11",
@@ -1328,7 +1421,8 @@
       "pnl_per_1000": 137.3,
       "exit": "take profit",
       "exit_date": "2024-12-03",
-      "days": 22
+      "days": 22,
+      "chain": "model"
      },
      {
       "date": "2024-12-03",
@@ -1343,7 +1437,8 @@
       "pnl_per_1000": -747.2,
       "exit": "expiry",
       "exit_date": "2025-01-11",
-      "days": 39
+      "days": 39,
+      "chain": "model"
      },
      {
       "date": "2025-01-11",
@@ -1358,7 +1453,8 @@
       "pnl_per_1000": 137.4,
       "exit": "take profit",
       "exit_date": "2025-01-29",
-      "days": 18
+      "days": 18,
+      "chain": "model"
      },
      {
       "date": "2025-01-29",
@@ -1373,7 +1469,8 @@
       "pnl_per_1000": -1000.0,
       "exit": "expiry",
       "exit_date": "2025-03-08",
-      "days": 38
+      "days": 38,
+      "chain": "model"
      },
      {
       "date": "2025-03-08",
@@ -1388,7 +1485,8 @@
       "pnl_per_1000": 138.8,
       "exit": "take profit",
       "exit_date": "2025-04-13",
-      "days": 36
+      "days": 36,
+      "chain": "model"
      },
      {
       "date": "2025-04-13",
@@ -1403,7 +1501,8 @@
       "pnl_per_1000": 141.7,
       "exit": "take profit",
       "exit_date": "2025-04-24",
-      "days": 11
+      "days": 11,
+      "chain": "model"
      },
      {
       "date": "2025-08-14",
@@ -1418,7 +1517,8 @@
       "pnl_per_1000": 123.8,
       "exit": "take profit",
       "exit_date": "2025-09-07",
-      "days": 24
+      "days": 24,
+      "chain": "model"
      },
      {
       "date": "2025-09-07",
@@ -1433,7 +1533,8 @@
       "pnl_per_1000": 137.7,
       "exit": "take profit",
       "exit_date": "2025-09-16",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2025-10-11",
@@ -1448,7 +1549,8 @@
       "pnl_per_1000": 134.1,
       "exit": "take profit",
       "exit_date": "2025-10-25",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2025-11-05",
@@ -1463,7 +1565,8 @@
       "pnl_per_1000": 132.1,
       "exit": "take profit",
       "exit_date": "2025-12-11",
-      "days": 36
+      "days": 36,
+      "chain": "model"
      },
      {
       "date": "2026-02-05",
@@ -1478,7 +1581,8 @@
       "pnl_per_1000": 128.0,
       "exit": "take profit",
       "exit_date": "2026-02-21",
-      "days": 16
+      "days": 16,
+      "chain": "model"
      },
      {
       "date": "2026-02-23",
@@ -1493,7 +1597,8 @@
       "pnl_per_1000": 122.6,
       "exit": "take profit",
       "exit_date": "2026-03-04",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2026-03-04",
@@ -1508,7 +1613,8 @@
       "pnl_per_1000": 127.4,
       "exit": "take profit",
       "exit_date": "2026-04-07",
-      "days": 34
+      "days": 34,
+      "chain": "model"
      },
      {
       "date": "2026-06-30",
@@ -1523,7 +1629,8 @@
       "pnl_per_1000": 118.3,
       "exit": "take profit",
       "exit_date": "2026-07-14",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2026-08-23",
@@ -1538,7 +1645,8 @@
       "pnl_per_1000": 129.1,
       "exit": "take profit",
       "exit_date": "2026-08-26",
-      "days": 3
+      "days": 3,
+      "chain": "model"
      },
      {
       "date": "2026-08-27",
@@ -1553,7 +1661,8 @@
       "pnl_per_1000": 125.4,
       "exit": "take profit",
       "exit_date": "2026-09-17",
-      "days": 21
+      "days": 21,
+      "chain": "model"
      }
     ]
    },
@@ -1570,7 +1679,8 @@
      "exits": {
       "take profit": 16,
       "time exit": 5
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": [
      {
@@ -1586,7 +1696,8 @@
       "pnl_per_1000": 117.5,
       "exit": "take profit",
       "exit_date": "2024-07-13",
-      "days": 29
+      "days": 29,
+      "chain": "model"
      },
      {
       "date": "2024-08-03",
@@ -1601,7 +1712,8 @@
       "pnl_per_1000": 134.4,
       "exit": "take profit",
       "exit_date": "2024-08-23",
-      "days": 20
+      "days": 20,
+      "chain": "model"
      },
      {
       "date": "2024-09-02",
@@ -1616,7 +1728,8 @@
       "pnl_per_1000": 133.6,
       "exit": "take profit",
       "exit_date": "2024-09-19",
-      "days": 17
+      "days": 17,
+      "chain": "model"
      },
      {
       "date": "2024-10-29",
@@ -1631,7 +1744,8 @@
       "pnl_per_1000": 131.7,
       "exit": "take profit",
       "exit_date": "2024-11-11",
-      "days": 13
+      "days": 13,
+      "chain": "model"
      },
      {
       "date": "2024-11-11",
@@ -1646,7 +1760,8 @@
       "pnl_per_1000": 137.3,
       "exit": "take profit",
       "exit_date": "2024-12-03",
-      "days": 22
+      "days": 22,
+      "chain": "model"
      },
      {
       "date": "2024-12-03",
@@ -1661,7 +1776,8 @@
       "pnl_per_1000": 6.0,
       "exit": "time exit",
       "exit_date": "2025-01-04",
-      "days": 32
+      "days": 32,
+      "chain": "model"
      },
      {
       "date": "2025-01-04",
@@ -1676,7 +1792,8 @@
       "pnl_per_1000": 133.1,
       "exit": "take profit",
       "exit_date": "2025-01-29",
-      "days": 25
+      "days": 25,
+      "chain": "model"
      },
      {
       "date": "2025-01-29",
@@ -1691,7 +1808,8 @@
       "pnl_per_1000": -1041.4,
       "exit": "time exit",
       "exit_date": "2025-03-01",
-      "days": 31
+      "days": 31,
+      "chain": "model"
      },
      {
       "date": "2025-03-01",
@@ -1706,7 +1824,8 @@
       "pnl_per_1000": -227.8,
       "exit": "time exit",
       "exit_date": "2025-04-05",
-      "days": 35
+      "days": 35,
+      "chain": "model"
      },
      {
       "date": "2025-04-05",
@@ -1721,7 +1840,8 @@
       "pnl_per_1000": 138.0,
       "exit": "take profit",
       "exit_date": "2025-04-19",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2025-04-19",
@@ -1736,7 +1856,8 @@
       "pnl_per_1000": 137.5,
       "exit": "take profit",
       "exit_date": "2025-05-07",
-      "days": 18
+      "days": 18,
+      "chain": "model"
      },
      {
       "date": "2025-08-14",
@@ -1751,7 +1872,8 @@
       "pnl_per_1000": 123.8,
       "exit": "take profit",
       "exit_date": "2025-09-07",
-      "days": 24
+      "days": 24,
+      "chain": "model"
      },
      {
       "date": "2025-09-07",
@@ -1766,7 +1888,8 @@
       "pnl_per_1000": 137.7,
       "exit": "take profit",
       "exit_date": "2025-09-16",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2025-10-11",
@@ -1781,7 +1904,8 @@
       "pnl_per_1000": 134.1,
       "exit": "take profit",
       "exit_date": "2025-10-25",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2025-11-05",
@@ -1796,7 +1920,8 @@
       "pnl_per_1000": -274.6,
       "exit": "time exit",
       "exit_date": "2025-12-06",
-      "days": 31
+      "days": 31,
+      "chain": "model"
      },
      {
       "date": "2026-02-05",
@@ -1811,7 +1936,8 @@
       "pnl_per_1000": 128.0,
       "exit": "take profit",
       "exit_date": "2026-02-21",
-      "days": 16
+      "days": 16,
+      "chain": "model"
      },
      {
       "date": "2026-02-23",
@@ -1826,7 +1952,8 @@
       "pnl_per_1000": 122.6,
       "exit": "take profit",
       "exit_date": "2026-03-04",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2026-03-04",
@@ -1841,7 +1968,8 @@
       "pnl_per_1000": -6.9,
       "exit": "time exit",
       "exit_date": "2026-04-04",
-      "days": 31
+      "days": 31,
+      "chain": "model"
      },
      {
       "date": "2026-06-30",
@@ -1856,7 +1984,8 @@
       "pnl_per_1000": 118.3,
       "exit": "take profit",
       "exit_date": "2026-07-14",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2026-08-23",
@@ -1871,7 +2000,8 @@
       "pnl_per_1000": 129.1,
       "exit": "take profit",
       "exit_date": "2026-08-26",
-      "days": 3
+      "days": 3,
+      "chain": "model"
      },
      {
       "date": "2026-08-27",
@@ -1886,7 +2016,8 @@
       "pnl_per_1000": 125.4,
       "exit": "take profit",
       "exit_date": "2026-09-17",
-      "days": 21
+      "days": 21,
+      "chain": "model"
      }
     ]
    },
@@ -1903,7 +2034,8 @@
      "exits": {
       "take profit": 18,
       "expiry": 2
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": [
      {
@@ -1919,7 +2051,8 @@
       "pnl_per_1000": 117.5,
       "exit": "take profit",
       "exit_date": "2024-07-13",
-      "days": 29
+      "days": 29,
+      "chain": "model"
      },
      {
       "date": "2024-08-03",
@@ -1934,7 +2067,8 @@
       "pnl_per_1000": 134.4,
       "exit": "take profit",
       "exit_date": "2024-08-23",
-      "days": 20
+      "days": 20,
+      "chain": "model"
      },
      {
       "date": "2024-09-02",
@@ -1949,7 +2083,8 @@
       "pnl_per_1000": 133.6,
       "exit": "take profit",
       "exit_date": "2024-09-19",
-      "days": 17
+      "days": 17,
+      "chain": "model"
      },
      {
       "date": "2024-10-29",
@@ -1964,7 +2099,8 @@
       "pnl_per_1000": 131.7,
       "exit": "take profit",
       "exit_date": "2024-11-11",
-      "days": 13
+      "days": 13,
+      "chain": "model"
      },
      {
       "date": "2024-11-11",
@@ -1979,7 +2115,8 @@
       "pnl_per_1000": 137.3,
       "exit": "take profit",
       "exit_date": "2024-12-03",
-      "days": 22
+      "days": 22,
+      "chain": "model"
      },
      {
       "date": "2024-12-03",
@@ -1994,7 +2131,8 @@
       "pnl_per_1000": -747.2,
       "exit": "expiry",
       "exit_date": "2025-01-11",
-      "days": 39
+      "days": 39,
+      "chain": "model"
      },
      {
       "date": "2025-01-11",
@@ -2009,7 +2147,8 @@
       "pnl_per_1000": 137.4,
       "exit": "take profit",
       "exit_date": "2025-01-29",
-      "days": 18
+      "days": 18,
+      "chain": "model"
      },
      {
       "date": "2025-01-29",
@@ -2024,7 +2163,8 @@
       "pnl_per_1000": -1000.0,
       "exit": "expiry",
       "exit_date": "2025-03-08",
-      "days": 38
+      "days": 38,
+      "chain": "model"
      },
      {
       "date": "2025-03-08",
@@ -2039,7 +2179,8 @@
       "pnl_per_1000": 138.8,
       "exit": "take profit",
       "exit_date": "2025-04-13",
-      "days": 36
+      "days": 36,
+      "chain": "model"
      },
      {
       "date": "2025-04-13",
@@ -2054,7 +2195,8 @@
       "pnl_per_1000": 141.7,
       "exit": "take profit",
       "exit_date": "2025-04-24",
-      "days": 11
+      "days": 11,
+      "chain": "model"
      },
      {
       "date": "2025-08-14",
@@ -2069,7 +2211,8 @@
       "pnl_per_1000": 123.8,
       "exit": "take profit",
       "exit_date": "2025-09-07",
-      "days": 24
+      "days": 24,
+      "chain": "model"
      },
      {
       "date": "2025-09-07",
@@ -2084,7 +2227,8 @@
       "pnl_per_1000": 137.7,
       "exit": "take profit",
       "exit_date": "2025-09-16",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2025-10-11",
@@ -2099,7 +2243,8 @@
       "pnl_per_1000": 134.1,
       "exit": "take profit",
       "exit_date": "2025-10-25",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2025-11-05",
@@ -2114,7 +2259,8 @@
       "pnl_per_1000": 132.1,
       "exit": "take profit",
       "exit_date": "2025-12-11",
-      "days": 36
+      "days": 36,
+      "chain": "model"
      },
      {
       "date": "2026-02-05",
@@ -2129,7 +2275,8 @@
       "pnl_per_1000": 128.0,
       "exit": "take profit",
       "exit_date": "2026-02-21",
-      "days": 16
+      "days": 16,
+      "chain": "model"
      },
      {
       "date": "2026-02-23",
@@ -2144,7 +2291,8 @@
       "pnl_per_1000": 122.6,
       "exit": "take profit",
       "exit_date": "2026-03-04",
-      "days": 9
+      "days": 9,
+      "chain": "model"
      },
      {
       "date": "2026-03-04",
@@ -2159,7 +2307,8 @@
       "pnl_per_1000": 127.4,
       "exit": "take profit",
       "exit_date": "2026-04-07",
-      "days": 34
+      "days": 34,
+      "chain": "model"
      },
      {
       "date": "2026-06-30",
@@ -2174,7 +2323,8 @@
       "pnl_per_1000": 118.3,
       "exit": "take profit",
       "exit_date": "2026-07-14",
-      "days": 14
+      "days": 14,
+      "chain": "model"
      },
      {
       "date": "2026-08-23",
@@ -2189,7 +2339,8 @@
       "pnl_per_1000": 129.1,
       "exit": "take profit",
       "exit_date": "2026-08-26",
-      "days": 3
+      "days": 3,
+      "chain": "model"
      },
      {
       "date": "2026-08-27",
@@ -2204,7 +2355,8 @@
       "pnl_per_1000": 125.4,
       "exit": "take profit",
       "exit_date": "2026-09-17",
-      "days": 21
+      "days": 21,
+      "chain": "model"
      }
     ]
    },
@@ -2220,7 +2372,8 @@
      "avg_days": 38.5,
      "exits": {
       "expiry": 14
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": [
      {
@@ -2236,7 +2389,8 @@
       "pnl_per_1000": 235.0,
       "exit": "expiry",
       "exit_date": "2024-07-20",
-      "days": 36
+      "days": 36,
+      "chain": "model"
      },
      {
       "date": "2024-08-03",
@@ -2251,7 +2405,8 @@
       "pnl_per_1000": 268.9,
       "exit": "expiry",
       "exit_date": "2024-09-14",
-      "days": 42
+      "days": 42,
+      "chain": "model"
      },
      {
       "date": "2024-10-29",
@@ -2266,7 +2421,8 @@
       "pnl_per_1000": 263.3,
       "exit": "expiry",
       "exit_date": "2024-12-07",
-      "days": 39
+      "days": 39,
+      "chain": "model"
      },
      {
       "date": "2024-12-07",
@@ -2281,7 +2437,8 @@
       "pnl_per_1000": 277.9,
       "exit": "expiry",
       "exit_date": "2025-01-18",
-      "days": 42
+      "days": 42,
+      "chain": "model"
      },
      {
       "date": "2025-01-18",
@@ -2296,7 +2453,8 @@
       "pnl_per_1000": -1000.0,
       "exit": "expiry",
       "exit_date": "2025-02-15",
-      "days": 28
+      "days": 28,
+      "chain": "model"
      },
      {
       "date": "2025-02-18",
@@ -2311,7 +2469,8 @@
       "pnl_per_1000": -1000.0,
       "exit": "expiry",
       "exit_date": "2025-03-29",
-      "days": 39
+      "days": 39,
+      "chain": "model"
      },
      {
       "date": "2025-03-30",
@@ -2326,7 +2485,8 @@
       "pnl_per_1000": 268.1,
       "exit": "expiry",
       "exit_date": "2025-05-10",
-      "days": 41
+      "days": 41,
+      "chain": "model"
      },
      {
       "date": "2025-08-14",
@@ -2341,7 +2501,8 @@
       "pnl_per_1000": 247.6,
       "exit": "expiry",
       "exit_date": "2025-09-20",
-      "days": 37
+      "days": 37,
+      "chain": "model"
      },
      {
       "date": "2025-10-11",
@@ -2356,7 +2517,8 @@
       "pnl_per_1000": -1000.0,
       "exit": "expiry",
       "exit_date": "2025-11-15",
-      "days": 35
+      "days": 35,
+      "chain": "model"
      },
      {
       "date": "2025-11-16",
@@ -2371,7 +2533,8 @@
       "pnl_per_1000": 268.6,
       "exit": "expiry",
       "exit_date": "2025-12-27",
-      "days": 41
+      "days": 41,
+      "chain": "model"
      },
      {
       "date": "2026-02-05",
@@ -2386,7 +2549,8 @@
       "pnl_per_1000": 256.0,
       "exit": "expiry",
       "exit_date": "2026-03-14",
-      "days": 37
+      "days": 37,
+      "chain": "model"
      },
      {
       "date": "2026-03-14",
@@ -2401,7 +2565,8 @@
       "pnl_per_1000": 255.2,
       "exit": "expiry",
       "exit_date": "2026-04-25",
-      "days": 42
+      "days": 42,
+      "chain": "model"
      },
      {
       "date": "2026-06-30",
@@ -2416,7 +2581,8 @@
       "pnl_per_1000": 236.7,
       "exit": "expiry",
       "exit_date": "2026-08-08",
-      "days": 39
+      "days": 39,
+      "chain": "model"
      },
      {
       "date": "2026-08-23",
@@ -2431,7 +2597,8 @@
       "pnl_per_1000": 258.3,
       "exit": "expiry",
       "exit_date": "2026-10-03",
-      "days": 41
+      "days": 41,
+      "chain": "model"
      }
     ]
    }
@@ -2451,7 +2618,8 @@
       "stop": 17,
       "take profit": 36,
       "time exit": 3
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2469,7 +2637,8 @@
       "stop": 30,
       "take profit": 38,
       "time exit": 1
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2487,7 +2656,8 @@
       "stop": 10,
       "take profit": 35,
       "time exit": 6
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2505,7 +2675,8 @@
       "expiry": 10,
       "take profit": 30,
       "stop": 3
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2522,7 +2693,8 @@
      "exits": {
       "time exit": 12,
       "take profit": 29
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2539,7 +2711,8 @@
      "exits": {
       "expiry": 11,
       "take profit": 29
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2555,7 +2728,8 @@
      "avg_days": 39.5,
      "exits": {
       "expiry": 22
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    }
@@ -2575,7 +2749,8 @@
       "take profit": 200,
       "time exit": 24,
       "stop": 66
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2593,7 +2768,8 @@
       "stop": 109,
       "take profit": 176,
       "time exit": 5
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2611,7 +2787,8 @@
       "take profit": 207,
       "time exit": 52,
       "stop": 28
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2628,7 +2805,8 @@
      "exits": {
       "take profit": 233,
       "expiry": 52
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2645,7 +2823,8 @@
      "exits": {
       "take profit": 207,
       "time exit": 78
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2662,7 +2841,8 @@
      "exits": {
       "take profit": 233,
       "expiry": 52
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    },
@@ -2678,7 +2858,8 @@
      "avg_days": 38.2,
      "exits": {
       "expiry": 285
-     }
+     },
+     "stored_chain_entries": 0
     },
     "trades": null
    }
