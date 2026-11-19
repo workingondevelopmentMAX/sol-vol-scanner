@@ -9,7 +9,7 @@
  "long": "SOL_USDC-4DEC26-108-P",
  "max_loss": 10.21,
  "no_trade": null,
- "price_stop": 119.4379,
+ "price_stop": 115.642,
  "short": "SOL_USDC-4DEC26-120-P",
  "take_profit": 0.89,
  "verdict": "RICH"

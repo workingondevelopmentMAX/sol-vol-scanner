@@ -78,7 +78,9 @@ class DeclaredInTheStrategyFile(unittest.TestCase):
         st = engine.load_strategy()
         view = engine.with_strategy({"risk": {}}, st)
         self.assertEqual(view["exits"], st["exits"])
-        self.assertEqual(st["exits"]["stop_multiple"], 1.5)
+        import tomllib
+        written = tomllib.loads(engine.DEFAULT_STRATEGY.read_text(encoding="utf-8"))["exits"]
+        self.assertEqual(st["exits"]["stop_multiple"], written["stop_multiple"])   # [[variants]] never leak in
 
 
 class SplitHistory(unittest.TestCase):
