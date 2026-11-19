@@ -39,11 +39,12 @@ body { margin:0; background:var(--surface-0); color:var(--text-primary);
   padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
 main { max-width:none; margin:0 auto; padding:12px 12px 40px; }
 .grid { display:grid; gap:12px; grid-template-columns:minmax(0,1fr);
-  grid-template-areas:"verdict" "hist" "term" "idea" "exit" "greeks" "log"; }
+  grid-template-areas:"exit" "greeks" "verdict" "hist" "term" "log"; }
+.grid.no-greeks { grid-template-areas:"verdict" "hist" "term" "log"; }
 .grid > .card { margin:0; min-width:0; }
-.a-idea, .a-greeks, .a-log, .a-exit { align-self:start; }
+.a-greeks, .a-log, .a-exit { align-self:start; }
 .a-verdict { grid-area:verdict; } .a-hist { grid-area:hist; } .a-term { grid-area:term; }
-.a-idea { grid-area:idea; } .a-greeks { grid-area:greeks; } .a-log { grid-area:log; }
+.a-greeks { grid-area:greeks; } .a-log { grid-area:log; }
 .step { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%;
   background:var(--text-primary); color:var(--surface-1); font-size:11px; font-weight:700; margin-right:8px; letter-spacing:0; vertical-align:1px; }
 .gitems .greek:first-child { border-top:0; padding-top:0; }
@@ -51,17 +52,20 @@ main { max-width:none; margin:0 auto; padding:12px 12px 40px; }
 @media (min-width:700px) {
   main { padding:20px 20px 48px; }
   .grid { grid-template-columns:repeat(2, minmax(0,1fr));
-    grid-template-areas:"verdict term" "hist hist" "idea exit" "greeks greeks" "log log"; }
-  .grid.no-greeks { grid-template-areas:"verdict term" "hist hist" "idea log"; }
+    grid-template-areas:"exit exit" "greeks greeks" "verdict term" "hist hist" "log log"; }
+  .grid.no-greeks { grid-template-areas:"verdict term" "hist hist" "log log"; }
+  .ev-cols { grid-template-columns:repeat(2, minmax(0,1fr)); }
   header h1 { font-size:20px; }
 }
 /* desktop: 1 market read -> 2-3 context -> 4-5 the idea and its risk -> 6 track record */
 @media (min-width:1100px) {
   main { padding:24px 28px 56px; }
   .grid { grid-template-columns:repeat(3, minmax(0,1fr));
-    grid-template-areas:"verdict verdict verdict" "hist hist term" "idea exit exit" "idea greeks greeks" "log log log"; }
+    grid-template-areas:"exit exit greeks" "verdict verdict verdict" "hist hist term" "log log log"; }
+  .idea-cols { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:28px; align-items:start; }
+  .idea-cols > .idea-right > :first-child { margin-top:0; }
   .grid .esteps { grid-template-columns:repeat(2, minmax(0,1fr)); }
-  .grid.no-greeks { grid-template-areas:"verdict verdict verdict" "hist hist term" "idea log log"; }
+  .grid.no-greeks { grid-template-areas:"verdict verdict verdict" "hist hist term" "log log log"; }
   .grid .stats { grid-template-columns:repeat(4, minmax(0,1fr)); }
   .gitems { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); column-gap:24px; }
   .gitems .greek:nth-child(2) { border-top:0; padding-top:0; }
@@ -153,6 +157,37 @@ h3.sub { font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:va
 .tl-out { font-size:13.5px; margin-bottom:6px; }
 footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
 .no-trade { font-size:16px; font-weight:650; margin-bottom:6px; }
+:root { --amber:#b07400; --amber-band:rgba(201,133,0,.10); }
+@media (prefers-color-scheme: dark) { :root { --amber:#eda100; --amber-band:rgba(237,161,0,.12); } }
+.glance-line { font-size:13.5px; color:var(--text-secondary); margin:0 0 10px; }
+.glance { display:grid; gap:0; }
+.grow { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2px 10px; padding:8px 0; border-top:1px solid var(--border); }
+.grow:first-child { border-top:0; }
+.grow .gn { font-weight:650; } .grow .gm { font-size:12px; color:var(--text-muted); text-align:right; white-space:nowrap; }
+.grow .gt { grid-column:1 / -1; font-size:13px; color:var(--text-secondary); }
+.grow .chip { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; padding:1px 7px;
+  border-radius:9px; border:1px solid var(--border); color:var(--text-secondary); margin-left:6px; vertical-align:1px; }
+.grow.suggested { background:var(--cheap-band); border-radius:10px; padding:8px 10px; border-top-color:transparent; }
+.grow.suggested .chip { border-color:var(--good); color:var(--good); }
+.grow.no_trade .chip { border-color:var(--amber); color:var(--amber); }
+.grow.not_built { opacity:.55; }
+.grow a { color:inherit; }
+.glance-foot { margin-top:10px; font-weight:650; }
+.a-idea { margin-bottom:12px; scroll-margin-top:12px; }
+.box { margin-top:16px; border-top:1px solid var(--border); padding-top:12px; }
+.box h3 { font-size:13px; margin:0 0 6px; text-transform:uppercase; letter-spacing:.5px; color:var(--text-secondary); }
+.ev-title { font-size:16px; font-weight:700; } .ev-title.thin, .ev-title.mixed, .ev-title.losing { color:var(--amber); }
+.ev-title.consistent:not(.thin) { color:var(--good); }
+.ev-cols { display:grid; gap:12px; grid-template-columns:minmax(0,1fr); margin-top:8px; }
+.ev-col { border:1px solid var(--border); border-radius:10px; padding:10px 12px; }
+.ev-col.held_back { border-color:var(--text-secondary); }
+.ev-col h4 { margin:0 0 2px; font-size:14px; } .ev-col .kv { font-size:13px; margin-top:8px; }
+ul.ticks, ul.cautions { list-style:none; padding:0; margin:4px 0 8px; font-size:13.5px; }
+ul.ticks li, ul.cautions li { padding:3px 0 3px 22px; position:relative; }
+ul.ticks li::before { content:"✓"; position:absolute; left:2px; color:var(--good); font-weight:700; }
+ul.cautions li { background:var(--amber-band); border-radius:6px; padding:5px 8px 5px 26px; margin:4px 0; }
+ul.cautions li::before { content:"!"; position:absolute; left:9px; color:var(--amber); font-weight:800; }
+.sim-group { margin-top:8px; } .sim-group h4 { font-size:12.5px; margin:8px 0 2px; color:var(--text-secondary); }
 </style>
 </head>
 <body>
@@ -195,55 +230,62 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
   }
 
   const ageH = (Date.now() - new Date(D.last_good_at || L.generated_at)) / 36e5;
+  const R = L.report || null;                         // the page's explanations, all worked out in Python
   let html = `<header><h1>SOL Vol Scanner</h1><div class="upd">Updated ${sgt(D.last_good_at || L.generated_at)} SGT<br>SOL ${usd(L.index_price)}</div></header>`;
   if (PRIVATE) html += `<div class="banner info"><b>Private view</b> from this computer's last scan, sized with your own limits. Run run_scan.bat to refresh it; the online dashboard shows the generic $1,000 reference instead.</div>`;
   if (D.sample) html += `<div class="banner info"><b>Sample data.</b> These numbers are synthetic, made for testing. Run the scanner for real data.</div>`;
   if (D.status === "error") html += `<div class="banner warn"><b>Stale data.</b> The last run failed (${esc(D.error)}). Showing data from ${sgt(D.last_good_at)} SGT.</div>`;
   else if (ageH > 36 && !D.sample) html += `<div class="banner warn"><b>Stale data.</b> Last update was ${Math.round(ageH)} hours ago. Is the laptop's daily task running?</div>`;
   if (L.checks && L.checks.price_units && L.checks.price_units.ok === false) html += `<div class="banner warn">${esc(L.checks.price_units.note)}</div>`;
+  if (R) R.banners.forEach(b => { html += `<div class="banner warn">${esc(b.text)}</div>`; });
 
-  // ---- verdict
-  const metric = V.mode === "percentile"
-    ? `<div class="stat"><div class="k">IV percentile</div><div class="v">${Math.round(V.percentile)}</div></div>`
-    : `<div class="stat"><div class="k">IV / RV30 (bootstrap)</div><div class="v">${V.iv_rv_ratio ? V.iv_rv_ratio.toFixed(2) + "×" : "n/a"}</div></div>`;
-  html += `<div class="grid${S ? "" : " no-greeks"}"><section class="card a-verdict"><h2><span class="step">1</span>Is volatility rich or cheap?</h2>
-    <div class="vbody"><div class="verdict"><span class="badge ${V.label}">${V.label}</span>
-      <div class="muted">${V.mode === "percentile" ? `vs ${V.history_days} days of IV history` : `${V.history_days || 0} of ${D.config?.vol?.min_history_days ?? 60} days of IV history collected — using IV vs realised vol until then`}</div></div>
-    <div class="stats">
-      <div class="stat"><div class="k">ATM implied vol (30-day)</div><div class="v">${pct(V.atm_iv)}</div></div>
-      ${metric}
-      <div class="stat"><div class="k">Realised vol, 20 days</div><div class="v">${pct(V.rv20)}</div></div>
-      <div class="stat"><div class="k">Realised vol, 30 days</div><div class="v">${pct(V.rv30)}</div></div>
-    </div></div>
-    <div class="reason">${esc(V.reason)}</div></section>`;
+  // ---- 1. today at a glance: every strategy on the menu
+  if (R) {
+    const G = R.glance;
+    html += `<section class="card a-glance"><h2><span class="step">1</span>Today at a glance</h2>
+      <p class="glance-line">${esc(G.line)}</p>
+      <div class="glance">${G.rows.map(r => `<div class="grow ${r.status}">
+        <div class="gn">${r.card ? `<a href="#${r.card}">${esc(r.name)}</a>` : esc(r.name)}<span class="chip">${esc(r.status.replace("_", " "))}</span></div>
+        <div class="gm">for ${esc(r.market_text)}</div>
+        <div class="gt">${esc(r.text)}${r.card ? ` <a href="#${r.card}">See the idea ↓</a>` : ""}</div></div>`).join("")}</div>
+      ${G.footer ? `<div class="glance-foot">${esc(G.footer)}</div>` : ""}</section>`;
+  }
 
-  // ---- charts
-  html += `<section class="card a-hist"><h2><span class="step">2</span>Implied vs realised volatility</h2>
-    <div class="controls"><div class="seg" id="rng">${["1M","3M","6M","1Y","All"].map((r,i)=>`<button data-d="${[30,91,182,365,1000][i]}" class="${r==="3M"?"on":""}">${r}</button>`).join("")}</div>
-      <div class="seg"><button id="pricebtn" aria-pressed="false">SOL price</button></div></div>
-    <div class="legend"><span><i style="background:var(--series-iv)"></i>Implied vol (30-day ATM)</span><span><i style="background:var(--series-rv)"></i>Realised vol (30-day)</span><span id="pricelegend" hidden><i style="background:var(--series-price)"></i>SOL price (lower panel)</span>
-      <span><i class="band" style="background:var(--rich-band);outline:1px solid var(--rich)"></i>IV was rich</span><span><i class="band" style="background:var(--cheap-band);outline:1px solid var(--cheap)"></i>IV was cheap</span></div>
-    <div class="chart" id="hist"></div>
-    <div class="muted" id="histnote"></div></section>`;
-  html += `<section class="card a-term"><h2><span class="step">3</span>Term structure (IV by expiry)</h2>
-    <div class="legend"><span><i style="background:var(--series-iv)"></i>Today</span>${L.term_structure_last_week ? `<span><i style="background:var(--series-faded)"></i>${L.term_structure_last_week.date}</span>` : ""}</div>
-    <div class="chart" id="term"></div>
-    <div class="muted">Normally longer expiries cost more. If the short end sits above the long end, the market is stressed.</div></section>`;
-
-  // ---- suggestion
-  if (!S) {
-    const W = L.why_no_trade || {market:[L.no_trade_reason], goals:[]};
-    html += `<section class="card a-idea"><h2><span class="step">4</span>Today's idea</h2><div class="no-trade">No trade today</div>
-      <div class="why" style="border-top:0;margin-top:4px;padding-top:0">
-        <div class="conv None"><div class="conv-top"><span class="lbl">Conviction: none</span><span class="sc">no trade</span></div>
-          <div class="conv-act">Sitting out is the right call today. Nothing passed the rules.</div></div>
-        <h3>Market conditions</h3><ul>${W.market.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
-        ${W.goals.length ? `<h3>How this fits your plan</h3><ul>${W.goals.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
-      </div></section>`;
-  } else {
-    const z = S.sizing;
-    html += `<section class="card a-idea"><h2><span class="step">4</span>Today's idea: bull put spread</h2>
-      <div class="legs"><div><span class="act">Sell</span>${esc(S.short_leg.name)} <span class="muted">delta ${S.short_delta.toFixed(2)}</span></div>
+  // ---- 2. today's idea card(s): one per suggested strategy (built from its entry in L.strategies)
+  const cardOf = id => (R ? R.cards.find(c => c.id === id) : null);
+  function evidenceBox(C) {
+    if (!C.evidence) return `<div class="box"><h3>How much to trust this rule</h3><p class="muted">${esc(C.evidence_missing)}</p></div>`;
+    const E = C.evidence;
+    return `<div class="box"><h3>How much to trust this rule</h3>
+      <div class="ev-title ${E.label}${E.thin ? " thin" : ""}">${esc(E.title)}</div><div class="muted">${esc(E.meaning)}</div>
+      <div class="ev-cols">${E.windows.map(w => `<div class="ev-col ${w.key}"><h4>${esc(w.title)}</h4><div class="muted">${esc(w.label)}</div>
+        <div class="kv">${w.rows.map(r => `<div class="k">${esc(r.name)}</div><div class="v${r.value != null && ["total_per_1000","avg_per_1000","hold_sol","dca_sol"].includes(r.key) ? (r.value >= 0 ? " pos" : " neg") : ""}">${esc(r.text)}</div>`).join("")}</div></div>`).join("")}</div>
+      <p class="muted" style="margin:8px 0 0"><b>${esc(E.unseen_note)}</b> ${esc(E.per_1000_note)}</p>
+      <p class="muted" style="margin:4px 0 0">${esc(E.versions_note)}</p></div>`;
+  }
+  function forAgainst(C) {
+    return `<div class="box"><h3>For and against today</h3>
+      <div class="muted">For: rules this trade passed</div><ul class="ticks">${C.for.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+      ${C.cautions.length ? `<div class="muted">Cautions</div><ul class="cautions">${C.cautions.map(c => `<li>${esc(c.text)}</li>`).join("")}</ul>` : `<div class="muted">No cautions fired today.</div>`}
+      <p class="muted" style="margin:6px 0 0">${esc(C.closing)}</p></div>`;
+  }
+  function similarBox(C) {
+    const M = C.similar;
+    if (!M) return "";
+    const table = g => g.rows.length ? `<div class="sim-group"><h4>${esc(g.title)}</h4><table><tr><th>Entry date</th><th>SOL then</th><th>30-day move then</th><th>Result per $1,000</th><th>How it exited</th></tr>
+      ${g.rows.map(r => `<tr><td>${r.date}</td><td>${usd(r.sol)}</td><td>${r.move_30d_pct > 0 ? "+" : ""}${r.move_30d_pct.toFixed(1)}%</td><td class="${r.pnl_per_1000 >= 0 ? "pos" : "neg"}">${esc(r.result)}</td><td>${esc(r.exit)}</td></tr>`).join("")}</table></div>` : "";
+    const groups = M.windows.map(table).join("");
+    const DT = C.during_trade;
+    return `<div class="box"><h3>Results on past days like today</h3><div class="muted">${esc(M.rule)}</div>
+      <p style="margin:6px 0;font-weight:650">${esc(M.text)}</p>
+      ${M.enough ? groups : (M.count ? `<details><summary>Show the ${M.count} day(s) anyway</summary>${groups}</details>` : "")}
+      ${DT && DT.rows.length ? `<details><summary>${esc(DT.label)}</summary><div class="muted">${esc(DT.note)}</div><table><tr><th>Period</th><th>Verdict and SOL during the trade</th><th>Trades</th><th>Wins</th><th>Total per $1,000</th></tr>
+        ${DT.rows.map(r => `<tr><td>${esc(r.window)}</td><td>${esc(r.group)}</td><td>${r.trades}</td><td>${r.wins}</td><td class="${r.total_per_1000 >= 0 ? "pos" : "neg"}">${esc(r.text)}</td></tr>`).join("")}</table></details>` : ""}</div>`;
+  }
+  function ideaCard(row, primary) {
+    const S = row.suggestion, z = S.sizing, C = cardOf(row.id);
+    const id = n => primary ? ` id="${n}"` : "";
+    const left = `<div class="legs"><div><span class="act">Sell</span>${esc(S.short_leg.name)} <span class="muted">delta ${S.short_delta.toFixed(2)}</span></div>
       <div><span class="act">Buy</span>${esc(S.long_leg.name)}</div></div>
       <div class="kv">
         <div class="k">Expiry</div><div class="v">${S.expiry} (${Math.round(S.dte)} days)</div>
@@ -257,7 +299,7 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
       </div>
       ${z.note ? `<div class="banner warn" style="margin-top:10px">${esc(z.note)}</div>` : ""}
       ${D.config.risk.reference_sizing ? `<div class="muted" style="margin-top:6px">Reference sizing: every size and dollar figure assumes a $1,000 max loss per trade (up to $3,000 across open spreads). Scale to your own size: risking $2,500 means 2.5× the contracts and dollars shown.</div>` : ""}
-      <details class="tryl"><summary>Try different loss limits</summary>
+      ${primary ? `<details class="tryl"><summary>Try different loss limits</summary>
         <div class="tl-grid">
           <label>Max loss per trade ($)<input id="tl-per" type="number" min="0" step="10" value="${D.config.risk.max_loss_per_trade_usd}"></label>
           <label>Max loss, all spreads ($)<input id="tl-tot" type="number" min="0" step="10" value="${D.config.risk.max_total_spread_risk_usd}"></label>
@@ -266,14 +308,62 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
         <div id="tl-out" class="tl-out"></div>
         <div class="muted">Preview only. To keep new limits, double-click <b>set_limits.bat</b> on the laptop, then rescan.</div>
       </details>
-      <div class="chart" id="payoff" style="margin-top:10px"></div>
-      <div class="muted">Payoff at expiry per SOL. Settles in USDC — to own more SOL, buy spot separately.</div>
-      ${L.alternates && L.alternates.length ? `<details><summary>${L.alternates.length} alternate(s)</summary><table><tr><th>Expiry</th><th>Strikes</th><th>Credit</th><th>Max loss</th></tr>
+      <div class="chart"${id("payoff")} style="margin-top:10px"></div>
+      <div class="muted">Payoff at expiry per SOL. Settles in USDC — to own more SOL, buy spot separately.</div>` : ""}
+      ${primary && L.alternates && L.alternates.length ? `<details><summary>${L.alternates.length} alternate(s)</summary><table><tr><th>Expiry</th><th>Strikes</th><th>Credit</th><th>Max loss</th></tr>
         ${L.alternates.map(a => `<tr><td>${a.expiry}</td><td>${a.short_leg.strike}/${a.long_leg.strike}</td><td>${usd(a.credit_conservative)}</td><td>${usd(a.max_loss)}</td></tr>`).join("")}</table></details>` : ""}
-      ${whyBlock(S)}
-    </section>`;
+      ${whyBlock(S)}`;
+    const right = C ? evidenceBox(C) + forAgainst(C) + similarBox(C) : "";
+    return `<section class="card a-idea" id="idea-${esc(row.id)}"><h2><span class="step">2</span>Today's idea: ${esc(row.name.toLowerCase())}</h2>
+      <div class="idea-cols"><div class="idea-left">${left}</div><div class="idea-right">${right}</div></div></section>`;
+  }
+  const rows = (L.strategies || []).filter(r => r.status === "suggested" && r.suggestion);
+  const ideaRows = rows.length ? rows : (S ? [{id: "bull_put_spread", name: "Bull put spread", suggestion: S}] : []);
+  ideaRows.forEach((r, i) => { html += ideaCard(r, i === 0); });
+  if (!ideaRows.length) {
+    const W = L.why_no_trade || {market:[L.no_trade_reason], goals:[]};
+    html += `<section class="card a-idea"><h2><span class="step">2</span>Today's idea</h2><div class="no-trade">No trade today</div>
+      <div class="why" style="border-top:0;margin-top:4px;padding-top:0">
+        <div class="conv None"><div class="conv-top"><span class="lbl">Conviction: none</span><span class="sc">no trade</span></div>
+          <div class="conv-act">Sitting out is the right call today. Nothing passed the rules.</div></div>
+        <h3>Market conditions</h3><ul>${W.market.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+        ${W.goals.length ? `<h3>How this fits your plan</h3><ul>${W.goals.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+      </div></section>`;
+  }
+
+  // ---- verdict
+  const metric = V.mode === "percentile"
+    ? `<div class="stat"><div class="k">IV percentile</div><div class="v">${Math.round(V.percentile)}</div></div>`
+    : `<div class="stat"><div class="k">IV / RV30 (bootstrap)</div><div class="v">${V.iv_rv_ratio ? V.iv_rv_ratio.toFixed(2) + "×" : "n/a"}</div></div>`;
+  let lower = `<section class="card a-verdict"><h2><span class="step">5</span>Is volatility rich or cheap?</h2>
+    <div class="vbody"><div class="verdict"><span class="badge ${V.label}">${V.label}</span>
+      <div class="muted">${V.mode === "percentile" ? `vs ${V.history_days} days of IV history` : `${V.history_days || 0} of ${D.config?.vol?.min_history_days ?? 60} days of IV history collected — using IV vs realised vol until then`}</div></div>
+    <div class="stats">
+      <div class="stat"><div class="k">ATM implied vol (30-day)</div><div class="v">${pct(V.atm_iv)}</div></div>
+      ${metric}
+      <div class="stat"><div class="k">Realised vol, 20 days</div><div class="v">${pct(V.rv20)}</div></div>
+      <div class="stat"><div class="k">Realised vol, 30 days</div><div class="v">${pct(V.rv30)}</div></div>
+    </div></div>
+    <div class="reason">${esc(V.reason)}</div></section>`;
+  html += `<div class="grid${S ? "" : " no-greeks"}">` + lower;
+
+  // ---- charts
+  html += `<section class="card a-hist"><h2><span class="step">6</span>Implied vs realised volatility</h2>
+    <div class="controls"><div class="seg" id="rng">${["1M","3M","6M","1Y","All"].map((r,i)=>`<button data-d="${[30,91,182,365,1000][i]}" class="${r==="3M"?"on":""}">${r}</button>`).join("")}</div>
+      <div class="seg"><button id="pricebtn" aria-pressed="false">SOL price</button></div></div>
+    <div class="legend"><span><i style="background:var(--series-iv)"></i>Implied vol (30-day ATM)</span><span><i style="background:var(--series-rv)"></i>Realised vol (30-day)</span><span id="pricelegend" hidden><i style="background:var(--series-price)"></i>SOL price (lower panel)</span>
+      <span><i class="band" style="background:var(--rich-band);outline:1px solid var(--rich)"></i>IV was rich</span><span><i class="band" style="background:var(--cheap-band);outline:1px solid var(--cheap)"></i>IV was cheap</span></div>
+    <div class="chart" id="hist"></div>
+    <div class="muted" id="histnote"></div></section>`;
+  html += `<section class="card a-term"><h2><span class="step">7</span>Term structure (IV by expiry)</h2>
+    <div class="legend"><span><i style="background:var(--series-iv)"></i>Today</span>${L.term_structure_last_week ? `<span><i style="background:var(--series-faded)"></i>${L.term_structure_last_week.date}</span>` : ""}</div>
+    <div class="chart" id="term"></div>
+    <div class="muted">Normally longer expiries cost more. If the short end sits above the long end, the market is stressed.</div></section>`;
+
+  // ---- exit plan and Greeks for today's idea (below the idea card)
+  if (S) {
     const E = S.exit_plan;
-    if (E) html += `<section class="card a-exit"><h2><span class="step">5</span>Exit plan: set these the moment you enter</h2>
+    if (E) html += `<section class="card a-exit"><h2><span class="step">3</span>Exit plan: set these the moment you enter</h2>
       <div class="exit-sum">
         <div class="stat"><div class="k">Loss if the stop fires</div><div class="v">≈ ${usd(E.loss_at_stop_usd, 0)}</div><div class="muted">instead of ${usd(E.max_loss_usd, 0)} maximum</div></div>
         <div class="stat"><div class="k">Win rate needed to break even</div><div class="v">${Math.round(E.breakeven_win_rate * 100)}%</div><div class="muted">this trade's rough chance of profit: ${Math.round(E.prob_profit_approx * 100)}%</div></div>
@@ -286,7 +376,7 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
       <div class="muted">${esc(E.order_note)} Settings: take profit ${E.settings.take_profit_pct}%${E.settings.split_take_profit ? " on half" : ""} · stop ${E.settings.stop_multiple}× credit · IV +${E.settings.iv_points_per_pct_drop} pt per 1% drop · close ${E.settings.time_exit_dte} days before expiry (change in strategies/bull_put_spread.toml, [exits]). Levels are model estimates.</div>
     </section>`;
     const P = S.greeks_panel;
-    html += `<section class="card a-greeks"><h2><span class="step">6</span>The Greeks, in plain language</h2><div class="muted" style="margin-bottom:8px">${esc(P.size_note)}</div>
+    html += `<section class="card a-greeks"><h2><span class="step">4</span>The Greeks, in plain language</h2><div class="muted" style="margin-bottom:8px">${esc(P.size_note)}</div>
       <div class="gitems">${P.items.map(g => `<div class="greek"><div class="h"><span>${g.greek}</span><span>${(g.greek === "Gamma" ? g.value.toFixed(4) : usd(g.value))} ${esc(g.unit)}</span></div>
         <p>${esc(g.now)}</p><p class="s"><b>When it shifts:</b> ${esc(g.shift)}</p></div>`).join("")}</div>
       <div class="greek gsum"><p><b>Hurts most:</b> ${esc(P.summary.hurts_most)}</p><p><b>Helps most:</b> ${esc(P.summary.helps_most)}</p></div>
@@ -300,7 +390,7 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
 
   // ---- log
   const log = (D.log || []).filter(r => r.trade === "yes").slice(0, 20);
-  html += `<section class="card a-log"><h2><span class="step">7</span>Track record</h2>
+  html += `<section class="card a-log"><h2><span class="step">8</span>Track record</h2>
     ${(() => { const pr = D.premium || {trades:0};
       return pr.trades ? `<div class="exit-sum" style="margin-bottom:10px"><div class="stat"><div class="k">SOL bought with premium</div><div class="v">${pr.sol_bought.toFixed(3)} SOL</div></div>
         <div class="stat"><div class="k">Premium collected</div><div class="v">${usd(pr.credit_usd)}</div><div class="muted">from ${pr.trades} trade(s)</div></div></div>`

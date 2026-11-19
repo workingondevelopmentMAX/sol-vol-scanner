@@ -57,4 +57,8 @@ min_trades_per_day = 2
 
 [report]
 # How backtest evidence is labelled on the dashboard. Display rules only: they never change a decision.
-held_back_thin_below = 20  # fewer unseen-period (held-back) trades than this = "thin evidence" (confirmed by the owner 2026-11-19)
+# All four values confirmed by the owner on 2026-11-19.
+held_back_thin_below = 20   # fewer unseen-period (held-back) trades than this = "thin evidence"
+caution_move_30d_pct = 15   # caution when SOL moved more than this % in the last 30 days, up or down
+similar_move_band_pts = 10  # a past entry day is "similar" if its prior 30-day SOL move is within +/- this many points
+similar_min_trades = 5      # fewer similar past days than this = "too few to tell"

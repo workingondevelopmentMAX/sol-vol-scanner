@@ -26,6 +26,7 @@ import vol_gauge
 import bsmodel
 import chain_store
 import rationale
+import report
 import strategy_menu
 import engine
 import exits
@@ -333,6 +334,8 @@ def save_outputs(cfg: dict, snap: dict, out: dict, sample: bool = False) -> dict
     write_log(rows)
 
     annotated = vol_gauge.annotate_history(cfg, hist)
+    # the page's explanations (display only); refreshed again by report.py after the daily backtest
+    result["report"] = report.build(cfg, result, report.load_backtest(), annotated, report.load_view(today=today))
     premium = read_premium_log()
     dash = {
         "status": "ok",

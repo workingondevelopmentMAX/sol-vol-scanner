@@ -56,8 +56,9 @@ The owner reviews outcomes, not code. In every session and pull request:
 | `engine.py` | The decision engine: `decide()`, `exit_plan()`, `synthetic_chain()`, `manage()`, `open_position()` |
 | `strategies/bull_put_spread.toml` | Put spread rules: entry, strikes, filters, exits, backtest pricing; `[evaluation]` windows and `[[variants]]` to compare |
 | `strategies/menu.toml` | The agreed strategy menu (docs/STRATEGIES.md) with status; display only, never changes a decision |
+| `report.py` | The daily page's explanations (at a glance, evidence box, cautions, similar past days): numbers + templates, display only; `python report.py` refreshes them after the backtest |
 | `strategy_menu.py` | Loads the menu and turns today's verdict and the scan's result into one status per strategy (templates) |
-| `config.toml` | Shared settings: Deribit, rich/cheap gauge, reference risk limits, backfill, DVOL check, `[report]` evidence labels |
+| `config.toml` | Shared settings: Deribit, rich/cheap gauge, reference risk limits, backfill, DVOL check, `[report]` display thresholds (evidence labels, cautions, similar days) |
 | `data_fetch.py` | Read-only Deribit public API client (retries, history host for backfill) |
 | `vol_gauge.py` | Option chain, ATM IV, realised vol, 12-month rich/cheap verdict, history file |
 | `suggest.py` | Candidate search, filters and sizing (called through `engine.decide`) |
