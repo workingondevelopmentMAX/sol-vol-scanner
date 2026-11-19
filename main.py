@@ -30,6 +30,7 @@ import exits
 
 ROOT = Path(__file__).resolve().parent
 CONFIG = ROOT / "config.toml"
+LOCAL_CONFIG = ROOT / "config.local.toml"   # private overrides on your own computer; never committed
 SUGGESTIONS_CSV = ROOT / "logs" / "suggestions.csv"
 TERM_HISTORY = ROOT / "data" / "term_history.json"
 SITE_DATA = ROOT / "site" / "data"
@@ -56,10 +57,46 @@ def use_sample_paths() -> None:
         vol_gauge.HISTORY_CSV.write_text(seed.read_text(encoding="utf-8"), encoding="utf-8")
 
 
+PRIVATE_DIR = ROOT / "private"
+
+
+def use_private_paths() -> None:
+    """With config.local.toml present, a laptop run never touches the shared (published) files.
+
+    It starts from the latest shared history (as pulled from GitHub), adds today's reading, and writes
+    everything to private/ and site/data/private/, both ignored by Git. The dashboard shows the private
+    view when it exists, so you see your own limits and premium log; the cloud copy stays generic.
+    """
+    global SUGGESTIONS_CSV, TERM_HISTORY, SITE_DATA
+    PRIVATE_DIR.mkdir(exist_ok=True)
+    for name in ("iv_history.csv", "term_history.json"):
+        shared = ROOT / "data" / name
+        if shared.exists():
+            (PRIVATE_DIR / name).write_bytes(shared.read_bytes())
+    vol_gauge.HISTORY_CSV = PRIVATE_DIR / "iv_history.csv"
+    TERM_HISTORY = PRIVATE_DIR / "term_history.json"
+    SUGGESTIONS_CSV = PRIVATE_DIR / "suggestions.csv"
+    SITE_DATA = ROOT / "site" / "data" / "private"
+
+
+def merge_settings(base: dict, over: dict) -> dict:
+    """Section-by-section overlay: values in config.local.toml replace the same keys in config.toml."""
+    out = {k: (dict(v) if isinstance(v, dict) else v) for k, v in base.items()}
+    for k, v in over.items():
+        if isinstance(v, dict) and isinstance(out.get(k), dict):
+            out[k].update(v)
+        else:
+            out[k] = v
+    return out
+
+
 def load_config(strategy_path=None) -> dict:
     """config.toml (market data, risk limits, vol gauge) + the strategy file's rules, as one settings view."""
     with CONFIG.open("rb") as f:
         cfg = tomllib.load(f)
+    if LOCAL_CONFIG.exists():
+        with LOCAL_CONFIG.open("rb") as f:
+            cfg = merge_settings(cfg, tomllib.load(f))
     st = engine.load_strategy(strategy_path or engine.DEFAULT_STRATEGY)
     cfg = engine.with_strategy(cfg, st)
     cfg["_strategy"] = st
@@ -83,14 +120,16 @@ def write_log(rows: list[dict]) -> None:
 
 
 PREMIUM_CSV = ROOT / "my_premium_log.csv"
+LOCAL_PREMIUM_CSV = ROOT / "my_premium_log.local.csv"   # your real trades stay here, never committed
 
 
 def read_premium_log() -> dict:
     """Your own record of credits taken and SOL bought with them (edit my_premium_log.csv in Excel)."""
     out = {"trades": 0, "credit_usd": 0.0, "sol_bought": 0.0, "rows": []}
-    if not PREMIUM_CSV.exists():
+    path = LOCAL_PREMIUM_CSV if LOCAL_PREMIUM_CSV.exists() else PREMIUM_CSV
+    if not path.exists():
         return out
-    with PREMIUM_CSV.open(newline="", encoding="utf-8-sig") as f:
+    with path.open(newline="", encoding="utf-8-sig") as f:
         for r in csv.DictReader(f):
             def num(k):
                 try:
@@ -307,7 +346,8 @@ def write_dashboard(dash: dict, sample: bool = False) -> None:
     text = json.dumps(dash, default=str, allow_nan=False)
     (SITE_DATA / "latest.json").write_text(text, encoding="utf-8")
     # data.js lets index.html work when opened straight from disk (file://) as well as over Wi-Fi
-    (SITE_DATA / "data.js").write_text("window.SCANNER_DATA = " + text + ";\n", encoding="utf-8")
+    var = "SCANNER_PRIVATE_DATA" if SITE_DATA.name == "private" else "SCANNER_DATA"
+    (SITE_DATA / "data.js").write_text(f"window.{var} = " + text + ";\n", encoding="utf-8")
 
 
 def mark_stale(error: str) -> None:
@@ -395,6 +435,8 @@ def main(argv=None) -> int:
     cfg = load_config()
     if args.sample:
         use_sample_paths()
+    elif LOCAL_CONFIG.exists():
+        use_private_paths()
     if args.backfill and not args.sample:
         print("Backfilling approximate IV history from Deribit trades (takes a few minutes)...")
         try:

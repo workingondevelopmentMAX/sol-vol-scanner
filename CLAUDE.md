@@ -1,0 +1,65 @@
+# SOL Vol Scanner: brief for Claude
+
+Read this first, then `docs/ROADMAP.md` (what to build next) and `docs/DECISIONS.md` (why things are the way they are).
+
+## What this is
+A read-only tool that checks once a day whether Solana (SOL) options on Deribit are rich or cheap, and suggests
+defined-risk option trades with a full exit plan. It runs daily in GitHub Actions (about 09:07 Singapore time) and
+publishes a dashboard to GitHub Pages: https://workingondevelopmentmax.github.io/sol-vol-scanner/
+
+## The owner and their goals
+- Based in Singapore. Not a professional coder: explain changes in plain language, keep instructions click-by-click.
+- Long-term SOL bull. The main goal is to **build up SOL over years**; option trades are secondary helpers.
+- Wants to **act at highs and lows** instead of freezing (has historically held at tops and not bought dips).
+- **Defined risk only:** spreads, never naked short options. Maximum loss is known before entry.
+- Wants a small, separate budget for **big-swing** trades (e.g. cheap call spreads) to scratch the "win big" itch.
+- Outputs must be **deterministic**: decisions come from code, data and versioned rule files, never from an LLM.
+
+## Non-negotiables
+1. **Read-only.** No code that authenticates to Deribit or places orders. Only `public/*` market-data methods.
+   A test (`NoOrderCode`) enforces this. Order placement is a later, explicitly approved phase (testnet first).
+2. **No LLM in the pipeline.** All dashboard text is fixed templates filled with numbers.
+3. **One engine.** `engine.py` makes every trade decision for both the daily scan (`main.py`) and the backtest
+   (`backtest.py`). Never add selection or exit logic anywhere else.
+4. **Rules live in strategy files** (`strategies/*.toml`), versioned and fingerprinted. Changing behaviour =
+   changing a strategy file, not hard-coding numbers.
+5. **Tests must pass**, including the golden test (`tests/golden/sample_decision.json`). If a change is meant to
+   alter the sample-day decision, update the golden file deliberately (`python tests/golden_tools.py --update`)
+   and say so in the pull request.
+6. **The repository is public.** No API keys, no real position sizes, no personal trade log. Real limits and the
+   real premium log live only in `config.local.toml` / `my_premium_log.local.csv` on the owner's laptop
+   (both git-ignored). The public copy uses reference sizing: $1,000 max loss per trade, $3,000 total.
+7. **Work through pull requests.** One task per branch; explain what changed, test results, and any change to
+   suggestions or backtest numbers in plain language in the PR description.
+
+## Layout
+| Path | Role |
+|---|---|
+| `main.py` | Daily entry point: fetch, analyse, write history/log/dashboard data. `--sample` runs offline, `--backfill` fills past IV |
+| `engine.py` | The decision engine: `decide()`, `exit_plan()`, `synthetic_chain()`, `manage()`, `open_position()` |
+| `strategies/bull_put_spread.toml` | Put spread rules: entry, strikes, filters, exits, backtest pricing assumptions |
+| `config.toml` | Shared settings: Deribit, rich/cheap gauge, reference risk limits, backfill, DVOL check |
+| `data_fetch.py` | Read-only Deribit public API client (retries, history host for backfill) |
+| `vol_gauge.py` | Option chain, ATM IV, realised vol, 12-month rich/cheap verdict, history file |
+| `suggest.py` | Candidate search, filters and sizing (called through `engine.decide`) |
+| `exits.py` | Exit plan: take profit, Greek-informed price stop, mark-price stop, time exit |
+| `rationale.py`, `explain.py` | Conviction score, plain-language "why", Greeks panel (templates only) |
+| `backtest.py` | Replays a strategy file over history with the same engine; writes `data/backtest.json` |
+| `data/iv_history.csv` | One row per day since 2024-04: price, 30-day ATM IV, RV20, RV30, IV source |
+| `site/` | Static dashboard (plain HTML/JS, no build step); data in `site/data/` |
+| `.github/workflows/daily.yml` | Daily scan, commit of data, Pages deploy; "Run workflow" with optional backfill |
+
+## How to run
+```
+python -m unittest discover tests      # all tests (must pass)
+python main.py --sample                # offline run on stored sample data
+python main.py                         # live run (needs internet access to deribit.com)
+python backtest.py                     # backtest the default strategy file
+```
+Python 3.11+ standard library only. No pip installs.
+
+## Data notes
+- Deribit publishes no SOL volatility index (the `get_volatility_index_data` currencies are BTC, ETH, USDC, USDT, EURR).
+- Past IV (2024-05-31 to 2026-11) is estimated from public trades on `history.deribit.com`; daily readings since
+  2026-11-15 come from the live chain (`iv_source = snapshot`).
+- SOL options are USDC-settled (linear), European, contract size 10 SOL; prices are quoted per 1 SOL.

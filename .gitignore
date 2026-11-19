@@ -3,3 +3,8 @@ __pycache__/
 sample_output/
 logs/raw/
 logs/last_run.txt
+# private, this computer only
+config.local.toml
+my_premium_log.local.csv
+private/
+site/data/private/

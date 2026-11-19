@@ -33,16 +33,17 @@ not financial advice.
 5. **Make it daily:** double-click `install_daily_task.bat`. It runs at 9:00 am every day, or as
    soon as the laptop is next on if it was off or asleep. To remove it, run `remove_daily_task.bat`.
 
-## Changing your risk limits
+## Changing your risk limits (privately)
 
-Double-click `set_limits.bat`. It asks for:
+Double-click `set_limits.bat` on your laptop. It asks for:
 - the most you'll lose on one trade
 - the most across all open spreads
 - the max loss of spreads you already hold
 
-Press Enter to keep any value. Once you've entered a portfolio value, you can type limits as
-percentages, e.g. `2%`. To preview other limits without saving them, use "Try different loss limits"
-under today's idea on the dashboard.
+Your answers are saved to `config.local.toml`, which Git ignores, so they never reach GitHub. Once that file
+exists, `run_scan.bat` on the laptop sizes ideas with your real limits and shows a "Private view" on the local
+dashboard; the online dashboard keeps the generic $1,000 reference. Record real trades in
+`my_premium_log.local.csv` (copy `my_premium_log.csv` and rename it): it is private in the same way.
 
 ## Exit plan
 

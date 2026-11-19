@@ -158,9 +158,11 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
 <body>
 <main id="app"><p class="muted">Loading…</p></main>
 <script src="data/data.js"></script>
+<script src="data/private/data.js"></script><!-- only exists on your own computer (private limits); ignored by Git -->
 <script>
 (async function () {
-  let D = window.SCANNER_DATA;
+  let D = window.SCANNER_PRIVATE_DATA || window.SCANNER_DATA;
+  const PRIVATE = !!window.SCANNER_PRIVATE_DATA;
   if (!D) { try { D = await (await fetch("data/latest.json", {cache:"no-store"})).json(); } catch (e) {} }
   const app = document.getElementById("app");
   if (!D || !D.latest) {
@@ -194,6 +196,7 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
 
   const ageH = (Date.now() - new Date(D.last_good_at || L.generated_at)) / 36e5;
   let html = `<header><h1>SOL Vol Scanner</h1><div class="upd">Updated ${sgt(D.last_good_at || L.generated_at)} SGT<br>SOL ${usd(L.index_price)}</div></header>`;
+  if (PRIVATE) html += `<div class="banner info"><b>Private view</b> from this computer's last scan, sized with your own limits. Run run_scan.bat to refresh it; the online dashboard shows the generic $1,000 reference instead.</div>`;
   if (D.sample) html += `<div class="banner info"><b>Sample data.</b> These numbers are synthetic, made for testing. Run the scanner for real data.</div>`;
   if (D.status === "error") html += `<div class="banner warn"><b>Stale data.</b> The last run failed (${esc(D.error)}). Showing data from ${sgt(D.last_good_at)} SGT.</div>`;
   else if (ageH > 36 && !D.sample) html += `<div class="banner warn"><b>Stale data.</b> Last update was ${Math.round(ageH)} hours ago. Is the laptop's daily task running?</div>`;

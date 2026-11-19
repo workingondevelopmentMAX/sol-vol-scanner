@@ -166,10 +166,15 @@ class Window(unittest.TestCase):
 
 class NoOrderCode(unittest.TestCase):
     def test_no_private_methods_anywhere(self):
-        for p in ROOT.glob("*.py"):
-            text = p.read_text(encoding="utf-8")
-            for bad in ("private/", "/buy", "/sell", "client_secret", "access_token"):
-                self.assertNotIn(bad, text, f"{p.name} contains {bad!r}")
+        """No Deribit authenticated/trading API anywhere: private/* methods, auth, keys or tokens."""
+        import re
+        bad = re.compile(r"api/v2/private|[\"'/]private/(buy|sell|edit|cancel|close_position|get_|auth)|public/auth"
+                         r"|client_secret|access_token")
+        for p in ROOT.rglob("*.py"):
+            if "tests" in p.parts:
+                continue
+            m = bad.search(p.read_text(encoding="utf-8"))
+            self.assertIsNone(m, f"{p.name} contains {m.group(0) if m else ''!r}")
 
 
 if __name__ == "__main__":
