@@ -41,3 +41,52 @@ half_spread = [-0.0037, 0.153, 0.01]                       # half bid-ask as sha
 fee_rate = 0.0003                   # per leg per trade: 0.03% of the underlying...
 fee_cap = 0.125                     # ...capped at 12.5% of the option price
 contract_size = 10
+
+# ---------------------------------------------------------------------------------------------------------------
+# Testing rules, set in advance (step 3). The backtest compares ONLY the variants listed here, and always reports
+# the same scorecard for two fixed windows. Nothing can be added to a comparison without changing this file.
+# None of this changes what the daily scan suggests: it reads only [entry], [strikes] and [exits] above.
+
+[evaluation]
+in_sample = ["2024-06-01", "2025-06-30"]   # rules were chosen looking at this period
+held_back = ["2025-07-01", ""]             # judged here; "" = up to the last day of data
+# A trade belongs to the window of its entry date. Each variant is run once over all of history, then split.
+
+# Each variant = the rules above with a few overrides:
+#   exits = { ... }          any key of [exits]
+#   require_verdict = ""     "" = trade whatever the vol verdict (no rich filter)
+#   one_at_a_time = false    open a new trade every eligible day, even while others are open (default true)
+[[variants]]
+name = "Strategy file as written"
+
+[[variants]]
+name = "Stop 1x"
+exits = { stop_multiple = 1.0 }
+
+[[variants]]
+name = "Stop 2x"
+exits = { stop_multiple = 2.0 }
+
+[[variants]]
+name = "Stop 3x, no time exit"
+exits = { stop_multiple = 3.0, time_exit_dte = 0 }
+
+[[variants]]
+name = "No stop, close 7 days out"
+exits = { stop_multiple = 0 }
+
+[[variants]]
+name = "No stop, no time exit"
+exits = { stop_multiple = 0, time_exit_dte = 0 }
+
+[[variants]]
+name = "Hold to expiry, no exits"
+exits = { stop_multiple = 0, time_exit_dte = 0, take_profit_pct = 0 }
+
+[[variants]]
+name = "No rich filter (every day)"
+require_verdict = ""
+
+[[variants]]
+name = "Overlapping (new trade every rich day)"
+one_at_a_time = false

@@ -13,16 +13,13 @@ Full rationale: the "Deterministic Strategy Engine Plan" doc. Work through one s
   The backtest uses a stored chain instead of `synthetic_chain()` where one exists (entries and exits), reads only
   committed files, lists the SHA-256 of each in `data/backtest.json` plus a `data_fingerprint`, and re-runs
   byte-identically. Golden test on a frozen 2024-04 to 2025-12 history slice.
+- **Step 3: testing rules set in advance** (2026-11-19). Variants live in the strategy file's `[[variants]]` list
+  and windows in `[evaluation]` (in-sample 2024-06-01 to 2025-06-30, held back 2025-07-01 onwards). Fixed
+  scorecard per window: trades, win rate, average/total/worst per $1,000 max loss, longest losing streak, max
+  drawdown, results by condition (verdict x SOL up/down over the trade), versus holding SOL. The report shows both
+  windows side by side for every declared variant; the backtest code has no variants of its own.
 
 ## Next
-
-### Step 3: testing rules set in advance
-- Variants to compare are declared in the strategy file (e.g. a `[[variants]]` list), not in code.
-- Split history: rules chosen on 2024-06 to 2025-06 ("in-sample"), judged on 2025-07 onwards ("held back").
-- Fixed scorecard for every report: trades, win rate, average and total per $1,000 max loss, worst trade, max
-  losing streak, max drawdown, results by condition (rich/cheap x SOL up/down over the trade), versus holding SOL.
-- **Done when:** the report shows in-sample and held-back columns side by side for every declared variant,
-  and nothing can be added to a comparison without changing a committed file.
 
 ### Step 4: Strategy Lab page
 - New dashboard page generated nightly from `data/backtest.json`: running P&L and drawdown chart, scorecard
@@ -38,4 +35,5 @@ Full rationale: the "Deterministic Strategy Engine Plan" doc. Work through one s
 
 ## Decisions waiting on the owner
 - Exit rules for the put spread: the current 1.5x stop lost money in the backtest; 2x / 3x / no stop did better
-  on 20-25 trades. Decide after step 3's held-back test, not before.
+  on 20-25 trades. Step 3's held-back test is now available (see DECISIONS 2026-11-19, "Testing rules set in
+  advance"): only 10-13 held-back trades per variant, so treat it as a hint, not proof. The owner decides.

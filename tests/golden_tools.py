@@ -37,14 +37,17 @@ def sample_decision() -> dict:
 
 
 def backtest_slice() -> dict:
-    """The strategy file's own rules, rich days, one trade at a time, on the frozen history slice."""
+    """The strategy file's own rules, rich days, one trade at a time, on the frozen history slice, with its scorecard."""
     import backtest
     cfg = main.load_config(local=False)
     st = cfg["_strategy"]
     days = backtest.load_days(cfg, BACKTEST_HISTORY)
     trades = backtest.run(cfg, st, days, True, NO_CHAINS)
+    win = backtest.windows(st, days)
     return {"period": [days[0]["date"], days[-1]["date"]], "strategy_version": st["_stamp"]["version"],
-            "summary": backtest.summarise(trades), "trades": trades}
+            "summary": backtest.summarise(trades), "windows": win,
+            "scorecard": {k: backtest.scorecard(trades, days, *win[k]) for k in ("in_sample", "held_back")},
+            "trades": trades}
 
 
 def dump(x: dict) -> str:
