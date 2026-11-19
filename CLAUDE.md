@@ -55,7 +55,9 @@ The owner reviews outcomes, not code. In every session and pull request:
 | `main.py` | Daily entry point: fetch, analyse, write history/log/dashboard data. `--sample` runs offline, `--backfill` fills past IV |
 | `engine.py` | The decision engine: `decide()`, `exit_plan()`, `synthetic_chain()`, `manage()`, `open_position()` |
 | `strategies/bull_put_spread.toml` | Put spread rules: entry, strikes, filters, exits, backtest pricing; `[evaluation]` windows and `[[variants]]` to compare |
-| `config.toml` | Shared settings: Deribit, rich/cheap gauge, reference risk limits, backfill, DVOL check |
+| `strategies/menu.toml` | The agreed strategy menu (docs/STRATEGIES.md) with status; display only, never changes a decision |
+| `strategy_menu.py` | Loads the menu and turns today's verdict and the scan's result into one status per strategy (templates) |
+| `config.toml` | Shared settings: Deribit, rich/cheap gauge, reference risk limits, backfill, DVOL check, `[report]` evidence labels |
 | `data_fetch.py` | Read-only Deribit public API client (retries, history host for backfill) |
 | `vol_gauge.py` | Option chain, ATM IV, realised vol, 12-month rich/cheap verdict, history file |
 | `suggest.py` | Candidate search, filters and sizing (called through `engine.decide`) |
@@ -66,7 +68,7 @@ The owner reviews outcomes, not code. In every session and pull request:
 | `data/iv_history.csv` | One row per day since 2024-04: price, 30-day ATM IV, RV20, RV30, IV source |
 | `data/chains/` | `YYYY-MM-DD.json.gz`: the first real SOL chain of each UTC day, never overwritten (from 2026-11) |
 | `tests/golden/` | Golden files: sample-day decision, backtest on a frozen history slice (`backtest_history.csv`) |
-| `site/` | Static dashboard (plain HTML/JS, no build step); data in `site/data/` |
+| `site/` | Static dashboard (plain HTML/JS, no build step); data in `site/data/` (`latest.json`/`data.js` daily, `backtest.json`/`backtest.js` evidence) |
 | `.github/workflows/daily.yml` | Daily scan, commit of data, Pages deploy; "Run workflow" with optional backfill |
 
 ## How to run
@@ -75,6 +77,7 @@ python -m unittest discover tests      # all tests (must pass)
 python main.py --sample                # offline run on stored sample data
 python main.py                         # live run (needs internet access to deribit.com)
 python backtest.py                     # backtest the default strategy file
+python backtest.py --publish           # ...and publish it to site/data/ (the daily job does this)
 ```
 Python 3.11+ standard library only. No pip installs.
 

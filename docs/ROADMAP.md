@@ -19,10 +19,22 @@ Full rationale: the "Deterministic Strategy Engine Plan" doc. Work through one s
   drawdown, results by condition (verdict x SOL up/down over the trade), versus holding SOL and versus buying
   SOL weekly (dollar-cost averaging). The report shows both
   windows side by side for every declared variant; the backtest code has no variants of its own.
+- **Step 4a: publish evidence and strategy menu** (2026-11-19). `strategies/menu.toml` lists every strategy in
+  `docs/STRATEGIES.md` (display only); the daily output has a `strategies` list with today's status for each
+  (suggested / no trade / not eligible / not built). The backtest runs daily after the scan and is published to
+  `site/data/backtest.json` (+ `backtest.js`), with a check that its rules fingerprint matches today's, the two
+  period labels, a fixed evidence label per variant (`config.toml` `[report]`, thin below 20 held-back trades),
+  and each trade's entry-day conditions (30-day move, % below 30-day high, IV percentile, verdict).
 
 ## Next
 
-### Step 4: Strategy Lab page
+### Step 4b: daily page shows the evidence
+- Today's page: at a glance (every menu strategy and its status), an evidence box for each suggested rule
+  (practice vs unseen period, evidence label, "older rules" warning), reasons for and against, and results on
+  past days with similar ENTRY-day conditions (never what happened after entry).
+- **Done when:** every number matches `site/data/latest.json` / `site/data/backtest.json`, on phone and desktop.
+
+### Step 4c: Strategy Lab page
 - New dashboard page generated nightly from `data/backtest.json`: running P&L and drawdown chart, scorecard
   table (in-sample vs held back), results by market condition, trade list linked to each day's chart.
 - Header: data range, strategy name/version/fingerprint, data fingerprint. Template text only.

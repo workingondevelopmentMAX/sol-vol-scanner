@@ -2,6 +2,17 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-19 · Dashboard shows the evidence behind each idea, for every strategy on the menu
+The site will list every strategy in docs/STRATEGIES.md with today's status (suggested, no trade, wrong
+market conditions, or not built yet), and show each suggested rule's results in the practice period
+(in-sample) and the unseen period (held back), a fixed evidence label, and results on past days with similar
+entry conditions. 'Similar' means conditions on the entry day, never what happened afterwards. Why: the page
+showed a conviction score but not the track record. The live rule lost $1,268 per $1,000 in-sample (14 trades)
+and made +$288 held back (11 trades), and the page never said so. Display only: no trading rules change.
+The 'thin evidence' threshold (20 held-back trades) is a starting value for the owner to confirm.
+"IV fair: no options trade" counts as live (the scanner already suggests nothing on FAIR days). If the daily
+backtest fails, the scan and dashboard still publish and the last evidence stays up.
+
 ### 2026-11-19 · Testing rules set in advance (step 3)
 What the backtest compares now lives in the strategy file: `[[variants]]` (9 entries: the 7 exit-rule variants,
 "no rich filter" and "overlapping") and `[evaluation]` windows, in-sample 2024-06-01 to 2025-06-30 (the period the

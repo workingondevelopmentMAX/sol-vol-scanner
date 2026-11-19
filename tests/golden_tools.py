@@ -44,10 +44,10 @@ def backtest_slice() -> dict:
     days = backtest.load_days(cfg, BACKTEST_HISTORY)
     trades = backtest.run(cfg, st, days, True, NO_CHAINS)
     win = backtest.windows(st, days)
+    sc = {k: backtest.scorecard(trades, days, *win[k]) for k in ("in_sample", "held_back")}
     return {"period": [days[0]["date"], days[-1]["date"]], "strategy_version": st["_stamp"]["version"],
-            "summary": backtest.summarise(trades), "windows": win,
-            "scorecard": {k: backtest.scorecard(trades, days, *win[k]) for k in ("in_sample", "held_back")},
-            "trades": trades}
+            "summary": backtest.summarise(trades), "windows": win, "window_labels": backtest.window_labels(st, win),
+            "scorecard": sc, "evidence": backtest.evidence(sc, cfg["report"]), "trades": trades}
 
 
 def dump(x: dict) -> str:

@@ -283,7 +283,7 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
         <div class="el">${esc(st.level)}</div><p>${esc(st.result)}</p><p class="s">${esc(st.why)}</p>
         <div class="ticket"><span>Order</span>${esc(st.ticket)}</div></div>`).join("")}</div>
       <p class="after"><b>If a stop fires:</b> ${esc(E.after_stop)}</p>
-      <div class="muted">${esc(E.order_note)} Settings: take profit ${E.settings.take_profit_pct}%${E.settings.split_take_profit ? " on half" : ""} · stop ${E.settings.stop_multiple}× credit · IV +${E.settings.iv_points_per_pct_drop} pt per 1% drop · close ${E.settings.time_exit_dte} days before expiry (change in config.toml, [exits]). Levels are model estimates.</div>
+      <div class="muted">${esc(E.order_note)} Settings: take profit ${E.settings.take_profit_pct}%${E.settings.split_take_profit ? " on half" : ""} · stop ${E.settings.stop_multiple}× credit · IV +${E.settings.iv_points_per_pct_drop} pt per 1% drop · close ${E.settings.time_exit_dte} days before expiry (change in strategies/bull_put_spread.toml, [exits]). Levels are model estimates.</div>
     </section>`;
     const P = S.greeks_panel;
     html += `<section class="card a-greeks"><h2><span class="step">6</span>The Greeks, in plain language</h2><div class="muted" style="margin-bottom:8px">${esc(P.size_note)}</div>

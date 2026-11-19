@@ -304,9 +304,11 @@ def annotate_history(cfg: dict, rows: list[dict]) -> list[dict]:
             window = [iv for d, iv in prior if d >= start]      # same 12-month window as today's verdict
             vd = verdict(cfg, r["atm_iv_30d"], r.get("rv30"), window)
             r["verdict"] = vd["label"]
+            r["iv_percentile"] = vd.get("percentile")           # point-in-time too: only days before this one
             prior.append((r["date"], r["atm_iv_30d"]))
         else:
             r["verdict"] = None
+            r["iv_percentile"] = None
         out.append(r)
     return out
 
