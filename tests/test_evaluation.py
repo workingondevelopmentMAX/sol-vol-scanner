@@ -14,7 +14,7 @@ import engine  # noqa: E402
 import golden_tools  # noqa: E402
 
 SCORECARD_KEYS = {"trades", "win_rate", "avg_per_1000", "total_per_1000", "worst_per_1000", "max_losing_streak",
-                  "max_drawdown_per_1000", "by_condition", "hold_sol"}
+                  "max_drawdown_per_1000", "by_condition", "hold_sol", "dca_sol"}
 
 
 def strategy_with(variants_toml: str) -> Path:
@@ -109,6 +109,7 @@ class SplitHistory(unittest.TestCase):
         for v in self.out["variants"]:
             self.assertIn(v["name"][:38], text)
         self.assertIn("Holding SOL instead", text)
+        self.assertIn("Buying SOL weekly instead", text)
 
 
 class ScorecardPieces(unittest.TestCase):
@@ -130,6 +131,12 @@ class ScorecardPieces(unittest.TestCase):
                 {"date": "2025-03-01", "S": 150.0}]
         self.assertEqual(backtest.hold_sol(days, "2025-01-01", "2025-02-28")["per_1000"], -200.0)
         self.assertEqual(backtest.hold_sol(days, "2025-01-01", "2025-12-31")["per_1000"], 500.0)
+
+    def test_dca_sol(self):
+        days = [{"date": f"2025-01-{d:02d}", "S": s} for d, s in ((1, 100.0), (4, 1.0), (8, 50.0), (15, 100.0))]
+        r = backtest.dca_sol(days, "2025-01-01", "2025-01-31")
+        self.assertEqual(r["buys"], 3)                       # days 1, 8 and 15 (weekly), not day 4
+        self.assertAlmostEqual(r["per_1000"], (1000 / 3) * (1 / 100 + 1 / 50 + 1 / 100) * 100 - 1000, places=0)
 
 
 if __name__ == "__main__":

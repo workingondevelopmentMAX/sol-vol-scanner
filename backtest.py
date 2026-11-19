@@ -145,6 +145,18 @@ def hold_sol(days: list[dict], lo: str, hi: str) -> dict:
             "per_1000": round((b["S"] / a["S"] - 1) * 1000, 1)}
 
 
+def dca_sol(days: list[dict], lo: str, hi: str, every_days: int = 7) -> dict:
+    """$1,000 spread evenly over weekly SOL buys through the window (first buy on its first day), valued at its end."""
+    inside = [d for d in days if lo <= d["date"] <= hi and d["S"]]
+    if len(inside) < 2:
+        return {"per_1000": None}
+    start = date.fromisoformat(inside[0]["date"])
+    buys = [d for d in inside if (date.fromisoformat(d["date"]) - start).days % every_days == 0]
+    sol = sum((1000 / len(buys)) / d["S"] for d in buys)
+    return {"buys": len(buys), "every_days": every_days,
+            "per_1000": round((sol * inside[-1]["S"] - 1000), 1)}
+
+
 def by_condition(trades: list[dict]) -> dict:
     """Results split by the vol verdict on entry day and whether SOL ended the trade higher or lower."""
     out = {}
@@ -167,6 +179,7 @@ def scorecard(trades: list[dict], days: list[dict], lo: str, hi: str) -> dict:
     s["max_losing_streak"] = losing_streak([t["pnl_per_1000"] for t in ts])
     s["by_condition"] = by_condition(ts)
     s["hold_sol"] = hold_sol(days, lo, hi)
+    s["dca_sol"] = dca_sol(days, lo, hi)
     return s
 
 
@@ -222,8 +235,11 @@ def report(out: dict) -> str:
         lines.append(f"{v['name'][:38]:38s} | {cells(sc['in_sample'])} | {cells(sc['held_back'])}")
     first = out["variants"][0]["scorecard"]
     hold = [first[k]["hold_sol"]["per_1000"] for k in ("in_sample", "held_back")]
+    dca = [first[k]["dca_sol"]["per_1000"] for k in ("in_sample", "held_back")]
     lines.append(f"Holding SOL instead ($1,000 bought on the window's first day): "
                  f"in-sample {hold[0]:+.0f}, held back {hold[1]:+.0f}")
+    lines.append(f"Buying SOL weekly instead ($1,000 spread over the window): "
+                 f"in-sample {dca[0]:+.0f}, held back {dca[1]:+.0f}")
     lines.append("P&L per $1,000 of max loss per trade (holding SOL: per $1,000 invested). "
                  "strk = longest losing streak.")
     return "\n".join(lines)

@@ -12,7 +12,7 @@ any can come back as one `[[variants]]` entry. Trades are identical to before: o
 First results, per $1,000 max loss per trade (in-sample | held back):
 as written -$1,268 over 14 trades | +$288 over 11; stop 2x +$316/11 | +$111/11; stop 3x or no stop with no time
 exit -$675/10 | +$1,278/10 (all 10 won); no stop, close 7 days out -$200/11 | +$738/10; no rich filter
--$1,849/23 | -$2,980/32. Holding $1,000 of SOL: -$90 | -$495. The held-back period was good for selling puts on
+-$1,849/23 | -$2,980/32. Holding $1,000 of SOL: -$90 | -$495; buying it weekly instead: -$66 | -$300. The held-back period was good for selling puts on
 rich days but small (10-13 trades). Only stop 2x made money in both windows, modestly; the no-stop variants did
 best held back but lost in-sample. Strategy version stays 1:
 the trading rules did not change (the fingerprint did, because the file did).

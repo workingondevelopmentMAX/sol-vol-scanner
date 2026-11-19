@@ -16,7 +16,8 @@ Full rationale: the "Deterministic Strategy Engine Plan" doc. Work through one s
 - **Step 3: testing rules set in advance** (2026-11-19). Variants live in the strategy file's `[[variants]]` list
   and windows in `[evaluation]` (in-sample 2024-06-01 to 2025-06-30, held back 2025-07-01 onwards). Fixed
   scorecard per window: trades, win rate, average/total/worst per $1,000 max loss, longest losing streak, max
-  drawdown, results by condition (verdict x SOL up/down over the trade), versus holding SOL. The report shows both
+  drawdown, results by condition (verdict x SOL up/down over the trade), versus holding SOL and versus buying
+  SOL weekly (dollar-cost averaging). The report shows both
   windows side by side for every declared variant; the backtest code has no variants of its own.
 
 ## Next
