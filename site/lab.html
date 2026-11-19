@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Strategy Lab · SOL Vol Scanner</title>
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#1a1a19">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Strategy Lab additions; everything else comes from style.css (same look as the daily page) */
+header a { color:inherit; }
+.lab { display:grid; gap:12px; grid-template-columns:minmax(0,1fr); }
+.lab > .card { margin:0; min-width:0; }
+.howto ul { margin:6px 0 0; padding-left:18px; font-size:13.5px; } .howto li { margin:4px 0; }
+.howto summary { margin:0; font-size:13px; text-transform:uppercase; letter-spacing:.6px; font-weight:600; }
+.mrow { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2px 10px; padding:8px 0; border-top:1px solid var(--border); }
+.mrow:first-child { border-top:0; }
+.mrow .mn { font-weight:650; } .mrow .mm { font-size:12px; color:var(--text-muted); text-align:right; white-space:nowrap; }
+.mrow .mt { grid-column:1 / -1; font-size:13px; color:var(--text-secondary); }
+.mrow.not_built { opacity:.6; } .mrow a { color:inherit; }
+.chip { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; padding:1px 7px;
+  border-radius:9px; border:1px solid var(--border); color:var(--text-secondary); margin-left:6px; vertical-align:1px; }
+.chip.live { border-color:var(--good); color:var(--good); }
+.rules { margin:4px 0 0; padding-left:18px; font-size:13.5px; } .rules li { margin:3px 0; }
+.tablewrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin-top:8px; }
+table.score { min-width:100%; font-size:12.5px; }
+table.score th, table.score td { white-space:nowrap; padding:6px 6px; }
+table.score td:first-child, table.score th:first-child { white-space:normal; min-width:140px; }
+table.score tr.live td { background:var(--cheap-band); }
+table.score tr.bench td { color:var(--text-secondary); }
+table.score th.grp { text-align:center; color:var(--text-primary); font-weight:650; border-bottom:1px solid var(--border); }
+table.score .ev { white-space:normal; font-size:11.5px; color:var(--text-muted); font-weight:500; }
+.livetag { display:inline-block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--good); margin-left:4px; }
+.wsw { margin:8px 0 0; }
+@media (max-width:699px) { table.score.show-in_sample .col-held_back, table.score.show-held_back .col-in_sample { display:none; } }
+@media (min-width:700px) { .wsw { display:none; } main { padding:20px 20px 48px; } }
+.picker { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:6px 0 4px; font-size:13px; }
+.picker select { font:inherit; font-size:14px; padding:6px 8px; border:1px solid var(--border); border-radius:8px;
+  background:var(--surface-0); color:var(--text-primary); max-width:100%; }
+.vtext { font-size:13px; color:var(--text-secondary); margin:2px 0 6px; }
+.subcard { border-top:1px solid var(--border); margin-top:14px; padding-top:12px; }
+.subcard h3 { font-size:13px; margin:0 0 6px; text-transform:uppercase; letter-spacing:.5px; color:var(--text-secondary); }
+.twocol { display:grid; gap:12px; grid-template-columns:minmax(0,1fr); }
+@media (min-width:1100px) { .twocol { grid-template-columns:repeat(2, minmax(0,1fr)); } main { padding:24px 28px 56px; } }
+.toofew { color:var(--text-muted); font-size:11.5px; }
+table.trades tr.trow { cursor:pointer; } table.trades tr.trow:hover td { background:var(--surface-0); }
+table.trades tr.trow.loss td:first-child { box-shadow:inset 3px 0 0 var(--bad); }
+table.trades tr.open td { background:var(--surface-0); }
+.tdetail td { text-align:left; background:var(--surface-0); }
+.lab footer { padding:4px 6px; }
+</style>
+</head>
+<body>
+<main id="app"><p class="muted">Loading…</p></main>
+<script src="charts.js"></script>
+<script src="data/lab.js"></script>
+<script>
+(async function () {
+  let D = window.SCANNER_LAB;
+  if (!D) { try { D = await (await fetch("data/lab.json", {cache:"no-store"})).json(); } catch (e) {} }
+  const app = document.getElementById("app");
+  function esc(s) { return String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+  const usd = (x, d = 2) => x == null ? "n/a" : (x < 0 ? "-$" : "$") + Math.abs(x).toLocaleString(undefined, {minimumFractionDigits:d, maximumFractionDigits:d});
+  const money = x => x == null ? "-" : (x > 0 ? "+" : x < 0 ? "-" : "") + "$" + Math.abs(x).toLocaleString(undefined, {maximumFractionDigits:0});
+  const sgt = iso => new Date(iso).toLocaleString("en-SG", {timeZone:"Asia/Singapore", day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit"});
+  const cls = v => v == null ? "" : (v >= 0 ? "pos" : "neg");
+  const header = `<header><h1>Strategy Lab</h1><div class="upd"><a href="index.html">← Daily page</a></div></header>`;
+  if (!D) {
+    app.innerHTML = header + `<div class="banner warn">The Strategy Lab data could not be loaded. Run <b>python lab.py</b> (the daily job does this after the backtest), then reload.</div>`;
+    return;
+  }
+
+  // ---- 1. header + banners
+  let html = header;
+  html += `<div class="card"><div class="kv">
+      <div class="k">Data range</div><div class="v">${D.period ? `${esc(D.period[0])} to ${esc(D.period[1])}` : "no backtest data"}</div>
+      <div class="k">Backtest last run</div><div class="v">${esc(sgt(D.built_at))} SGT</div>
+      <div class="k">Data fingerprint</div><div class="v">${esc(D.data_fingerprint || "-")}</div></div>
+    ${D.quotes_line ? `<div class="muted" style="margin-top:8px">${esc(D.quotes_line)}</div>` : ""}</div>`;
+  D.banners.forEach(b => { html += `<div class="banner warn" style="margin-top:12px">${esc(b.text)}</div>`; });
+
+  html += `<div class="lab" style="margin-top:12px">`;
+  // ---- 2. how to read this page
+  html += `<section class="card howto"><details id="howto"><summary>How to read this page</summary>
+    <ul>${D.how_to_read.map(t => `<li>${esc(t)}</li>`).join("")}</ul></details></section>`;
+
+  // ---- 3. strategy menu overview
+  html += `<section class="card"><h2>Strategy menu</h2>${D.menu.map(r => `<div class="mrow ${r.status}">
+      <div class="mn">${r.anchor ? `<a href="#${r.anchor}">${esc(r.name)}</a>` : esc(r.name)}<span class="chip ${r.status}">${esc(r.status_text)}</span></div>
+      <div class="mm">for ${esc(r.market_text)}</div>
+      <div class="mt">${r.evidence_title ? `Live rule: <b>${esc(r.evidence_title)}</b>. <a href="#${r.anchor}">See the full results ↓</a>` : esc(r.note)}</div></div>`).join("")}</section>`;
+
+  // ---- 4. one section per built strategy
+  const COLS = [["trades","Trades"],["win_rate","Win rate"],["total_per_1000","Total"],["avg_per_1000","Avg"],
+                ["worst_per_1000","Worst"],["max_losing_streak","Losing streak"],["max_drawdown_per_1000","Max drawdown"]];
+  D.strategies.forEach((S, si) => {
+    const W = S.windows;
+    const cell = (row, k) => { const r = row.find(x => x.key === k); return r ? r : {text:"-", value:null}; };
+    const money_keys = ["total_per_1000","avg_per_1000","worst_per_1000","max_drawdown_per_1000"];
+    let t = `<div class="wsw"><div class="seg" data-sw="${si}">${W.slice().reverse().map(w => `<button data-w="${w.key}" class="${w.key === "held_back" ? "on" : ""}">${w.key === "held_back" ? "Unseen" : "Practice"}</button>`).join("")}</div></div>
+      <div class="tablewrap"><table class="score show-held_back" id="score-${si}"><thead>
+      <tr><th></th>${W.map(w => `<th class="grp col-${w.key}" colspan="${COLS.length}">${esc(w.title)}</th>`).join("")}</tr>
+      <tr><th>Version (strategy-file order) and evidence</th>${W.map(w => COLS.map(c => `<th class="col-${w.key}">${c[1]}</th>`).join("")).join("")}</tr></thead><tbody>`;
+    S.variants.forEach(v => {
+      t += `<tr class="${v.live ? "live" : ""}"><td><b>${esc(v.name)}</b>${v.live ? `<span class="livetag">Live rule</span>` : ""}<div class="ev">Evidence: ${esc(v.evidence_title)}</div></td>`
+        + W.map(w => COLS.map(c => { const x = cell(v.windows[w.key].rows, c[0]);
+            return `<td class="col-${w.key} ${money_keys.includes(c[0]) && c[0] !== "worst_per_1000" && c[0] !== "max_drawdown_per_1000" ? cls(x.value) : ""}">${esc(x.text)}</td>`; }).join("")).join("")
+        + `</tr>`;
+    });
+    const B = S.benchmarks;
+    [["hold", "Holding $1,000 of SOL"], ["dca", "Buying SOL weekly (same $1,000)"]].forEach(([k, name]) => {
+      t += `<tr class="bench"><td>${name}</td>` + W.map(w => COLS.map(c => `<td class="col-${w.key} ${c[0] === "total_per_1000" ? cls(B[w.key][k].per_1000) : ""}">${c[0] === "total_per_1000" ? money(B[w.key][k].per_1000) : ""}</td>`).join("")).join("") + `</tr>`;
+    });
+    t += `</tbody></table></div><div class="muted" style="margin-top:6px">Per $1,000 risked on every trade. Holding and weekly buying: per $1,000 invested. Versions are listed in the order written in the strategy file, never ranked by results.</div>`;
+
+    html += `<section class="card" id="${S.anchor}"><h2>${esc(S.name)}</h2>
+      <h3 class="sub">The rules in plain words</h3><ul class="rules">${S.rules.map(r => `<li>${esc(r)}</li>`).join("")}</ul>
+      <div class="muted" style="margin-top:4px">Rules: ${esc(S.stamp.title)} · version ${esc(S.stamp.version)} · fingerprint ${esc(S.stamp.fingerprint)}. ${esc(S.quotes_line)}</div>
+      <div class="subcard"><h3>Scorecard: every version, both periods</h3>${t}</div>
+      <div class="subcard"><h3>Pick a version to look into</h3>
+        <div class="picker"><select id="pick-${si}" aria-label="Version">${S.variants.map(v => `<option value="${esc(v.name)}"${v.name === S.default_variant ? " selected" : ""}>${esc(v.name)}${v.live ? " (live rule)" : ""}</option>`).join("")}</select></div>
+        <div class="vtext" id="vtext-${si}"></div></div>
+      <div class="subcard"><h3>Running result</h3>
+        <div class="controls"><div class="seg"><button id="bench-${si}" aria-pressed="false">Show holding / weekly buying</button></div></div>
+        <div class="legend"><span><i style="background:var(--series-iv)"></i>Chosen version</span><span class="bl-${si}" hidden><i style="background:var(--series-price)"></i>Holding $1,000 of SOL</span><span class="bl-${si}" hidden><i style="background:var(--series-rv)"></i>Buying SOL weekly</span><span><i class="band" style="background:var(--cheap-band);outline:1px solid var(--cheap)"></i>Unseen period</span></div>
+        <div class="chart" id="cum-${si}"></div>
+        <div class="muted">Cumulative result per $1,000 risked, one step per trade at its entry date. Each period starts again from $0, so each line ends at that period's total.</div>
+        <h3 class="sub" style="margin-top:10px">Drawdown</h3>
+        <div class="chart" id="dd-${si}"></div>
+        <div class="muted">How far the running result fell below its previous best, in each period.</div></div>
+      <div class="subcard"><h3>Results by entry-day conditions</h3><div id="groups-${si}"></div></div>
+      <div class="subcard"><h3>Trade list</h3><div class="muted">Newest first. Losing trades have a red edge. Tap a trade to see SOL's price from entry to exit.</div>
+        <div class="tablewrap" id="trades-${si}"></div></div>
+    </section>`;
+  });
+  html += `<footer>${esc(D.footer)}</footer></div>`;
+  app.innerHTML = html;
+
+  // How to read: open by default on iPad/desktop, folded on a phone
+  if (window.innerWidth >= 700) document.getElementById("howto").open = true;
+
+  // ================= charts =================
+  const {css, el, niceTicks, frame, axes, path, hover} = window.Charts;
+  const ms = d => Date.parse(d + "T00:00:00Z");
+  const fmtD = v => new Date(v).toLocaleDateString("en-SG", {month:"short", year:"2-digit", timeZone:"UTC"});
+
+  function drawRunning(si, v, showBench) {
+    const S = D.strategies[si], W = S.windows;
+    const cum = W.map(w => v.windows[w.key].series.points), dd = W.map(w => v.windows[w.key].series.drawdown);
+    const bh = W.map(w => S.benchmarks[w.key].series.hold), bd = W.map(w => S.benchmarks[w.key].series.dca);
+    const x0 = ms(W[0].range[0]), x1 = ms(W[W.length - 1].range[1]), split = ms(W[W.length - 1].range[0]);
+    function chart(host, lines, label, H) {
+      const f = frame(host, H);
+      const all = lines.flat(2).map(p => p.value).concat([0]);
+      let lo = Math.min(...all), hi = Math.max(...all); if (hi - lo < 1) { hi += 1; lo -= 1; }
+      const pad = (hi - lo) * 0.08; lo -= pad; hi += pad;
+      const x = t => f.m.l + (t - x0) / (x1 - x0) * f.iw, y = val => f.m.t + (hi - val) / (hi - lo) * f.ih;
+      el("rect", {x:x(split), y:f.m.t, width:Math.max(0, x(x1) - x(split)), height:f.ih, fill:css("--cheap-band")}, f.svg);
+      const yt = niceTicks(lo, hi, 4), xt = niceTicks(x0, x1, 4).filter(t => t >= x0 && t <= x1);
+      axes(f, x, y, yt, v => (v < 0 ? "-$" : "$") + (Math.abs(v) >= 1000 ? (Math.abs(v) / 1000).toLocaleString(undefined, {maximumFractionDigits:1}) + "k" : Math.abs(v).toFixed(0)), xt, fmtD);
+      el("line", {x1:f.m.l, x2:f.W - f.m.r, y1:y(0), y2:y(0), stroke:css("--text-muted"), "stroke-width":1}, f.svg);
+      el("line", {x1:x(split), x2:x(split), y1:f.m.t, y2:f.m.t + f.ih, stroke:css("--cheap"), "stroke-width":1.5, "stroke-dasharray":"4 3"}, f.svg);
+      const lab = el("text", {x:x(split) + 4, y:f.m.t + 12, "font-size":11, fill:css("--cheap")}, f.svg); lab.textContent = "Unseen period starts";
+      const colors = ["--series-iv", "--series-price", "--series-rv"];
+      lines.forEach((segs, li) => segs.forEach(seg => {
+        const pts = seg.map(p => [x(ms(p.date)), y(p.value)]);
+        el("path", {d:path(pts), fill:"none", stroke:css(colors[li]), "stroke-width":li ? 1.5 : 2, "stroke-linejoin":"round", ...(li === 0 && label === "dd" ? {} : {})}, f.svg);
+      }));
+      // hover: the chosen version's points (plus benchmarks on the same date when shown)
+      const flat = lines[0].flat(), xs = flat.map(p => x(ms(p.date)));
+      const near = (segs, d) => { let best = null; segs.flat().forEach(p => { if (p.date <= d) best = p; }); return best; };
+      hover(f, xs, i => { const p = flat[i]; let s = `<b>${p.date}</b><br>${label === "dd" ? "Below best" : "Chosen version"}: ${money(p.value)}`;
+        if (lines.length > 1) { const h = near(lines[1], p.date), c = near(lines[2], p.date);
+          if (h) s += `<br><span class="muted">Holding SOL: ${money(h.value)} · weekly buying: ${c ? money(c.value) : "-"}</span>`; }
+        return s; });
+    }
+    chart(document.getElementById(`cum-${si}`), showBench ? [cum, bh, bd] : [cum], "cum", 220);
+    chart(document.getElementById(`dd-${si}`), [dd], "dd", 150);
+  }
+
+  function drawGroups(si, v) {
+    const S = D.strategies[si];
+    let h = `<div class="twocol">` + S.windows.map(w => { const G = v.windows[w.key].groups;
+      return `<div><h4 style="margin:4px 0">${esc(w.title)}</h4>${G.length ? `<div class="tablewrap" style="margin-top:0"><table><tr><th>30-day move on entry day</th><th>IV</th><th>Trades</th><th>Wins</th><th>Total</th><th>Avg</th></tr>
+        ${G.map(g => `<tr><td>${esc(g.move)}${g.too_few ? `<br><span class="toofew">${esc(g.note)}</span>` : ""}</td><td>${esc(g.verdict)}</td><td>${g.trades}</td><td>${g.wins}</td><td class="${cls(g.total_per_1000)}">${money(g.total_per_1000)}</td><td class="${cls(g.avg_per_1000)}">${money(g.avg_per_1000)}</td></tr>`).join("")}</table></div>`
+        : `<div class="muted">No trades in this period.</div>`}</div>`; }).join("") + `</div>`;
+    h += `<div class="muted" style="margin-top:6px">Grouped only by conditions on the day each trade was opened (SOL's move over the previous 30 days, and the IV verdict). Groups with fewer than ${D.settings.similar_min_trades} trades are too few to tell.</div>`;
+    const T = v.during_trade;
+    if (T && T.rows.length) h += `<details><summary>What happened when SOL fell during the trade (hindsight, not a signal)</summary><div class="muted">${esc(T.note)}</div>
+      <table><tr><th>Period</th><th>Verdict, SOL during the trade</th><th>Trades</th><th>Wins</th><th>Total</th></tr>
+      ${T.rows.map(r => `<tr><td>${esc(r.window)}</td><td>${esc(r.group)}</td><td>${r.trades}</td><td>${r.wins}</td><td class="${cls(r.total_per_1000)}">${esc(r.text)}</td></tr>`).join("")}</table></details>`;
+    document.getElementById(`groups-${si}`).innerHTML = h;
+  }
+
+  function drawTradeChart(host, t) {
+    if (t.price_from == null || t.price_to == null) { host.innerHTML = `<div class="muted">No price history for these dates.</div>`; return; }
+    const P = D.prices.slice(t.price_from, t.price_to + 1);
+    const f = frame(host, 170);
+    const vals = P.map(p => p[1]).concat([t.short_strike, t.long_strike, t.break_even]);
+    let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
+    const x0 = ms(P[0][0]), x1 = Math.max(ms(P[P.length - 1][0]), x0 + 864e5);
+    const x = v => f.m.l + (v - x0) / (x1 - x0) * f.iw, y = v => f.m.t + (hi - v) / (hi - lo) * f.ih;
+    axes(f, x, y, niceTicks(lo, hi, 4), v => "$" + v.toFixed(v < 20 ? 1 : 0), [x0, x1], v => new Date(v).toLocaleDateString("en-SG", {day:"numeric", month:"short", timeZone:"UTC"}));
+    [[t.short_strike, "Short " + t.short_strike, "--rich"], [t.long_strike, "Long " + t.long_strike, "--text-muted"], [t.break_even, "Break-even " + t.break_even.toFixed(2), "--series-rv"]].forEach(([v, l, c]) => {
+      el("line", {x1:f.m.l, x2:f.W - f.m.r, y1:y(v), y2:y(v), stroke:css(c), "stroke-width":1, "stroke-dasharray":"4 3"}, f.svg);
+      const tx = el("text", {x:f.W - f.m.r - 2, y:y(v) - 3, "text-anchor":"end", "font-size":10.5, fill:css(c)}, f.svg); tx.textContent = l; });
+    const pts = P.map(p => [x(ms(p[0])), y(p[1])]);
+    el("path", {d:path(pts), fill:"none", stroke:css("--series-iv"), "stroke-width":2}, f.svg);
+    [[pts[0], "Entry"], [pts[pts.length - 1], "Exit"]].forEach(([p, l], i) => {
+      el("circle", {cx:p[0], cy:p[1], r:4, fill:css(i ? (t.loss ? "--bad" : "--good") : "--text-primary")}, f.svg);
+      const tx = el("text", {x:p[0] + (i ? -6 : 6), y:p[1] - 7, "text-anchor":i ? "end" : "start", "font-size":11, fill:css("--text-secondary")}, f.svg); tx.textContent = l; });
+    hover(f, pts.map(p => p[0]), i => `<b>${P[i][0]}</b><br>SOL ${usd(P[i][1])}`);
+  }
+
+  function drawTrades(si, v) {
+    const host = document.getElementById(`trades-${si}`);
+    host.innerHTML = `<table class="trades"><tr><th>Entry</th><th>Period</th><th>SOL</th><th>30-day move</th><th>IV pct</th><th>Strikes</th><th>Expiry</th><th>Result</th><th>Exit</th><th>Exit date</th><th>Prices</th></tr>
+      ${v.trades.map((t, i) => `<tr class="trow${t.loss ? " loss" : ""}" data-i="${i}" tabindex="0"><td>${t.date}</td><td>${t.window === "held_back" ? "Unseen" : t.window === "in_sample" ? "Practice" : "Before"}</td><td>${usd(t.sol)}</td>
+        <td>${t.move_30d_pct == null ? "-" : (t.move_30d_pct > 0 ? "+" : "") + t.move_30d_pct.toFixed(1) + "%"}</td><td>${t.iv_percentile == null ? "-" : Math.round(t.iv_percentile)}</td>
+        <td>${t.short_strike}/${t.long_strike}</td><td>${t.expiry}</td><td class="${cls(t.pnl_per_1000)}">${esc(t.result)}</td><td>${esc(t.exit)}</td><td>${t.exit_date}</td><td>${esc(t.quotes)}</td></tr>`).join("")}</table>`;
+    host.querySelectorAll("tr.trow").forEach(tr => {
+      const open = () => {
+        const next = tr.nextElementSibling;
+        if (next && next.classList.contains("tdetail")) { next.remove(); tr.classList.remove("open"); return; }
+        const t = v.trades[+tr.dataset.i];
+        const d = document.createElement("tr"); d.className = "tdetail";
+        d.innerHTML = `<td colspan="11"><div class="muted">SOL from ${t.date} to ${t.exit_date}: ${esc(t.exit)}, ${esc(t.result)} per $1,000 risked.</div><div class="chart"></div></td>`;
+        tr.after(d); tr.classList.add("open");
+        drawTradeChart(d.querySelector(".chart"), t);
+      };
+      tr.addEventListener("click", open); tr.addEventListener("keydown", e => { if (e.key === "Enter") open(); });
+    });
+  }
+
+  D.strategies.forEach((S, si) => {
+    const pick = document.getElementById(`pick-${si}`), bench = document.getElementById(`bench-${si}`);
+    let showBench = false;
+    const current = () => S.variants.find(v => v.name === pick.value) || S.variants[0];
+    const render = () => { const v = current();
+      document.getElementById(`vtext-${si}`).textContent = `${v.text} Evidence: ${v.evidence_title}.`;
+      drawRunning(si, v, showBench); drawGroups(si, v); drawTrades(si, v); };
+    pick.addEventListener("change", render);
+    bench.addEventListener("click", () => { showBench = !showBench; bench.classList.toggle("on", showBench); bench.setAttribute("aria-pressed", showBench);
+      document.querySelectorAll(`.bl-${si}`).forEach(e => e.hidden = !showBench); drawRunning(si, current(), showBench); });
+    document.querySelector(`[data-sw="${si}"]`).addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+      const tbl = document.getElementById(`score-${si}`); tbl.classList.remove("show-in_sample", "show-held_back"); tbl.classList.add("show-" + b.dataset.w);
+      e.currentTarget.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); });
+    render();
+    let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => drawRunning(si, current(), showBench), 150); });
+  });
+  if (location.hash) { const t = document.querySelector(location.hash); if (t) t.scrollIntoView(); }
+})();
+</script>
+</body>
+</html>

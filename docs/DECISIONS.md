@@ -2,6 +2,19 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-19 · Strategy Lab page
+A second page, lab.html, shows the full backtest for every strategy on the menu: every declared version
+in the order written in its strategy file (never ranked by results), practice and unseen periods side by
+side, running result and drawdown charts with benchmarks (holding SOL, buying weekly), results by
+entry-day conditions, and a trade list with a price chart per trade. Not-built strategies are listed with
+the scorecard they will be judged on. Why: one place to judge rules consistently without picking
+winners in hindsight. Display only: suggestions, rules and backtest results are unchanged.
+Today: 9 versions of the bull put spread; only "Stop 2x" made money in both periods (+$316 practice, +$111
+unseen, per $1,000 risked per trade); 0 of 25 live-rule trades (0 of 499 across all versions) used real
+stored quotes, the rest model prices. Each period's running result starts again from $0 (owner's choice), so each
+line ends at that period's total. Not built: a link from each trade to the daily page's IV chart at that date
+(the daily chart cannot open at a chosen date); the trade's own price chart covers it.
+
 ### 2026-11-19 · Daily page: at a glance, evidence, for and against, similar past days
 The daily page now lists every strategy on the menu with today's status, and each suggested trade shows its
 rule's practice-period and unseen-period results side by side, an evidence label, rule-based cautions, and

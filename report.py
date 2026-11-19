@@ -163,7 +163,7 @@ def window_rows(sc: dict) -> list[dict]:
     return [{"key": k, "name": name, "value": v, "text": t} for k, name, v, t in rows]
 
 
-def evidence_box(bt: dict, v: dict) -> dict:
+def evidence_box(bt: dict, v: dict, strategy_id: str | None = None) -> dict:
     e = v["evidence"]
     title = ("Thin evidence, " if e["thin"] else "Enough trades to judge, ") + {
         "consistent": "consistent results", "mixed": "mixed results", "losing": "losing results"}[e["label"]]
@@ -173,8 +173,9 @@ def evidence_box(bt: dict, v: dict) -> dict:
                         for k, t in WINDOWS],
             "unseen_note": "The unseen period counts for more: it was never used to choose the rules.",
             "per_1000_note": "If you risked $1,000 on every trade, this is what you'd have made or lost.",
-            "versions_note": f"{len(bt.get('variants', []))} versions of these rules were tested. The full "
-                             "comparison is coming on the Strategy Lab page."}
+            "versions_note": f"{len(bt.get('variants', []))} versions of these rules were tested.",
+            "lab_link": f"lab.html#lab-{strategy_id}" if strategy_id else "lab.html",
+            "lab_link_text": "See the full comparison on the Strategy Lab page"}
 
 
 # ------------------------------------------------------------------ 6. past days like today
@@ -319,7 +320,7 @@ def build(cfg: dict, result: dict, bt: dict | None, annotated_history: list[dict
         sim = similar_days(bt, v, today, rep) if v else None
         out["cards"].append({
             "id": s["id"], "anchor": f"idea-{s['id']}", "name": s["name"],
-            "evidence": evidence_box(bt, v) if v else None,
+            "evidence": evidence_box(bt, v, s["id"]) if v else None,
             "evidence_missing": None if v else "No backtest results for this rule yet, so its track record can't be shown.",
             "for": for_list(cfg, result, sug),
             "cautions": cautions(rep, sug, spot, today, v, match, sim),
