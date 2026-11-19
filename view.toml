@@ -1,0 +1,8 @@
+# My own market view. The scanner records it every day and lets it tilt the data-driven direction signal
+# (how much is set in each strategy file). Edit on github.com (pencil icon) or on the laptop and commit.
+# A view switches itself off after `expires` so a stale opinion never lingers.
+
+direction = "neutral"      # "bullish", "neutral" or "bearish"
+strength = 1               # 1 = mild, 2 = moderate, 3 = strong
+expires = 2026-12-31       # after this date the view counts as neutral
+note = ""                  # optional, e.g. "expect a pullback after the rally"

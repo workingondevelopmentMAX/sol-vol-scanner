@@ -27,11 +27,18 @@ Full rationale: the "Deterministic Strategy Engine Plan" doc. Work through one s
 - Header: data range, strategy name/version/fingerprint, data fingerprint. Template text only.
 - **Done when:** the page renders on phone, iPad and desktop and every number matches `data/backtest.json`.
 
-### Step 5: more strategies as files
-- `strategies/call_spread_cheap_vol.toml`: buy call spreads on CHEAP days, small fixed budget (the "big swing").
-- `strategies/accumulation_ladder.toml`: rules for weekly SOL buys plus extra buys on crash/fear days
-  (IV jump of 15+ points, SOL down 15%+ in a week).
-- Each judged by the same scorecard against simply holding / dollar-cost averaging SOL.
+### Step 5: more strategies as files (see docs/STRATEGIES.md)
+Agreed menu (2026-11-19): rich IV = bull put spread (exists), bear call spread, iron condor, zero-cost protective
+hedge for core SOL near highs; cheap IV = call or put debit spreads (and a no-direction big-move option); always =
+accumulation helper. Direction = tested data signal (trend, momentum/drawdown, options-market signals, crash/fear)
+tilted by `view.toml`. Build order:
+1. Direction signal module + `view.toml`, and record the view in force on every daily run.
+2. Call and put debit spreads on cheap-IV days.
+3. Bear call spread and iron condor on rich-IV days.
+4. Zero-cost protective hedge.
+5. Accumulation helper, benchmarked against plain weekly buying.
+- **Done when:** each is a strategy file on the shared engine, judged by the step 3 scorecard on held-back data,
+  and shown on the dashboard only after passing.
 
 ## Decisions waiting on the owner
 - Exit rules for the put spread: the current 1.5x stop lost money in the backtest; 2x / 3x / no stop did better
