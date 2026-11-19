@@ -57,7 +57,8 @@ def load_view(path: Path = VIEW, today: str | None = None) -> dict:
     if v.get("note") and not expired:
         text += f' ("{v["note"]}")'
     return {"available": True, "direction": direction, "strength": strength, "expires": exp_s,
-            "expired": expired, "in_force": "neutral" if expired else direction, "text": text}
+            "expired": expired, "in_force": "neutral" if expired else direction, "text": text,
+            "note": v.get("note", "")}
 
 
 def todays_conditions(annotated_history: list[dict], verdict_label: str | None) -> dict:
@@ -130,7 +131,14 @@ def glance(result: dict, today: dict, view: dict) -> dict:
                      "market_text": MARKET_TEXT[s["market"]], "status": st, "text": text,
                      "card": f"idea-{s['id']}" if st == "suggested" and s.get("suggestion") else None})
     any_trade = any(r["card"] for r in rows)
-    return {"line": line, "rows": rows,
+    d = result.get("direction")
+    dline = None
+    if d:
+        v = d["view"]
+        vt = v["text"] if v.get("available") else "none set"
+        dline = (f"Direction: data {d['data_reading']} ({len(d['passed'])} of {d['tested']} factors passed testing) · "
+                 f"your view {vt} · combined {d['final_reading']}")
+    return {"line": line, "direction_line": dline, "direction_note": d["note"] if d else None, "rows": rows,
             "footer": None if any_trade else "No trade today. Sitting out is the plan working."}
 
 
@@ -351,6 +359,9 @@ def refresh(site_data: Path | None = None) -> dict:
     cfg = main.load_config()
     hist = vol_gauge.annotate_history(cfg, vol_gauge.load_history())
     today = res["generated_at"][:10]
+    if res.get("direction"):
+        import direction
+        direction.refresh_block(direction.load_rules(), res["direction"], direction.load_test())
     res["report"] = build(cfg, res, load_backtest(), hist, load_view(today=today))
     old, main.SITE_DATA = main.SITE_DATA, site_data
     try:

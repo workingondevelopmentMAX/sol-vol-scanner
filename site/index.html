@@ -67,6 +67,7 @@
     const G = R.glance;
     html += `<section class="card a-glance"><h2><span class="step">1</span>Today at a glance</h2>
       <p class="glance-line">${esc(G.line)}</p>
+      ${G.direction_line ? `<p class="glance-line" style="margin-top:-6px">${esc(G.direction_line)}<br><span class="muted">${esc(G.direction_note)}</span></p>` : ""}
       <div class="glance">${G.rows.map(r => `<div class="grow ${r.status}">
         <div class="gn">${r.card ? `<a href="#${r.card}">${esc(r.name)}</a>` : esc(r.name)}<span class="chip">${esc(r.status.replace("_", " "))}</span></div>
         <div class="gm">for ${esc(r.market_text)}</div>
