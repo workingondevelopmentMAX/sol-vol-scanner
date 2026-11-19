@@ -2,6 +2,14 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-19 · Strategy menu agreed (see docs/STRATEGIES.md)
+Rich IV: bull put spreads, bear call spreads, iron condors, and a zero-cost hedge for core SOL near highs. Cheap IV:
+buy call or put debit spreads (or a no-direction big-move trade). Plus an accumulation helper. Direction combines a
+data signal (factors: trend, momentum/drawdown, options-market signals, crash/fear; kept only if they help on
+held-back data) with the owner's view in `view.toml` (direction, strength 1-3, expiry). Past views cannot be
+backtested, so the view is recorded daily from now on. Big-move budget confirmed by the owner: at most 1% of
+portfolio per month. Left to testing: debit spreads vs outright options, and 30/60/90-day horizons.
+
 ### 2026-11-19 · Fixed, recorded data (step 2)
 Each daily scan stores the SOL option chain in `data/chains/YYYY-MM-DD.json.gz`: SOL options only, only the fields
 the engine reads, about 30 KB a day. The first snapshot of each UTC day is kept and never overwritten, so a stored

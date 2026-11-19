@@ -1,6 +1,7 @@
 # SOL Vol Scanner: brief for Claude
 
-Read this first, then `docs/ROADMAP.md` (what to build next) and `docs/DECISIONS.md` (why things are the way they are).
+Read this first, then `docs/ROADMAP.md` (what to build next), `docs/STRATEGIES.md` (the agreed strategy menu)
+and `docs/DECISIONS.md` (why things are the way they are).
 
 ## What this is
 A read-only tool that checks once a day whether Solana (SOL) options on Deribit are rich or cheap, and suggests
