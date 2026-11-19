@@ -2,6 +2,11 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-19 · "Thin evidence" threshold confirmed at 20 held-back trades
+The owner confirmed `held_back_thin_below = 20` (`config.toml` `[report]`): a rule with fewer than 20 trades in the
+unseen period (held back) is labelled "thin evidence". Today every bull put spread variant is thin (10-13
+held-back trades). Display only: no trading rule changes.
+
 ### 2026-11-19 · Dashboard shows the evidence behind each idea, for every strategy on the menu
 The site will list every strategy in docs/STRATEGIES.md with today's status (suggested, no trade, wrong
 market conditions, or not built yet), and show each suggested rule's results in the practice period
@@ -9,7 +14,7 @@ market conditions, or not built yet), and show each suggested rule's results in 
 entry conditions. 'Similar' means conditions on the entry day, never what happened afterwards. Why: the page
 showed a conviction score but not the track record. The live rule lost $1,268 per $1,000 in-sample (14 trades)
 and made +$288 held back (11 trades), and the page never said so. Display only: no trading rules change.
-The 'thin evidence' threshold (20 held-back trades) is a starting value for the owner to confirm.
+The 'thin evidence' threshold (20 held-back trades) was a starting value; confirmed the same day (entry above).
 "IV fair: no options trade" counts as live (the scanner already suggests nothing on FAIR days). If the daily
 backtest fails, the scan and dashboard still publish and the last evidence stays up.
 
