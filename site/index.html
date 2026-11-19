@@ -306,7 +306,7 @@ footer { font-size:12px; color:var(--text-muted); padding:4px 6px; }
     ${log.map(r => `<tr><td>${r.date}</td><td>${r.expiry?.slice(5)} ${(+r.short_strike)}/${(+r.long_strike)}</td><td>${usd(+r.credit_conservative)}</td>
       <td>${r.outcome ? `${esc(r.outcome)}${r.pnl_per_sol ? ` <span class="${+r.pnl_per_sol >= 0 ? "pos" : "neg"}">${usd(+r.pnl_per_sol)}</span>` : ""}` : `<span class="muted">open</span>`}</td></tr>`).join("")}</table>`
     : `<div class="muted">No trade suggestions yet.</div>`}</section>`;
-  html += `</div><footer>Snapshot from the last daily run, not live prices. Check live quotes on Deribit before trading. Suggestions only, not financial advice. This tool cannot place orders.</footer>`;
+  html += `</div><footer>${L.strategy ? `Rules: ${esc(L.strategy.title)} · version ${esc(L.strategy.version)} · fingerprint ${esc(L.strategy.fingerprint)}. ` : ""}Snapshot from the last daily run, not live prices. Check live quotes on Deribit before trading. Suggestions only, not financial advice. This tool cannot place orders.</footer>`;
   app.innerHTML = html;
 
   // ================= charts (plain SVG) =================

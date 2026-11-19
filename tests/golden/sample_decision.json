@@ -1,0 +1,16 @@
+{
+ "alternates": [
+  "SOL_USDC-25DEC26-115-P / SOL_USDC-25DEC26-105-P",
+  "SOL_USDC-18DEC26-115-P / SOL_USDC-18DEC26-105-P"
+ ],
+ "contracts": 97,
+ "conviction": 44,
+ "credit": 1.79,
+ "long": "SOL_USDC-4DEC26-108-P",
+ "max_loss": 10.21,
+ "no_trade": null,
+ "price_stop": 119.4379,
+ "short": "SOL_USDC-4DEC26-120-P",
+ "take_profit": 0.89,
+ "verdict": "RICH"
+}

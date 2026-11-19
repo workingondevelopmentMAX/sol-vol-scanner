@@ -1,0 +1,43 @@
+# Strategy definition: the ONE place the put spread rules live.
+# Both the daily scan and the backtest read this file, through engine.py, so they always follow the same rules.
+# Change a number here, commit it, and every result afterwards is stamped with the new version + fingerprint.
+
+[strategy]
+name = "bull_put_spread"
+title = "Bull put spread: sell rich put premium"
+version = 1
+
+[entry]
+require_verdict = "RICH"            # only trade when IV is rich (12-month percentile, see config.toml [vol])
+
+[strikes]
+dte_min = 14
+dte_max = 42
+short_delta_target = -0.20
+short_delta_min = -0.25             # most negative delta allowed for the short put
+short_delta_max = -0.15             # least negative delta allowed for the short put
+long_strike_offset_pct = 10         # long put about this % below the short strike
+min_credit_pct_of_width = 12        # conservative credit must be >= this % of strike width
+max_leg_spread_pct_of_mid = 15      # each leg's bid-ask spread must be <= this % of its mid...
+max_leg_spread_abs_usd = 0.10       # ...OR <= this many USDC per SOL (absolute floor)
+min_open_interest = 0               # per leg, in SOL
+max_alternates = 2
+
+[exits]
+take_profit_pct = 50                # buy the spread back once you've kept this % of the credit
+split_take_profit = false           # true = take profit on half, let the other half run to expiry
+stop_multiple = 1.5                 # stop when the loss reaches this many times the credit (0 = no stop)
+iv_points_per_pct_drop = 1.0        # assume implied vol rises this many points for each 1% SOL falls
+stop_assumed_days = 3               # assume this many days have passed when the stop is hit
+time_exit_dte = 7                   # close anything still open this many days before expiry (0 = hold to expiry)
+stop_limit_buffer_pct = 30          # stop-limit price = trigger price + this %
+
+[backtest]
+# How past days are rebuilt when no real quotes were stored: a model chain from that day's 30-day ATM IV.
+expiry_weekday = 4                  # Deribit weekly expiries: Fridays 08:00 UTC
+max_expiry_days = 70
+put_skew = [[0.0, 1.0], [0.122, 1.014], [0.220, 1.0625]]   # IV / ATM IV at log-moneyness ln(F/K), from the live chain 2026-11-17
+half_spread = [-0.0037, 0.153, 0.01]                       # half bid-ask as share of price = a + b*ln(F/K), floor c
+fee_rate = 0.0003                   # per leg per trade: 0.03% of the underlying...
+fee_cap = 0.125                     # ...capped at 12.5% of the option price
+contract_size = 10

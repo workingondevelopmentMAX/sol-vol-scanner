@@ -19,30 +19,8 @@ iv_rv_ratio_cheap = 0.9    # bootstrap mode: CHEAP when IV / RV30 <= this
 min_history_days = 60      # days of IV history needed before percentile mode switches on
 target_dte = 30            # the "30-day" ATM IV we track
 
-[spread]
-dte_min = 14
-dte_max = 42
-short_delta_target = -0.20
-short_delta_min = -0.25    # most negative delta allowed for the short put
-short_delta_max = -0.15    # least negative delta allowed for the short put
-long_strike_offset_pct = 10          # long put about this % below the short strike
-min_credit_pct_of_width = 12         # conservative credit must be >= this % of strike width
-                                     # (a ~20-delta put spread usually pays 10-17% of width;
-                                     #  25% would need a ~30-delta short put or very rich IV)
-max_leg_spread_pct_of_mid = 15       # each leg's bid-ask spread must be <= this % of its mid...
-max_leg_spread_abs_usd = 0.10        # ...OR <= this many USDC per SOL (absolute floor)
-min_open_interest = 0                # per leg, in SOL. Set after a first look at real data.
-max_alternates = 2
-
-[exits]
-# The exit plan worked out for every idea (shown in step 5 of the dashboard).
-take_profit_pct = 50          # buy the spread back once you've kept this % of the credit
-split_take_profit = false     # true = take profit on half, let the other half run to expiry
-stop_multiple = 1.5           # stop when the loss reaches this many times the credit (1, 1.5 or 2)
-iv_points_per_pct_drop = 1.0  # assume implied vol rises this many points for each 1% SOL falls
-stop_assumed_days = 3         # assume this many days have passed when the stop is hit
-time_exit_dte = 7             # close anything still open this many days before expiry
-stop_limit_buffer_pct = 30    # stop-limit price = trigger price + this % (room to get filled in a fast market)
+# The put spread's rules (strikes, filters, exits) now live in strategies/bull_put_spread.toml,
+# shared by the daily scan and the backtest.
 
 [conviction]
 # 0-100 score shown with every idea. Below "medium" the dashboard says skip today.

@@ -89,7 +89,11 @@ premium collected and the SOL it bought.
 
 | File | What it is |
 |---|---|
-| `config.toml` | All thresholds and your risk limits |
+| `config.toml` | Market data settings, the rich/cheap gauge and your risk limits |
+| `strategies/bull_put_spread.toml` | The put spread's rules: strikes, filters, exits, and how past days are rebuilt for backtests. Versioned and fingerprinted |
+| `engine.py` | The one decision engine, shared by the daily scan and the backtest |
+| `backtest.py` | Replays a strategy file over SOL's history with the same engine (`python backtest.py`) |
+| `tests/golden/` | Locked copy of what the scanner suggests on the stored sample day; tests fail if it changes unexpectedly |
 | `main.py` | Entry point (`--sample`, `--json`, `--backfill`) |
 | `data_fetch.py` | Read-only Deribit calls (public methods only) |
 | `vol_gauge.py` | Chain building, ATM IV, realised vol, verdict, history |

@@ -25,6 +25,7 @@ import suggest
 import vol_gauge
 import bsmodel
 import rationale
+import engine
 import exits
 
 ROOT = Path(__file__).resolve().parent
@@ -55,9 +56,14 @@ def use_sample_paths() -> None:
         vol_gauge.HISTORY_CSV.write_text(seed.read_text(encoding="utf-8"), encoding="utf-8")
 
 
-def load_config() -> dict:
+def load_config(strategy_path=None) -> dict:
+    """config.toml (market data, risk limits, vol gauge) + the strategy file's rules, as one settings view."""
     with CONFIG.open("rb") as f:
-        return tomllib.load(f)
+        cfg = tomllib.load(f)
+    st = engine.load_strategy(strategy_path or engine.DEFAULT_STRATEGY)
+    cfg = engine.with_strategy(cfg, st)
+    cfg["_strategy"] = st
+    return cfg
 
 
 # ------------------------------------------------------------------ logs
@@ -220,24 +226,21 @@ def analyse(cfg: dict, snap: dict) -> dict:
     spot = float(snap["index_price"])
     ctx = rationale.market_context(ts, vals, spot)
     result["market_context"] = ctx
-    if vd["label"] != "RICH":
-        result["no_trade_reason"] = f"Volatility is {vd['label']}: {vd.get('reason', '')}. Only sell put spreads when IV is rich."
+    st = cfg["_strategy"]
+    result["strategy"] = st["_stamp"]
+    dec = engine.decide(cfg, st, vd, chain)          # the same decision function the backtest uses
+    if dec["trade"] is None:
+        result["no_trade_reason"] = dec["reason"]
     else:
-        cands, reasons = suggest.find_candidates(cfg, chain)
-        if not cands:
-            why = "; ".join(f"{k} ({n})" for k, n in reasons.most_common(4)) or "no strikes matched the rules"
-            result["no_trade_reason"] = f"IV is rich, but no put spread passed the filters: {why}."
-        else:
-            best = cands[0]
-            sz = suggest.size(cfg, best)
-            panel = explain.greeks_panel(best, sz, float(snap["index_price"]))
-            result["suggestion"] = {**suggest.strip(best), "sizing": sz, "greeks_panel": panel}
-            result["alternates"] = [{**suggest.strip(c), "sizing": suggest.size(cfg, c)}
-                                    for c in cands[1: 1 + int(cfg["spread"]["max_alternates"])]]
-            s = result["suggestion"]
-            s["exit_plan"] = exits.plan(cfg, best, sz, spot)
-            s["conviction"] = rationale.conviction(cfg, vd, s, spot)
-            s["why"] = rationale.why_trade(cfg, vd, s, ctx, spot, s["conviction"])
+        best = dec["trade"]
+        sz = suggest.size(cfg, best)
+        panel = explain.greeks_panel(best, sz, float(snap["index_price"]))
+        result["suggestion"] = {**suggest.strip(best), "sizing": sz, "greeks_panel": panel}
+        result["alternates"] = [{**suggest.strip(c), "sizing": suggest.size(cfg, c)} for c in dec["alternates"]]
+        s = result["suggestion"]
+        s["exit_plan"] = engine.exit_plan(cfg, st, best, sz, spot)
+        s["conviction"] = rationale.conviction(cfg, vd, s, spot)
+        s["why"] = rationale.why_trade(cfg, vd, s, ctx, spot, s["conviction"])
     if result["suggestion"] is None:
         result["why_no_trade"] = rationale.why_no_trade(vd, result["no_trade_reason"])
     return {"result": result, "history": hist, "today": today, "now": now}
@@ -287,7 +290,8 @@ def save_outputs(cfg: dict, snap: dict, out: dict, sample: bool = False) -> dict
         "history": annotated[-1000:],
         "log": list(reversed(rows))[:60],
         "premium": premium,
-        "config": {"risk": cfg["risk"], "vol": cfg["vol"], "spread": cfg["spread"], "conviction": cfg.get("conviction", {})},
+        "config": {"risk": cfg["risk"], "vol": cfg["vol"], "spread": cfg["spread"], "exits": cfg["exits"],
+                   "conviction": cfg.get("conviction", {}), "strategy": cfg["strategy"]},
     }
     write_dashboard(dash, sample)
     return dash
