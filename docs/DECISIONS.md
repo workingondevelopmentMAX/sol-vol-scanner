@@ -2,6 +2,21 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-19 · Daily page: at a glance, evidence, for and against, similar past days
+The daily page now lists every strategy on the menu with today's status, and each suggested trade shows its
+rule's practice-period and unseen-period results side by side, an evidence label, rule-based cautions, and
+results on past days with similar entry conditions. Settings confirmed by the owner on 2026-11-19
+(config.toml [report]): caution when SOL moved more than 15% in 30 days; a past day is similar if its 30-day
+SOL move was within ±10 points of today's and it had the same IV verdict; fewer than 5 similar days =
+'too few to tell'; fewer than 20 held-back trades = 'thin evidence'. Display only: suggestions, sizes,
+exits and conviction are unchanged. Today's example: the 25 Dec 66/60 bull put spread (IV RICH, 63rd percentile,
+conviction Medium 54/100) shows "Thin evidence, mixed results" (practice period -$1,268 over 14 trades, unseen
+period +$288 over 11) with four cautions (SOL -30% in 30 days, cushion 0.7x a typical move, thin evidence, lost in
+the practice period), and 6 similar past days (RICH, 30-day move between -40% and -20%): 4 won, 2 lost, -$192 in
+total per $1,000 risked. "SOL's 30-day move" is measured the same way for today and for past entry days (index
+price vs 30 calendar days earlier, from data/iv_history.csv). The daily job refreshes these sections after the
+backtest (`python report.py`) so the evidence and the "older rules" check are current.
+
 ### 2026-11-19 · "Thin evidence" threshold confirmed at 20 held-back trades
 The owner confirmed `held_back_thin_below = 20` (`config.toml` `[report]`): a rule with fewer than 20 trades in the
 unseen period (held back) is labelled "thin evidence". Today every bull put spread variant is thin (10-13

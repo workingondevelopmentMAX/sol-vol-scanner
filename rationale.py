@@ -46,7 +46,7 @@ def conviction(cfg: dict, verdict: dict, s: dict, spot: float) -> dict:
     exp_move = spot * (verdict.get("atm_iv") or 0) * math.sqrt(max(s["dte"], 1) / 365)
     cushion = spot - s["break_even"]
     sig = cushion / exp_move if exp_move else 0
-    parts.append({"name": "Cushion before a loss", "weight": 25, "score": _scale(sig, 0.4, 1.0),
+    parts.append({"name": "Cushion before a loss", "weight": 25, "score": _scale(sig, 0.4, 1.0), "ratio": sig,
                   "why": f"SOL can fall {cushion / spot:.0%} to ${s['break_even']:.2f}: {sig:.1f}x a typical move to expiry (full marks at 1.0x)"})
 
     # 3. Pay for the risk

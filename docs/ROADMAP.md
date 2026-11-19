@@ -25,14 +25,11 @@ Full rationale: the "Deterministic Strategy Engine Plan" doc. Work through one s
   `site/data/backtest.json` (+ `backtest.js`), with a check that its rules fingerprint matches today's, the two
   period labels, a fixed evidence label per variant (`config.toml` `[report]`, thin below 20 held-back trades),
   and each trade's entry-day conditions (30-day move, % below 30-day high, IV percentile, verdict).
+- **Step 4b: daily page shows the evidence** (2026-11-19). Today at a glance (every menu strategy and its status),
+  idea cards with an evidence box (practice vs unseen period), for and against today (rule-based cautions), and
+  results on past days with similar entry-day conditions; all worked out in `report.py`, display only.
 
 ## Next
-
-### Step 4b: daily page shows the evidence
-- Today's page: at a glance (every menu strategy and its status), an evidence box for each suggested rule
-  (practice vs unseen period, evidence label, "older rules" warning), reasons for and against, and results on
-  past days with similar ENTRY-day conditions (never what happened after entry).
-- **Done when:** every number matches `site/data/latest.json` / `site/data/backtest.json`, on phone and desktop.
 
 ### Step 4c: Strategy Lab page
 - New dashboard page generated nightly from `data/backtest.json`: running P&L and drawdown chart, scorecard
