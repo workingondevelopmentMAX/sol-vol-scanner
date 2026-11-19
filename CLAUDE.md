@@ -33,6 +33,21 @@ publishes a dashboard to GitHub Pages: https://workingondevelopmentmax.github.io
 7. **Work through pull requests.** One task per branch; explain what changed, test results, and any change to
    suggestions or backtest numbers in plain language in the PR description.
 
+## How to report back to the owner
+The owner reviews outcomes, not code. In every session and pull request:
+- **Plan first.** Before editing, list in plain words what you will change and what the owner will notice
+  (dashboard, suggestions, numbers). Wait for approval when in Plan mode.
+- **Progress in plain words.** Short updates such as "tests written, now changing the engine", not code jargon.
+- **Pull request description, always in this order:**
+  1. **What changed:** 2-4 plain sentences, no code terms.
+  2. **What you'll see:** dashboard or daily-output differences, or "nothing visible".
+  3. **Numbers that moved:** any change to today's suggestion, golden files or backtest results, old vs new,
+     and why. Say "none" if none.
+  4. **How it was checked:** tests run and their result; anything that could not be checked.
+  5. **What I need from you:** a decision, a setting, or "just review and merge".
+- **Update the docs:** tick off the step in `docs/ROADMAP.md` and add a dated entry to `docs/DECISIONS.md`
+  for anything decided or learned.
+
 ## Layout
 | Path | Role |
 |---|---|
