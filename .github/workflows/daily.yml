@@ -48,11 +48,15 @@ jobs:
             python main.py
           fi
 
+      - name: Backtest on the stored files, published to the dashboard (yesterday's evidence stays up if this fails)
+        continue-on-error: true
+        run: python backtest.py --publish
+
       - name: Save history, log, today's option chain (data/chains/) and dashboard data
         run: |
           git config user.name "sol-vol-scanner bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/iv_history.csv data/term_history.json logs/suggestions.csv site/data/
+          git add data/iv_history.csv data/term_history.json logs/suggestions.csv site/data/ data/backtest.json
           if [ -d data/chains ]; then git add data/chains/; fi
           if git diff --cached --quiet; then
             echo "Nothing new to save."

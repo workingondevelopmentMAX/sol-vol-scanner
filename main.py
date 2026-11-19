@@ -26,6 +26,7 @@ import vol_gauge
 import bsmodel
 import chain_store
 import rationale
+import strategy_menu
 import engine
 import exits
 
@@ -287,6 +288,10 @@ def analyse(cfg: dict, snap: dict) -> dict:
         s["why"] = rationale.why_trade(cfg, vd, s, ctx, spot, s["conviction"])
     if result["suggestion"] is None:
         result["why_no_trade"] = rationale.why_no_trade(vd, result["no_trade_reason"])
+    # every strategy on the agreed menu with today's status (display only; the decision above is unchanged)
+    ran = {st["_stamp"]["file"]: {"stamp": st["_stamp"], "suggestion": result["suggestion"],
+                                  "no_trade_reason": result["no_trade_reason"]}}
+    result["strategies"] = strategy_menu.statuses(strategy_menu.load(), vd["label"], ran)
     return {"result": result, "history": hist, "today": today, "now": now}
 
 

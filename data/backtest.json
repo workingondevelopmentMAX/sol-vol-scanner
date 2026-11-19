@@ -11,12 +11,12 @@
   "2026-11-19"
  ],
  "inputs": {
-  "config.toml": "04cb012cae7745bb1fd291aeb5db45b5f1f4866323e22999cc9e9be17f518cb8",
+  "config.toml": "6a614f97d7b03d7e0b490bfc6d54cfd329ce67b83764e658e053e8086c1bbb62",
   "data/chains/2026-11-19.json.gz": "65b1e0bc09bbc3cc014e351cc3d7499cba8ec743f97f279182cb763d423b004a",
-  "data/iv_history.csv": "9c9471b447d8505766d78ff6fb3b657a70765387801ca80c10c9d4b4fa890367",
+  "data/iv_history.csv": "19470ab4968725542b3d5c431cbc3eee233739d8a276d14bd3aa322a4af7cf7a",
   "strategies/bull_put_spread.toml": "26b253abbac928d306de02e59389a3342090f49ff50eaf01f7b2ba739ede9a73"
  },
- "data_fingerprint": "4ebc2b8cae61",
+ "data_fingerprint": "92fbfb8cc7d6",
  "stored_chain_days": 1,
  "windows": {
   "in_sample": [
@@ -28,6 +28,11 @@
    "2026-11-19"
   ]
  },
+ "window_labels": {
+  "in_sample": "Practice period (Jun 2024 - Jun 2025): the rules were chosen while looking at these days, so good results here prove little.",
+  "held_back": "Unseen period (Jul 2025 - today): kept aside and never used to choose rules, the fairer test. Results here count for more."
+ },
+ "units": "P&L per $1,000 of max loss per trade. Holding SOL and buying weekly: per $1,000 invested.",
  "variants": [
   {
    "name": "Strategy file as written",
@@ -62,6 +67,7 @@
        "avg_per_1000": 133.8
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2024-06-01",
       "to": "2025-06-30",
@@ -105,19 +111,27 @@
        "avg_per_1000": 127.7
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
       "to": "2026-11-19",
       "sol_from": 149.13,
-      "sol_to": 75.3728,
-      "per_1000": -494.6
+      "sol_to": 75.0591,
+      "per_1000": -496.7
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -300.0
+      "per_1000": -303.0
      }
     }
+   },
+   "evidence": {
+    "label": "mixed",
+    "thin": true,
+    "held_back_trades": 11,
+    "thin_below": 20,
+    "text": "Mixed: made money in only one of the two periods. Thin evidence: only 11 unseen-period trades (fewer than 20)."
    },
    "trades": [
     {
@@ -136,7 +150,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.99
+     "S_exit": 144.99,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.8,
+      "below_30d_high_pct": 20.7,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-03",
@@ -154,7 +174,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 26.8,
+      "iv_percentile": 56.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-02",
@@ -172,7 +198,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -4.4,
+      "below_30d_high_pct": 15.5,
+      "iv_percentile": 53.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-10-29",
@@ -190,7 +222,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 222.5
+     "S_exit": 222.5,
+     "entry_conditions": {
+      "sol_30d_change_pct": 13.8,
+      "below_30d_high_pct": 0.8,
+      "iv_percentile": 50.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-11",
@@ -208,7 +246,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.04
+     "S_exit": 237.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": 52.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 94.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-03",
@@ -226,7 +270,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 46.8,
+      "below_30d_high_pct": 8.8,
+      "iv_percentile": 75.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-21",
@@ -244,7 +294,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.72
+     "S_exit": 207.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -29.2,
+      "below_30d_high_pct": 28.8,
+      "iv_percentile": 92.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-02",
@@ -262,7 +318,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 271.32
+     "S_exit": 271.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": -12.4,
+      "below_30d_high_pct": 13.3,
+      "iv_percentile": 70.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-18",
@@ -280,7 +342,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 199.14
+     "S_exit": 199.14,
+     "entry_conditions": {
+      "sol_30d_change_pct": 42.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-02",
@@ -298,7 +366,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -8.0,
+      "below_30d_high_pct": 26.6,
+      "iv_percentile": 71.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-24",
@@ -316,7 +390,13 @@
      "days": 27,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.94
+     "S_exit": 138.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -47.3,
+      "below_30d_high_pct": 42.9,
+      "iv_percentile": 55.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-30",
@@ -334,7 +414,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.6,
+      "below_30d_high_pct": 22.4,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-06",
@@ -352,7 +438,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 128.52
+     "S_exit": 128.52,
+     "entry_conditions": {
+      "sol_30d_change_pct": -30.1,
+      "below_30d_high_pct": 32.9,
+      "iv_percentile": 90.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-12",
@@ -370,7 +462,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.9
+     "S_exit": 154.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 3.1,
+      "below_30d_high_pct": 11.1,
+      "iv_percentile": 73.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-14",
@@ -388,7 +486,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.9
+     "S_exit": 207.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 20.1,
+      "below_30d_high_pct": 4.2,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-07",
@@ -406,7 +510,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.82
+     "S_exit": 237.82,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.2,
+      "below_30d_high_pct": 2.5,
+      "iv_percentile": 60.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-11",
@@ -424,7 +534,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 194.04
+     "S_exit": 194.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.2,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": 57.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-05",
@@ -442,7 +558,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 132.11
+     "S_exit": 132.11,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.3,
+      "below_30d_high_pct": 29.3,
+      "iv_percentile": 65.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-05",
@@ -460,7 +582,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 85.23
+     "S_exit": 85.23,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.9,
+      "below_30d_high_pct": 45.1,
+      "iv_percentile": 74.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-23",
@@ -478,7 +606,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 90.19
+     "S_exit": 90.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.2,
+      "below_30d_high_pct": 39.5,
+      "iv_percentile": 50.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-04",
@@ -496,7 +630,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 79.61
+     "S_exit": 79.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": -13.7,
+      "below_30d_high_pct": 7.8,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-06-30",
@@ -514,7 +654,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 77.371
+     "S_exit": 77.371,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.3,
+      "below_30d_high_pct": 6.0,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-23",
@@ -532,7 +678,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 101.79
+     "S_exit": 101.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": 27.6,
+      "below_30d_high_pct": 0.4,
+      "iv_percentile": 60.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-27",
@@ -550,7 +702,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 105.718
+     "S_exit": 105.718,
+     "entry_conditions": {
+      "sol_30d_change_pct": 43.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-11-01",
@@ -568,7 +726,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 79.657
+     "S_exit": 79.657,
+     "entry_conditions": {
+      "sol_30d_change_pct": -21.1,
+      "below_30d_high_pct": 22.6,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     }
    ]
   },
@@ -609,6 +773,7 @@
        "avg_per_1000": 134.9
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2024-06-01",
       "to": "2025-06-30",
@@ -652,19 +817,27 @@
        "avg_per_1000": 127.7
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
       "to": "2026-11-19",
       "sol_from": 149.13,
-      "sol_to": 75.3728,
-      "per_1000": -494.6
+      "sol_to": 75.0591,
+      "per_1000": -496.7
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -300.0
+      "per_1000": -303.0
      }
     }
+   },
+   "evidence": {
+    "label": "mixed",
+    "thin": true,
+    "held_back_trades": 13,
+    "thin_below": 20,
+    "text": "Mixed: made money in only one of the two periods. Thin evidence: only 13 unseen-period trades (fewer than 20)."
    },
    "trades": [
     {
@@ -683,7 +856,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 125.13
+     "S_exit": 125.13,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.8,
+      "below_30d_high_pct": 20.7,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-23",
@@ -701,7 +880,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 148.12
+     "S_exit": 148.12,
+     "entry_conditions": {
+      "sol_30d_change_pct": -26.2,
+      "below_30d_high_pct": 28.0,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-07-01",
@@ -719,7 +904,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 126.72
+     "S_exit": 126.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -10.7,
+      "below_30d_high_pct": 15.2,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-03",
@@ -737,7 +928,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 26.8,
+      "iv_percentile": 56.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-02",
@@ -755,7 +952,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -4.4,
+      "below_30d_high_pct": 15.5,
+      "iv_percentile": 53.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-10-29",
@@ -773,7 +976,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 222.5
+     "S_exit": 222.5,
+     "entry_conditions": {
+      "sol_30d_change_pct": 13.8,
+      "below_30d_high_pct": 0.8,
+      "iv_percentile": 50.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-11",
@@ -791,7 +1000,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.04
+     "S_exit": 237.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": 52.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 94.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-03",
@@ -809,7 +1024,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 191.11
+     "S_exit": 191.11,
+     "entry_conditions": {
+      "sol_30d_change_pct": 46.8,
+      "below_30d_high_pct": 8.8,
+      "iv_percentile": 75.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-19",
@@ -827,7 +1048,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 216.57
+     "S_exit": 216.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.2,
+      "below_30d_high_pct": 26.5,
+      "iv_percentile": 71.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-03",
@@ -845,7 +1072,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 186.19
+     "S_exit": 186.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.6,
+      "below_30d_high_pct": 9.6,
+      "iv_percentile": 67.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-10",
@@ -863,7 +1096,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 271.32
+     "S_exit": 271.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.1,
+      "below_30d_high_pct": 17.6,
+      "iv_percentile": 61.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-18",
@@ -881,7 +1120,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 227.53
+     "S_exit": 227.53,
+     "entry_conditions": {
+      "sol_30d_change_pct": 42.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-26",
@@ -899,7 +1144,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 181.48
+     "S_exit": 181.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 23.0,
+      "below_30d_high_pct": 16.1,
+      "iv_percentile": 96.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-18",
@@ -917,7 +1168,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -35.3,
+      "below_30d_high_pct": 34.9,
+      "iv_percentile": 58.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-24",
@@ -935,7 +1192,13 @@
      "days": 27,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.94
+     "S_exit": 138.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -47.3,
+      "below_30d_high_pct": 42.9,
+      "iv_percentile": 55.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-30",
@@ -953,7 +1216,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.6,
+      "below_30d_high_pct": 22.4,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-06",
@@ -971,7 +1240,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 128.52
+     "S_exit": 128.52,
+     "entry_conditions": {
+      "sol_30d_change_pct": -30.1,
+      "below_30d_high_pct": 32.9,
+      "iv_percentile": 90.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-12",
@@ -989,7 +1264,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.9
+     "S_exit": 154.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 3.1,
+      "below_30d_high_pct": 11.1,
+      "iv_percentile": 73.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-14",
@@ -1007,7 +1288,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.9
+     "S_exit": 207.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 20.1,
+      "below_30d_high_pct": 4.2,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-07",
@@ -1025,7 +1312,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.82
+     "S_exit": 237.82,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.2,
+      "below_30d_high_pct": 2.5,
+      "iv_percentile": 60.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-11",
@@ -1043,7 +1336,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 194.04
+     "S_exit": 194.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.2,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": 57.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-05",
@@ -1061,7 +1360,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.84
+     "S_exit": 136.84,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.3,
+      "below_30d_high_pct": 29.3,
+      "iv_percentile": 65.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-18",
@@ -1079,7 +1384,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 125.26
+     "S_exit": 125.26,
+     "entry_conditions": {
+      "sol_30d_change_pct": -27.3,
+      "below_30d_high_pct": 30.7,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-05",
@@ -1097,7 +1408,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 85.23
+     "S_exit": 85.23,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.9,
+      "below_30d_high_pct": 45.1,
+      "iv_percentile": 74.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-23",
@@ -1115,7 +1432,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 90.19
+     "S_exit": 90.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.2,
+      "below_30d_high_pct": 39.5,
+      "iv_percentile": 50.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-04",
@@ -1133,7 +1456,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 79.61
+     "S_exit": 79.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": -13.7,
+      "below_30d_high_pct": 7.8,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-06-30",
@@ -1151,7 +1480,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 77.371
+     "S_exit": 77.371,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.3,
+      "below_30d_high_pct": 6.0,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-23",
@@ -1169,7 +1504,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 101.79
+     "S_exit": 101.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": 27.6,
+      "below_30d_high_pct": 0.4,
+      "iv_percentile": 60.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-27",
@@ -1187,7 +1528,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 105.718
+     "S_exit": 105.718,
+     "entry_conditions": {
+      "sol_30d_change_pct": 43.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-11-01",
@@ -1205,7 +1552,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 83.277
+     "S_exit": 83.277,
+     "entry_conditions": {
+      "sol_30d_change_pct": -21.1,
+      "below_30d_high_pct": 22.6,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-11-10",
@@ -1223,7 +1576,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 75.205
+     "S_exit": 75.205,
+     "entry_conditions": {
+      "sol_30d_change_pct": -26.0,
+      "below_30d_high_pct": 23.2,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     }
    ]
   },
@@ -1265,6 +1624,7 @@
        "avg_per_1000": 132.7
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2024-06-01",
       "to": "2025-06-30",
@@ -1308,19 +1668,27 @@
        "avg_per_1000": 127.7
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
       "to": "2026-11-19",
       "sol_from": 149.13,
-      "sol_to": 75.3728,
-      "per_1000": -494.6
+      "sol_to": 75.0591,
+      "per_1000": -496.7
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -300.0
+      "per_1000": -303.0
      }
     }
+   },
+   "evidence": {
+    "label": "consistent",
+    "thin": true,
+    "held_back_trades": 11,
+    "thin_below": 20,
+    "text": "Consistent: made money in both periods. Thin evidence: only 11 unseen-period trades (fewer than 20)."
    },
    "trades": [
     {
@@ -1339,7 +1707,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.99
+     "S_exit": 144.99,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.8,
+      "below_30d_high_pct": 20.7,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-03",
@@ -1357,7 +1731,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 26.8,
+      "iv_percentile": 56.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-02",
@@ -1375,7 +1755,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -4.4,
+      "below_30d_high_pct": 15.5,
+      "iv_percentile": 53.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-10-29",
@@ -1393,7 +1779,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 222.5
+     "S_exit": 222.5,
+     "entry_conditions": {
+      "sol_30d_change_pct": 13.8,
+      "below_30d_high_pct": 0.8,
+      "iv_percentile": 50.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-11",
@@ -1411,7 +1803,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.04
+     "S_exit": 237.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": 52.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 94.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-03",
@@ -1429,7 +1827,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 216.29
+     "S_exit": 216.29,
+     "entry_conditions": {
+      "sol_30d_change_pct": 46.8,
+      "below_30d_high_pct": 8.8,
+      "iv_percentile": 75.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-04",
@@ -1447,7 +1851,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.74
+     "S_exit": 238.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -9.7,
+      "below_30d_high_pct": 9.1,
+      "iv_percentile": 84.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-29",
@@ -1465,7 +1875,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 161.08
+     "S_exit": 161.08,
+     "entry_conditions": {
+      "sol_30d_change_pct": 25.8,
+      "below_30d_high_pct": 12.0,
+      "iv_percentile": 90.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-24",
@@ -1483,7 +1899,13 @@
      "days": 27,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.94
+     "S_exit": 138.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -47.3,
+      "below_30d_high_pct": 42.9,
+      "iv_percentile": 55.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-30",
@@ -1501,7 +1923,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.57
+     "S_exit": 139.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.6,
+      "below_30d_high_pct": 22.4,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-19",
@@ -1519,7 +1947,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.64
+     "S_exit": 151.64,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.1,
+      "below_30d_high_pct": 3.5,
+      "iv_percentile": 52.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-14",
@@ -1537,7 +1971,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.9
+     "S_exit": 207.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 20.1,
+      "below_30d_high_pct": 4.2,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-07",
@@ -1555,7 +1995,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.82
+     "S_exit": 237.82,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.2,
+      "below_30d_high_pct": 2.5,
+      "iv_percentile": 60.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-11",
@@ -1573,7 +2019,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 194.04
+     "S_exit": 194.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.2,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": 57.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-05",
@@ -1591,7 +2043,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 132.11
+     "S_exit": 132.11,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.3,
+      "below_30d_high_pct": 29.3,
+      "iv_percentile": 65.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-05",
@@ -1609,7 +2067,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 85.23
+     "S_exit": 85.23,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.9,
+      "below_30d_high_pct": 45.1,
+      "iv_percentile": 74.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-23",
@@ -1627,7 +2091,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 90.19
+     "S_exit": 90.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.2,
+      "below_30d_high_pct": 39.5,
+      "iv_percentile": 50.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-04",
@@ -1645,7 +2115,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 79.61
+     "S_exit": 79.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": -13.7,
+      "below_30d_high_pct": 7.8,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-06-30",
@@ -1663,7 +2139,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 77.371
+     "S_exit": 77.371,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.3,
+      "below_30d_high_pct": 6.0,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-23",
@@ -1681,7 +2163,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 101.79
+     "S_exit": 101.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": 27.6,
+      "below_30d_high_pct": 0.4,
+      "iv_percentile": 60.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-27",
@@ -1699,7 +2187,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 105.718
+     "S_exit": 105.718,
+     "entry_conditions": {
+      "sol_30d_change_pct": 43.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-11-01",
@@ -1717,7 +2211,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 75.205
+     "S_exit": 75.205,
+     "entry_conditions": {
+      "sol_30d_change_pct": -21.1,
+      "below_30d_high_pct": 22.6,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     }
    ]
   },
@@ -1759,6 +2259,7 @@
        "avg_per_1000": 133.4
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2024-06-01",
       "to": "2025-06-30",
@@ -1800,19 +2301,27 @@
        "avg_per_1000": 127.7
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
       "to": "2026-11-19",
       "sol_from": 149.13,
-      "sol_to": 75.3728,
-      "per_1000": -494.6
+      "sol_to": 75.0591,
+      "per_1000": -496.7
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -300.0
+      "per_1000": -303.0
      }
     }
+   },
+   "evidence": {
+    "label": "mixed",
+    "thin": true,
+    "held_back_trades": 10,
+    "thin_below": 20,
+    "text": "Mixed: made money in only one of the two periods. Thin evidence: only 10 unseen-period trades (fewer than 20)."
    },
    "trades": [
     {
@@ -1831,7 +2340,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.99
+     "S_exit": 144.99,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.8,
+      "below_30d_high_pct": 20.7,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-03",
@@ -1849,7 +2364,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 26.8,
+      "iv_percentile": 56.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-02",
@@ -1867,7 +2388,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -4.4,
+      "below_30d_high_pct": 15.5,
+      "iv_percentile": 53.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-10-29",
@@ -1885,7 +2412,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 222.5
+     "S_exit": 222.5,
+     "entry_conditions": {
+      "sol_30d_change_pct": 13.8,
+      "below_30d_high_pct": 0.8,
+      "iv_percentile": 50.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-11",
@@ -1903,7 +2436,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.04
+     "S_exit": 237.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": 52.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 94.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-03",
@@ -1921,7 +2460,13 @@
      "days": 39,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 186.48
+     "S_exit": 186.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 46.8,
+      "below_30d_high_pct": 8.8,
+      "iv_percentile": 75.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-11",
@@ -1939,7 +2484,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.74
+     "S_exit": 238.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -17.1,
+      "below_30d_high_pct": 17.5,
+      "iv_percentile": 53.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-29",
@@ -1957,7 +2508,13 @@
      "days": 38,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.65
+     "S_exit": 139.65,
+     "entry_conditions": {
+      "sol_30d_change_pct": 25.8,
+      "below_30d_high_pct": 12.0,
+      "iv_percentile": 90.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-08",
@@ -1975,7 +2532,13 @@
      "days": 36,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 132.33
+     "S_exit": 132.33,
+     "entry_conditions": {
+      "sol_30d_change_pct": -27.5,
+      "below_30d_high_pct": 31.7,
+      "iv_percentile": 79.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-13",
@@ -1993,7 +2556,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.9
+     "S_exit": 154.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": -0.4,
+      "below_30d_high_pct": 8.5,
+      "iv_percentile": 72.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-14",
@@ -2011,7 +2580,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.9
+     "S_exit": 207.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 20.1,
+      "below_30d_high_pct": 4.2,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-07",
@@ -2029,7 +2604,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.82
+     "S_exit": 237.82,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.2,
+      "below_30d_high_pct": 2.5,
+      "iv_percentile": 60.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-11",
@@ -2047,7 +2628,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 194.04
+     "S_exit": 194.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.2,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": 57.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-05",
@@ -2065,7 +2652,13 @@
      "days": 36,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.16
+     "S_exit": 139.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.3,
+      "below_30d_high_pct": 29.3,
+      "iv_percentile": 65.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-05",
@@ -2083,7 +2676,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 85.23
+     "S_exit": 85.23,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.9,
+      "below_30d_high_pct": 45.1,
+      "iv_percentile": 74.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-23",
@@ -2101,7 +2700,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 90.19
+     "S_exit": 90.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.2,
+      "below_30d_high_pct": 39.5,
+      "iv_percentile": 50.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-04",
@@ -2119,7 +2724,13 @@
      "days": 34,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 84.45
+     "S_exit": 84.45,
+     "entry_conditions": {
+      "sol_30d_change_pct": -13.7,
+      "below_30d_high_pct": 7.8,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-06-30",
@@ -2137,7 +2748,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 77.371
+     "S_exit": 77.371,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.3,
+      "below_30d_high_pct": 6.0,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-23",
@@ -2155,7 +2772,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 101.79
+     "S_exit": 101.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": 27.6,
+      "below_30d_high_pct": 0.4,
+      "iv_percentile": 60.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-27",
@@ -2173,7 +2796,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 105.718
+     "S_exit": 105.718,
+     "entry_conditions": {
+      "sol_30d_change_pct": 43.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     }
    ]
   },
@@ -2214,6 +2843,7 @@
        "avg_per_1000": 132.9
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2024-06-01",
       "to": "2025-06-30",
@@ -2256,19 +2886,27 @@
        "avg_per_1000": 127.7
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
       "to": "2026-11-19",
       "sol_from": 149.13,
-      "sol_to": 75.3728,
-      "per_1000": -494.6
+      "sol_to": 75.0591,
+      "per_1000": -496.7
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -300.0
+      "per_1000": -303.0
      }
     }
+   },
+   "evidence": {
+    "label": "mixed",
+    "thin": true,
+    "held_back_trades": 10,
+    "thin_below": 20,
+    "text": "Mixed: made money in only one of the two periods. Thin evidence: only 10 unseen-period trades (fewer than 20)."
    },
    "trades": [
     {
@@ -2287,7 +2925,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.99
+     "S_exit": 144.99,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.8,
+      "below_30d_high_pct": 20.7,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-03",
@@ -2305,7 +2949,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 26.8,
+      "iv_percentile": 56.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-02",
@@ -2323,7 +2973,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -4.4,
+      "below_30d_high_pct": 15.5,
+      "iv_percentile": 53.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-10-29",
@@ -2341,7 +2997,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 222.5
+     "S_exit": 222.5,
+     "entry_conditions": {
+      "sol_30d_change_pct": 13.8,
+      "below_30d_high_pct": 0.8,
+      "iv_percentile": 50.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-11",
@@ -2359,7 +3021,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.04
+     "S_exit": 237.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": 52.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 94.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-03",
@@ -2377,7 +3045,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 216.29
+     "S_exit": 216.29,
+     "entry_conditions": {
+      "sol_30d_change_pct": 46.8,
+      "below_30d_high_pct": 8.8,
+      "iv_percentile": 75.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-04",
@@ -2395,7 +3069,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.74
+     "S_exit": 238.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -9.7,
+      "below_30d_high_pct": 9.1,
+      "iv_percentile": 84.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-29",
@@ -2413,7 +3093,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 143.78
+     "S_exit": 143.78,
+     "entry_conditions": {
+      "sol_30d_change_pct": 25.8,
+      "below_30d_high_pct": 12.0,
+      "iv_percentile": 90.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-01",
@@ -2431,7 +3117,13 @@
      "days": 35,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 119.13
+     "S_exit": 119.13,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.1,
+      "below_30d_high_pct": 37.7,
+      "iv_percentile": 90.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-05",
@@ -2449,7 +3141,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.57
+     "S_exit": 139.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -17.5,
+      "below_30d_high_pct": 17.6,
+      "iv_percentile": 75.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-19",
@@ -2467,7 +3165,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.64
+     "S_exit": 151.64,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.1,
+      "below_30d_high_pct": 3.5,
+      "iv_percentile": 52.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-14",
@@ -2485,7 +3189,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.9
+     "S_exit": 207.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 20.1,
+      "below_30d_high_pct": 4.2,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-07",
@@ -2503,7 +3213,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.82
+     "S_exit": 237.82,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.2,
+      "below_30d_high_pct": 2.5,
+      "iv_percentile": 60.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-11",
@@ -2521,7 +3237,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 194.04
+     "S_exit": 194.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.2,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": 57.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-05",
@@ -2539,7 +3261,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 132.11
+     "S_exit": 132.11,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.3,
+      "below_30d_high_pct": 29.3,
+      "iv_percentile": 65.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-05",
@@ -2557,7 +3285,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 85.23
+     "S_exit": 85.23,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.9,
+      "below_30d_high_pct": 45.1,
+      "iv_percentile": 74.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-23",
@@ -2575,7 +3309,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 90.19
+     "S_exit": 90.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.2,
+      "below_30d_high_pct": 39.5,
+      "iv_percentile": 50.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-04",
@@ -2593,7 +3333,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 79.61
+     "S_exit": 79.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": -13.7,
+      "below_30d_high_pct": 7.8,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-06-30",
@@ -2611,7 +3357,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 77.371
+     "S_exit": 77.371,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.3,
+      "below_30d_high_pct": 6.0,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-23",
@@ -2629,7 +3381,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 101.79
+     "S_exit": 101.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": 27.6,
+      "below_30d_high_pct": 0.4,
+      "iv_percentile": 60.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-27",
@@ -2647,7 +3405,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 105.718
+     "S_exit": 105.718,
+     "entry_conditions": {
+      "sol_30d_change_pct": 43.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     }
    ]
   },
@@ -2689,6 +3453,7 @@
        "avg_per_1000": 133.4
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2024-06-01",
       "to": "2025-06-30",
@@ -2730,19 +3495,27 @@
        "avg_per_1000": 127.7
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
       "to": "2026-11-19",
       "sol_from": 149.13,
-      "sol_to": 75.3728,
-      "per_1000": -494.6
+      "sol_to": 75.0591,
+      "per_1000": -496.7
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -300.0
+      "per_1000": -303.0
      }
     }
+   },
+   "evidence": {
+    "label": "mixed",
+    "thin": true,
+    "held_back_trades": 10,
+    "thin_below": 20,
+    "text": "Mixed: made money in only one of the two periods. Thin evidence: only 10 unseen-period trades (fewer than 20)."
    },
    "trades": [
     {
@@ -2761,7 +3534,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.99
+     "S_exit": 144.99,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.8,
+      "below_30d_high_pct": 20.7,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-03",
@@ -2779,7 +3558,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 26.8,
+      "iv_percentile": 56.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-02",
@@ -2797,7 +3582,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -4.4,
+      "below_30d_high_pct": 15.5,
+      "iv_percentile": 53.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-10-29",
@@ -2815,7 +3606,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 222.5
+     "S_exit": 222.5,
+     "entry_conditions": {
+      "sol_30d_change_pct": 13.8,
+      "below_30d_high_pct": 0.8,
+      "iv_percentile": 50.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-11",
@@ -2833,7 +3630,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.04
+     "S_exit": 237.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": 52.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 94.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-03",
@@ -2851,7 +3654,13 @@
      "days": 39,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 186.48
+     "S_exit": 186.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 46.8,
+      "below_30d_high_pct": 8.8,
+      "iv_percentile": 75.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-11",
@@ -2869,7 +3678,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.74
+     "S_exit": 238.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -17.1,
+      "below_30d_high_pct": 17.5,
+      "iv_percentile": 53.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-29",
@@ -2887,7 +3702,13 @@
      "days": 38,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.65
+     "S_exit": 139.65,
+     "entry_conditions": {
+      "sol_30d_change_pct": 25.8,
+      "below_30d_high_pct": 12.0,
+      "iv_percentile": 90.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-08",
@@ -2905,7 +3726,13 @@
      "days": 36,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 132.33
+     "S_exit": 132.33,
+     "entry_conditions": {
+      "sol_30d_change_pct": -27.5,
+      "below_30d_high_pct": 31.7,
+      "iv_percentile": 79.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-13",
@@ -2923,7 +3750,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.9
+     "S_exit": 154.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": -0.4,
+      "below_30d_high_pct": 8.5,
+      "iv_percentile": 72.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-14",
@@ -2941,7 +3774,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.9
+     "S_exit": 207.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 20.1,
+      "below_30d_high_pct": 4.2,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-07",
@@ -2959,7 +3798,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.82
+     "S_exit": 237.82,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.2,
+      "below_30d_high_pct": 2.5,
+      "iv_percentile": 60.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-11",
@@ -2977,7 +3822,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 194.04
+     "S_exit": 194.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.2,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": 57.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-05",
@@ -2995,7 +3846,13 @@
      "days": 36,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.16
+     "S_exit": 139.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.3,
+      "below_30d_high_pct": 29.3,
+      "iv_percentile": 65.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-05",
@@ -3013,7 +3870,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 85.23
+     "S_exit": 85.23,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.9,
+      "below_30d_high_pct": 45.1,
+      "iv_percentile": 74.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-23",
@@ -3031,7 +3894,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 90.19
+     "S_exit": 90.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.2,
+      "below_30d_high_pct": 39.5,
+      "iv_percentile": 50.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-04",
@@ -3049,7 +3918,13 @@
      "days": 34,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 84.45
+     "S_exit": 84.45,
+     "entry_conditions": {
+      "sol_30d_change_pct": -13.7,
+      "below_30d_high_pct": 7.8,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-06-30",
@@ -3067,7 +3942,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 77.371
+     "S_exit": 77.371,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.3,
+      "below_30d_high_pct": 6.0,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-23",
@@ -3085,7 +3966,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 101.79
+     "S_exit": 101.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": 27.6,
+      "below_30d_high_pct": 0.4,
+      "iv_percentile": 60.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-27",
@@ -3103,7 +3990,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 105.718
+     "S_exit": 105.718,
+     "entry_conditions": {
+      "sol_30d_change_pct": 43.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     }
    ]
   },
@@ -3145,6 +4038,7 @@
        "avg_per_1000": 261.1
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2024-06-01",
       "to": "2025-06-30",
@@ -3186,19 +4080,27 @@
        "avg_per_1000": 249.7
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
       "to": "2026-11-19",
       "sol_from": 149.13,
-      "sol_to": 75.3728,
-      "per_1000": -494.6
+      "sol_to": 75.0591,
+      "per_1000": -496.7
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -300.0
+      "per_1000": -303.0
      }
     }
+   },
+   "evidence": {
+    "label": "mixed",
+    "thin": true,
+    "held_back_trades": 7,
+    "thin_below": 20,
+    "text": "Mixed: made money in only one of the two periods. Thin evidence: only 7 unseen-period trades (fewer than 20)."
    },
    "trades": [
     {
@@ -3217,7 +4119,13 @@
      "days": 36,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 171.58
+     "S_exit": 171.58,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.8,
+      "below_30d_high_pct": 20.7,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-03",
@@ -3235,7 +4143,13 @@
      "days": 42,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 137.17
+     "S_exit": 137.17,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 26.8,
+      "iv_percentile": 56.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-10-29",
@@ -3253,7 +4167,13 @@
      "days": 39,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.0
+     "S_exit": 238.0,
+     "entry_conditions": {
+      "sol_30d_change_pct": 13.8,
+      "below_30d_high_pct": 0.8,
+      "iv_percentile": 50.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-07",
@@ -3271,7 +4191,13 @@
      "days": 42,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 271.32
+     "S_exit": 271.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": 18.5,
+      "below_30d_high_pct": 8.5,
+      "iv_percentile": 77.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-18",
@@ -3289,7 +4215,13 @@
      "days": 28,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 192.78
+     "S_exit": 192.78,
+     "entry_conditions": {
+      "sol_30d_change_pct": 42.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-18",
@@ -3307,7 +4239,13 @@
      "days": 39,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 125.39
+     "S_exit": 125.39,
+     "entry_conditions": {
+      "sol_30d_change_pct": -35.3,
+      "below_30d_high_pct": 34.9,
+      "iv_percentile": 58.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-30",
@@ -3325,7 +4263,13 @@
      "days": 41,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 172.66
+     "S_exit": 172.66,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.6,
+      "below_30d_high_pct": 22.4,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-14",
@@ -3343,7 +4287,13 @@
      "days": 37,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 240.24
+     "S_exit": 240.24,
+     "entry_conditions": {
+      "sol_30d_change_pct": 20.1,
+      "below_30d_high_pct": 4.2,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-11",
@@ -3361,7 +4311,13 @@
      "days": 35,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 142.24
+     "S_exit": 142.24,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.2,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": 57.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-16",
@@ -3379,7 +4335,13 @@
      "days": 41,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 124.19
+     "S_exit": 124.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -24.2,
+      "below_30d_high_pct": 30.3,
+      "iv_percentile": 52.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-05",
@@ -3397,7 +4359,13 @@
      "days": 37,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 88.22
+     "S_exit": 88.22,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.9,
+      "below_30d_high_pct": 45.1,
+      "iv_percentile": 74.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-14",
@@ -3415,7 +4383,13 @@
      "days": 42,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 86.64
+     "S_exit": 86.64,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.8,
+      "below_30d_high_pct": 2.7,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-06-30",
@@ -3433,7 +4407,13 @@
      "days": 39,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 76.315
+     "S_exit": 76.315,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.3,
+      "below_30d_high_pct": 6.0,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-23",
@@ -3451,7 +4431,13 @@
      "days": 41,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 121.178
+     "S_exit": 121.178,
+     "entry_conditions": {
+      "sol_30d_change_pct": 27.6,
+      "below_30d_high_pct": 0.4,
+      "iv_percentile": 60.4,
+      "verdict": "RICH"
+     }
     }
    ]
   },
@@ -3515,6 +4501,7 @@
        "avg_per_1000": 135.6
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2024-06-01",
       "to": "2025-06-30",
@@ -3582,19 +4569,27 @@
        "avg_per_1000": 130.6
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
       "to": "2026-11-19",
       "sol_from": 149.13,
-      "sol_to": 75.3728,
-      "per_1000": -494.6
+      "sol_to": 75.0591,
+      "per_1000": -496.7
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -300.0
+      "per_1000": -303.0
      }
     }
+   },
+   "evidence": {
+    "label": "losing",
+    "thin": false,
+    "held_back_trades": 32,
+    "thin_below": 20,
+    "text": "Losing: lost money (or made none) in both periods."
    },
    "trades": [
     {
@@ -3613,7 +4608,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 131.4
+     "S_exit": 131.4,
+     "entry_conditions": {
+      "sol_30d_change_pct": 26.8,
+      "below_30d_high_pct": 8.0,
+      "iv_percentile": null,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2024-06-20",
@@ -3631,7 +4632,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 141.89
+     "S_exit": 141.89,
+     "entry_conditions": {
+      "sol_30d_change_pct": -26.9,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-28",
@@ -3649,7 +4656,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 161.05
+     "S_exit": 161.05,
+     "entry_conditions": {
+      "sol_30d_change_pct": -14.1,
+      "below_30d_high_pct": 18.4,
+      "iv_percentile": null,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2024-07-16",
@@ -3667,7 +4680,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 185.93
+     "S_exit": 185.93,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.8,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": null,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2024-07-26",
@@ -3685,7 +4704,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 140.88
+     "S_exit": 140.88,
+     "entry_conditions": {
+      "sol_30d_change_pct": 36.9,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": null,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2024-08-03",
@@ -3703,7 +4728,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 26.8,
+      "iv_percentile": 56.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-23",
@@ -3721,7 +4752,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 127.6
+     "S_exit": 127.6,
+     "entry_conditions": {
+      "sol_30d_change_pct": -8.7,
+      "below_30d_high_pct": 19.6,
+      "iv_percentile": 21.2,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2024-09-01",
@@ -3739,7 +4776,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -15.8,
+      "below_30d_high_pct": 19.9,
+      "iv_percentile": 36.2,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2024-09-19",
@@ -3757,7 +4800,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 145.52
+     "S_exit": 145.52,
+     "entry_conditions": {
+      "sol_30d_change_pct": 5.5,
+      "below_30d_high_pct": 5.1,
+      "iv_percentile": 23.2,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2024-10-11",
@@ -3775,7 +4824,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 168.63
+     "S_exit": 168.63,
+     "entry_conditions": {
+      "sol_30d_change_pct": 7.9,
+      "below_30d_high_pct": 7.7,
+      "iv_percentile": 5.2,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2024-10-20",
@@ -3793,7 +4848,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 188.32
+     "S_exit": 188.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": 14.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 23.1,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2024-11-06",
@@ -3811,7 +4872,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 236.61
+     "S_exit": 236.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": 31.6,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 32.5,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2024-11-19",
@@ -3829,7 +4896,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 40.3,
+      "below_30d_high_pct": 2.7,
+      "iv_percentile": 89.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-21",
@@ -3847,7 +4920,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.72
+     "S_exit": 207.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -29.2,
+      "below_30d_high_pct": 28.8,
+      "iv_percentile": 92.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-02",
@@ -3865,7 +4944,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 271.32
+     "S_exit": 271.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": -12.4,
+      "below_30d_high_pct": 13.3,
+      "iv_percentile": 70.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-18",
@@ -3883,7 +4968,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 199.14
+     "S_exit": 199.14,
+     "entry_conditions": {
+      "sol_30d_change_pct": 42.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-02",
@@ -3901,7 +4992,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -8.0,
+      "below_30d_high_pct": 26.6,
+      "iv_percentile": 71.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-24",
@@ -3919,7 +5016,13 @@
      "days": 27,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.94
+     "S_exit": 138.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -47.3,
+      "below_30d_high_pct": 42.9,
+      "iv_percentile": 55.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-23",
@@ -3937,7 +5040,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.1,
+      "below_30d_high_pct": 19.7,
+      "iv_percentile": 44.4,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2025-04-06",
@@ -3955,7 +5064,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 128.52
+     "S_exit": 128.52,
+     "entry_conditions": {
+      "sol_30d_change_pct": -30.1,
+      "below_30d_high_pct": 32.9,
+      "iv_percentile": 90.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-12",
@@ -3973,7 +5088,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.9
+     "S_exit": 154.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 3.1,
+      "below_30d_high_pct": 11.1,
+      "iv_percentile": 73.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-24",
@@ -3991,7 +5112,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 165.19
+     "S_exit": 165.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": 7.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 33.1,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2025-05-08",
@@ -4009,7 +5136,13 @@
      "days": 30,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 149.36
+     "S_exit": 149.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": 53.9,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 12.8,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2025-06-07",
@@ -4027,7 +5160,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 155.79
+     "S_exit": 155.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": -9.6,
+      "below_30d_high_pct": 18.2,
+      "iv_percentile": 9.0,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2025-07-02",
@@ -4045,7 +5184,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 174.26
+     "S_exit": 174.26,
+     "entry_conditions": {
+      "sol_30d_change_pct": -2.6,
+      "below_30d_high_pct": 6.7,
+      "iv_percentile": 1.6,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2025-07-16",
@@ -4063,7 +5208,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 177.18
+     "S_exit": 177.18,
+     "entry_conditions": {
+      "sol_30d_change_pct": 14.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 15.0,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2025-08-07",
@@ -4081,7 +5232,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 205.1
+     "S_exit": 205.1,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.8,
+      "below_30d_high_pct": 11.3,
+      "iv_percentile": 7.1,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2025-08-22",
@@ -4099,7 +5256,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 222.41
+     "S_exit": 222.41,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 0.3,
+      "iv_percentile": 56.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-09",
@@ -4117,7 +5280,13 @@
      "days": 23,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 229.71
+     "S_exit": 229.71,
+     "entry_conditions": {
+      "sol_30d_change_pct": 21.4,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 47.8,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2025-10-02",
@@ -4135,7 +5304,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 182.93
+     "S_exit": 182.93,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.7,
+      "below_30d_high_pct": 6.8,
+      "iv_percentile": 32.2,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2025-10-10",
@@ -4153,7 +5328,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 202.64
+     "S_exit": 202.64,
+     "entry_conditions": {
+      "sol_30d_change_pct": -18.1,
+      "below_30d_high_pct": 25.8,
+      "iv_percentile": 7.9,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2025-10-26",
@@ -4171,7 +5352,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 156.91
+     "S_exit": 156.91,
+     "entry_conditions": {
+      "sol_30d_change_pct": 0.3,
+      "below_30d_high_pct": 14.4,
+      "iv_percentile": 9.6,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2025-11-03",
@@ -4189,7 +5376,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 127.5
+     "S_exit": 127.5,
+     "entry_conditions": {
+      "sol_30d_change_pct": -33.7,
+      "below_30d_high_pct": 32.2,
+      "iv_percentile": 11.7,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2025-11-20",
@@ -4207,7 +5400,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 143.73
+     "S_exit": 143.73,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.1,
+      "below_30d_high_pct": 37.1,
+      "iv_percentile": 59.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-26",
@@ -4225,7 +5424,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 124.19
+     "S_exit": 124.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -29.0,
+      "below_30d_high_pct": 26.6,
+      "iv_percentile": 34.7,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2025-12-27",
@@ -4243,7 +5448,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 139.18
+     "S_exit": 139.18,
+     "entry_conditions": {
+      "sol_30d_change_pct": -10.6,
+      "below_30d_high_pct": 13.5,
+      "iv_percentile": 0.3,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-01-06",
@@ -4261,7 +5472,13 @@
      "days": 23,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 115.71
+     "S_exit": 115.71,
+     "entry_conditions": {
+      "sol_30d_change_pct": 2.5,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 3.0,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-01-29",
@@ -4279,7 +5496,13 @@
      "days": 5,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 97.79
+     "S_exit": 97.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": -8.1,
+      "below_30d_high_pct": 20.2,
+      "iv_percentile": 2.2,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-02-03",
@@ -4297,7 +5520,13 @@
      "days": 2,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 79.5
+     "S_exit": 79.5,
+     "entry_conditions": {
+      "sol_30d_change_pct": -27.8,
+      "below_30d_high_pct": 32.5,
+      "iv_percentile": 20.5,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2026-02-05",
@@ -4315,7 +5544,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 85.23
+     "S_exit": 85.23,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.9,
+      "below_30d_high_pct": 45.1,
+      "iv_percentile": 74.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-21",
@@ -4333,7 +5568,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 93.7
+     "S_exit": 93.7,
+     "entry_conditions": {
+      "sol_30d_change_pct": -33.3,
+      "below_30d_high_pct": 32.9,
+      "iv_percentile": 41.0,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2026-03-15",
@@ -4351,7 +5592,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 88.1
+     "S_exit": 88.1,
+     "entry_conditions": {
+      "sol_30d_change_pct": 10.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 54.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-04-16",
@@ -4369,7 +5616,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 90.198
+     "S_exit": 90.198,
+     "entry_conditions": {
+      "sol_30d_change_pct": -6.2,
+      "below_30d_high_pct": 4.1,
+      "iv_percentile": 0.3,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-05-06",
@@ -4387,7 +5640,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 79.61
+     "S_exit": 79.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": 12.9,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 1.9,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-06-01",
@@ -4405,7 +5664,13 @@
      "days": 2,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 69.091
+     "S_exit": 69.091,
+     "entry_conditions": {
+      "sol_30d_change_pct": -5.1,
+      "below_30d_high_pct": 17.1,
+      "iv_percentile": 2.2,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-06-03",
@@ -4423,7 +5688,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 71.179
+     "S_exit": 71.179,
+     "entry_conditions": {
+      "sol_30d_change_pct": -18.6,
+      "below_30d_high_pct": 28.0,
+      "iv_percentile": 27.6,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2026-06-14",
@@ -4441,7 +5712,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 77.877
+     "S_exit": 77.877,
+     "entry_conditions": {
+      "sol_30d_change_pct": -18.6,
+      "below_30d_high_pct": 18.2,
+      "iv_percentile": 11.7,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-07-01",
@@ -4459,7 +5736,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 76.089
+     "S_exit": 76.089,
+     "entry_conditions": {
+      "sol_30d_change_pct": -2.2,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 48.1,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2026-07-18",
@@ -4477,7 +5760,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 76.315
+     "S_exit": 76.315,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.3,
+      "below_30d_high_pct": 8.0,
+      "iv_percentile": 2.7,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-08-08",
@@ -4495,7 +5784,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 86.078
+     "S_exit": 86.078,
+     "entry_conditions": {
+      "sol_30d_change_pct": -3.2,
+      "below_30d_high_pct": 2.9,
+      "iv_percentile": 0.3,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-08-19",
@@ -4513,7 +5808,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 101.79
+     "S_exit": 101.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.6,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 6.0,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-08-26",
@@ -4531,7 +5832,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 105.718
+     "S_exit": 105.718,
+     "entry_conditions": {
+      "sol_30d_change_pct": 39.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 23.5,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2026-09-17",
@@ -4549,7 +5856,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "CHEAP",
-     "S_exit": 116.477
+     "S_exit": 116.477,
+     "entry_conditions": {
+      "sol_30d_change_pct": 37.4,
+      "below_30d_high_pct": 0.6,
+      "iv_percentile": 15.6,
+      "verdict": "CHEAP"
+     }
     },
     {
      "date": "2026-09-24",
@@ -4567,7 +5880,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 101.833
+     "S_exit": 101.833,
+     "entry_conditions": {
+      "sol_30d_change_pct": 20.1,
+      "below_30d_high_pct": 1.2,
+      "iv_percentile": 32.2,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2026-10-23",
@@ -4585,7 +5904,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "FAIR",
-     "S_exit": 85.501
+     "S_exit": 85.501,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.9,
+      "below_30d_high_pct": 18.0,
+      "iv_percentile": 28.7,
+      "verdict": "FAIR"
+     }
     },
     {
      "date": "2026-11-08",
@@ -4603,7 +5928,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 69.911
+     "S_exit": 69.911,
+     "entry_conditions": {
+      "sol_30d_change_pct": -22.2,
+      "below_30d_high_pct": 24.0,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     }
    ]
   },
@@ -4643,6 +5974,7 @@
        "avg_per_1000": 134.9
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2024-06-01",
       "to": "2025-06-30",
@@ -4686,19 +6018,27 @@
        "avg_per_1000": 131.3
       }
      },
+     "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
       "to": "2026-11-19",
       "sol_from": 149.13,
-      "sol_to": 75.3728,
-      "per_1000": -494.6
+      "sol_to": 75.0591,
+      "per_1000": -496.7
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -300.0
+      "per_1000": -303.0
      }
     }
+   },
+   "evidence": {
+    "label": "mixed",
+    "thin": false,
+    "held_back_trades": 94,
+    "thin_below": 20,
+    "text": "Mixed: made money in only one of the two periods."
    },
    "trades": [
     {
@@ -4717,7 +6057,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.99
+     "S_exit": 144.99,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.8,
+      "below_30d_high_pct": 20.7,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-15",
@@ -4735,7 +6081,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 153.47
+     "S_exit": 153.47,
+     "entry_conditions": {
+      "sol_30d_change_pct": -14.6,
+      "below_30d_high_pct": 20.2,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-16",
@@ -4753,7 +6105,13 @@
      "days": 28,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 153.47
+     "S_exit": 153.47,
+     "entry_conditions": {
+      "sol_30d_change_pct": -14.8,
+      "below_30d_high_pct": 19.0,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-17",
@@ -4771,7 +6129,13 @@
      "days": 23,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 142.46
+     "S_exit": 142.46,
+     "entry_conditions": {
+      "sol_30d_change_pct": -21.6,
+      "below_30d_high_pct": 24.6,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-18",
@@ -4789,7 +6153,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.99
+     "S_exit": 144.99,
+     "entry_conditions": {
+      "sol_30d_change_pct": -21.5,
+      "below_30d_high_pct": 22.8,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-19",
@@ -4807,7 +6177,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.99
+     "S_exit": 144.99,
+     "entry_conditions": {
+      "sol_30d_change_pct": -24.3,
+      "below_30d_high_pct": 23.7,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-20",
@@ -4825,7 +6201,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 141.89
+     "S_exit": 141.89,
+     "entry_conditions": {
+      "sol_30d_change_pct": -26.9,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-21",
@@ -4843,7 +6225,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.99
+     "S_exit": 144.99,
+     "entry_conditions": {
+      "sol_30d_change_pct": -24.1,
+      "below_30d_high_pct": 22.5,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-22",
@@ -4861,7 +6249,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.99
+     "S_exit": 144.99,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.0,
+      "below_30d_high_pct": 22.6,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-23",
@@ -4879,7 +6273,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 148.12
+     "S_exit": 148.12,
+     "entry_conditions": {
+      "sol_30d_change_pct": -26.2,
+      "below_30d_high_pct": 28.0,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-24",
@@ -4897,7 +6297,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 153.47
+     "S_exit": 153.47,
+     "entry_conditions": {
+      "sol_30d_change_pct": -18.5,
+      "below_30d_high_pct": 22.5,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-25",
@@ -4915,7 +6321,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 153.47
+     "S_exit": 153.47,
+     "entry_conditions": {
+      "sol_30d_change_pct": -16.6,
+      "below_30d_high_pct": 20.6,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-27",
@@ -4933,7 +6345,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 161.05
+     "S_exit": 161.05,
+     "entry_conditions": {
+      "sol_30d_change_pct": -14.9,
+      "below_30d_high_pct": 16.4,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-06-29",
@@ -4951,7 +6369,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 158.74
+     "S_exit": 158.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -15.5,
+      "below_30d_high_pct": 19.0,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-07-01",
@@ -4969,7 +6393,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 168.75
+     "S_exit": 168.75,
+     "entry_conditions": {
+      "sol_30d_change_pct": -10.7,
+      "below_30d_high_pct": 15.2,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-07-02",
@@ -4987,7 +6417,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 161.65
+     "S_exit": 161.65,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.3,
+      "below_30d_high_pct": 15.7,
+      "iv_percentile": null,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-03",
@@ -5005,7 +6441,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 26.8,
+      "iv_percentile": 56.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-04",
@@ -5023,7 +6465,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.53
+     "S_exit": 144.53,
+     "entry_conditions": {
+      "sol_30d_change_pct": -10.2,
+      "below_30d_high_pct": 36.1,
+      "iv_percentile": 92.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-05",
@@ -5041,7 +6489,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 2.1,
+      "below_30d_high_pct": 26.3,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-06",
@@ -5059,7 +6513,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 159.35
+     "S_exit": 159.35,
+     "entry_conditions": {
+      "sol_30d_change_pct": 14.9,
+      "below_30d_high_pct": 20.8,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-07",
@@ -5077,7 +6537,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 8.3,
+      "below_30d_high_pct": 20.1,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-08",
@@ -5095,7 +6561,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.5,
+      "below_30d_high_pct": 17.9,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-09",
@@ -5113,7 +6585,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.0,
+      "below_30d_high_pct": 19.3,
+      "iv_percentile": 95.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-10",
@@ -5131,7 +6609,13 @@
      "days": 35,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 137.17
+     "S_exit": 137.17,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.6,
+      "below_30d_high_pct": 18.6,
+      "iv_percentile": 95.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-11",
@@ -5149,7 +6633,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 4.9,
+      "below_30d_high_pct": 24.1,
+      "iv_percentile": 94.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-12",
@@ -5167,7 +6657,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": 0.6,
+      "below_30d_high_pct": 24.2,
+      "iv_percentile": 93.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-13",
@@ -5185,7 +6681,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 137.66
+     "S_exit": 137.66,
+     "entry_conditions": {
+      "sol_30d_change_pct": -5.0,
+      "below_30d_high_pct": 24.3,
+      "iv_percentile": 89.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-14",
@@ -5203,7 +6705,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.7,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": 86.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-15",
@@ -5221,7 +6729,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 137.66
+     "S_exit": 137.66,
+     "entry_conditions": {
+      "sol_30d_change_pct": -10.3,
+      "below_30d_high_pct": 24.9,
+      "iv_percentile": 79.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-16",
@@ -5239,7 +6753,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.72
+     "S_exit": 154.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -12.1,
+      "below_30d_high_pct": 27.5,
+      "iv_percentile": 70.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-17",
@@ -5257,7 +6777,13 @@
      "days": 27,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 137.66
+     "S_exit": 137.66,
+     "entry_conditions": {
+      "sol_30d_change_pct": -12.4,
+      "below_30d_high_pct": 26.4,
+      "iv_percentile": 53.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-18",
@@ -5275,7 +6801,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.69
+     "S_exit": 138.69,
+     "entry_conditions": {
+      "sol_30d_change_pct": -15.6,
+      "below_30d_high_pct": 26.1,
+      "iv_percentile": 66.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-19",
@@ -5293,7 +6825,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -14.0,
+      "below_30d_high_pct": 23.4,
+      "iv_percentile": 64.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-08-20",
@@ -5311,7 +6849,13 @@
      "days": 30,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.8,
+      "below_30d_high_pct": 25.6,
+      "iv_percentile": 58.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-02",
@@ -5329,7 +6873,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -4.4,
+      "below_30d_high_pct": 15.5,
+      "iv_percentile": 53.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-03",
@@ -5347,7 +6897,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.69
+     "S_exit": 138.69,
+     "entry_conditions": {
+      "sol_30d_change_pct": 6.1,
+      "below_30d_high_pct": 18.1,
+      "iv_percentile": 52.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-04",
@@ -5365,7 +6921,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -6.3,
+      "below_30d_high_pct": 16.5,
+      "iv_percentile": 71.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-06",
@@ -5383,7 +6945,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -16.9,
+      "below_30d_high_pct": 19.8,
+      "iv_percentile": 69.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-07",
@@ -5401,7 +6969,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -18.0,
+      "below_30d_high_pct": 18.7,
+      "iv_percentile": 63.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-09-08",
@@ -5419,7 +6993,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.15
+     "S_exit": 151.15,
+     "entry_conditions": {
+      "sol_30d_change_pct": -16.7,
+      "below_30d_high_pct": 18.8,
+      "iv_percentile": 59.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-10-29",
@@ -5437,7 +7017,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 222.5
+     "S_exit": 222.5,
+     "entry_conditions": {
+      "sol_30d_change_pct": 13.8,
+      "below_30d_high_pct": 0.8,
+      "iv_percentile": 50.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-10-31",
@@ -5455,7 +7041,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 200.86
+     "S_exit": 200.86,
+     "entry_conditions": {
+      "sol_30d_change_pct": 12.2,
+      "below_30d_high_pct": 7.9,
+      "iv_percentile": 52.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-03",
@@ -5473,7 +7065,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 188.32
+     "S_exit": 188.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": 12.3,
+      "below_30d_high_pct": 10.3,
+      "iv_percentile": 61.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-04",
@@ -5491,7 +7089,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 200.86
+     "S_exit": 200.86,
+     "entry_conditions": {
+      "sol_30d_change_pct": 13.3,
+      "below_30d_high_pct": 10.1,
+      "iv_percentile": 77.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-05",
@@ -5509,7 +7113,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.47
+     "S_exit": 237.47,
+     "entry_conditions": {
+      "sol_30d_change_pct": 24.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 75.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-08",
@@ -5527,7 +7137,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 241.79
+     "S_exit": 241.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": 43.5,
+      "below_30d_high_pct": 0.1,
+      "iv_percentile": 89.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-09",
@@ -5545,7 +7161,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 253.61
+     "S_exit": 253.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": 45.7,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 90.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-10",
@@ -5563,7 +7185,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.3
+     "S_exit": 238.3,
+     "entry_conditions": {
+      "sol_30d_change_pct": 43.2,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 93.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-11",
@@ -5581,7 +7209,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.04
+     "S_exit": 237.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": 52.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 94.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-12",
@@ -5599,7 +7233,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 259.97
+     "S_exit": 259.97,
+     "entry_conditions": {
+      "sol_30d_change_pct": 34.5,
+      "below_30d_high_pct": 7.5,
+      "iv_percentile": 97.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-13",
@@ -5617,7 +7257,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 244.38
+     "S_exit": 244.38,
+     "entry_conditions": {
+      "sol_30d_change_pct": 40.9,
+      "below_30d_high_pct": 1.8,
+      "iv_percentile": 96.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-14",
@@ -5635,7 +7281,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.3
+     "S_exit": 238.3,
+     "entry_conditions": {
+      "sol_30d_change_pct": 36.1,
+      "below_30d_high_pct": 6.0,
+      "iv_percentile": 97.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-15",
@@ -5653,7 +7305,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 244.38
+     "S_exit": 244.38,
+     "entry_conditions": {
+      "sol_30d_change_pct": 43.4,
+      "below_30d_high_pct": 1.6,
+      "iv_percentile": 95.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-16",
@@ -5671,7 +7329,13 @@
      "days": 35,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 54.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 93.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-17",
@@ -5689,7 +7353,13 @@
      "days": 34,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 56.5,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 95.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-18",
@@ -5707,7 +7377,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.0
+     "S_exit": 238.0,
+     "entry_conditions": {
+      "sol_30d_change_pct": 53.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 94.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-19",
@@ -5725,7 +7401,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 40.3,
+      "below_30d_high_pct": 2.7,
+      "iv_percentile": 89.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-20",
@@ -5743,7 +7425,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 44.8,
+      "below_30d_high_pct": 0.6,
+      "iv_percentile": 87.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-21",
@@ -5761,7 +7449,13 @@
      "days": 28,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 191.11
+     "S_exit": 191.11,
+     "entry_conditions": {
+      "sol_30d_change_pct": 56.9,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 92.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-22",
@@ -5779,7 +7473,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 217.35
+     "S_exit": 217.35,
+     "entry_conditions": {
+      "sol_30d_change_pct": 49.2,
+      "below_30d_high_pct": 0.5,
+      "iv_percentile": 98.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-23",
@@ -5797,7 +7497,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 191.11
+     "S_exit": 191.11,
+     "entry_conditions": {
+      "sol_30d_change_pct": 49.4,
+      "below_30d_high_pct": 1.2,
+      "iv_percentile": 97.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-24",
@@ -5815,7 +7521,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 191.11
+     "S_exit": 191.11,
+     "entry_conditions": {
+      "sol_30d_change_pct": 51.5,
+      "below_30d_high_pct": 2.4,
+      "iv_percentile": 90.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-25",
@@ -5833,7 +7545,13 @@
      "days": 33,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 195.73
+     "S_exit": 195.73,
+     "entry_conditions": {
+      "sol_30d_change_pct": 36.4,
+      "below_30d_high_pct": 9.2,
+      "iv_percentile": 91.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-26",
@@ -5851,7 +7569,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 195.73
+     "S_exit": 195.73,
+     "entry_conditions": {
+      "sol_30d_change_pct": 33.5,
+      "below_30d_high_pct": 9.9,
+      "iv_percentile": 90.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-27",
@@ -5869,7 +7593,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 32.3,
+      "below_30d_high_pct": 8.3,
+      "iv_percentile": 79.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-28",
@@ -5887,7 +7617,13 @@
      "days": 23,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 33.1,
+      "below_30d_high_pct": 8.6,
+      "iv_percentile": 85.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-29",
@@ -5905,7 +7641,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 191.11
+     "S_exit": 191.11,
+     "entry_conditions": {
+      "sol_30d_change_pct": 39.9,
+      "below_30d_high_pct": 6.0,
+      "iv_percentile": 80.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-11-30",
@@ -5923,7 +7665,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 181.77
+     "S_exit": 181.77,
+     "entry_conditions": {
+      "sol_30d_change_pct": 42.2,
+      "below_30d_high_pct": 9.3,
+      "iv_percentile": 83.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-01",
@@ -5941,7 +7689,13 @@
      "days": 33,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 216.57
+     "S_exit": 216.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": 36.6,
+      "below_30d_high_pct": 12.0,
+      "iv_percentile": 84.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-02",
@@ -5959,7 +7713,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 216.57
+     "S_exit": 216.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": 39.0,
+      "below_30d_high_pct": 12.6,
+      "iv_percentile": 84.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-03",
@@ -5977,7 +7737,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 46.8,
+      "below_30d_high_pct": 8.8,
+      "iv_percentile": 75.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-04",
@@ -5995,7 +7761,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 44.7,
+      "below_30d_high_pct": 9.9,
+      "iv_percentile": 83.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-05",
@@ -6013,7 +7785,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 30.1,
+      "below_30d_high_pct": 7.9,
+      "iv_percentile": 83.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-06",
@@ -6031,7 +7809,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 25.7,
+      "below_30d_high_pct": 8.9,
+      "iv_percentile": 87.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-07",
@@ -6049,7 +7833,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 184.16
+     "S_exit": 184.16,
+     "entry_conditions": {
+      "sol_30d_change_pct": 18.5,
+      "below_30d_high_pct": 8.5,
+      "iv_percentile": 77.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-08",
@@ -6067,7 +7857,13 @@
      "days": 34,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 186.48
+     "S_exit": 186.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.6,
+      "below_30d_high_pct": 10.8,
+      "iv_percentile": 75.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-09",
@@ -6085,7 +7881,13 @@
      "days": 33,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 186.48
+     "S_exit": 186.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 5.8,
+      "below_30d_high_pct": 16.3,
+      "iv_percentile": 84.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-10",
@@ -6103,7 +7905,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 186.48
+     "S_exit": 186.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 4.9,
+      "below_30d_high_pct": 15.9,
+      "iv_percentile": 92.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-11",
@@ -6121,7 +7929,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 186.48
+     "S_exit": 186.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 3.5,
+      "below_30d_high_pct": 11.4,
+      "iv_percentile": 92.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-12",
@@ -6139,7 +7953,13 @@
      "days": 30,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 186.48
+     "S_exit": 186.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.3,
+      "below_30d_high_pct": 13.5,
+      "iv_percentile": 88.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-13",
@@ -6157,7 +7977,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 186.48
+     "S_exit": 186.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 3.4,
+      "below_30d_high_pct": 13.1,
+      "iv_percentile": 81.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-14",
@@ -6175,7 +8001,13 @@
      "days": 33,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 213.52
+     "S_exit": 213.52,
+     "entry_conditions": {
+      "sol_30d_change_pct": 3.9,
+      "below_30d_high_pct": 16.4,
+      "iv_percentile": 89.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-15",
@@ -6193,7 +8025,13 @@
      "days": 33,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 232.95
+     "S_exit": 232.95,
+     "entry_conditions": {
+      "sol_30d_change_pct": 1.9,
+      "below_30d_high_pct": 14.1,
+      "iv_percentile": 80.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-16",
@@ -6211,7 +8049,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 213.52
+     "S_exit": 213.52,
+     "entry_conditions": {
+      "sol_30d_change_pct": -9.2,
+      "below_30d_high_pct": 17.1,
+      "iv_percentile": 85.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-17",
@@ -6229,7 +8073,13 @@
      "days": 30,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 213.52
+     "S_exit": 213.52,
+     "entry_conditions": {
+      "sol_30d_change_pct": -10.7,
+      "below_30d_high_pct": 16.9,
+      "iv_percentile": 78.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-18",
@@ -6247,7 +8097,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 213.52
+     "S_exit": 213.52,
+     "entry_conditions": {
+      "sol_30d_change_pct": -12.9,
+      "below_30d_high_pct": 18.5,
+      "iv_percentile": 83.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-19",
@@ -6265,7 +8121,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 216.57
+     "S_exit": 216.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.2,
+      "below_30d_high_pct": 26.5,
+      "iv_percentile": 71.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-20",
@@ -6283,7 +8145,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 203.19
+     "S_exit": 203.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -17.7,
+      "below_30d_high_pct": 23.5,
+      "iv_percentile": 59.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-21",
@@ -6301,7 +8169,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.72
+     "S_exit": 207.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -29.2,
+      "below_30d_high_pct": 28.8,
+      "iv_percentile": 92.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-22",
@@ -6319,7 +8193,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 205.89
+     "S_exit": 205.89,
+     "entry_conditions": {
+      "sol_30d_change_pct": -29.7,
+      "below_30d_high_pct": 29.2,
+      "iv_percentile": 99.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-23",
@@ -6337,7 +8217,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 216.57
+     "S_exit": 216.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -25.5,
+      "below_30d_high_pct": 24.6,
+      "iv_percentile": 98.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-24",
@@ -6355,7 +8241,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 203.19
+     "S_exit": 203.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -22.0,
+      "below_30d_high_pct": 19.0,
+      "iv_percentile": 95.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-25",
@@ -6373,7 +8265,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 203.19
+     "S_exit": 203.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -18.0,
+      "below_30d_high_pct": 20.8,
+      "iv_percentile": 93.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-26",
@@ -6391,7 +8289,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 203.19
+     "S_exit": 203.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -20.4,
+      "below_30d_high_pct": 23.7,
+      "iv_percentile": 83.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-27",
@@ -6409,7 +8313,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 216.1
+     "S_exit": 216.1,
+     "entry_conditions": {
+      "sol_30d_change_pct": -22.4,
+      "below_30d_high_pct": 24.3,
+      "iv_percentile": 93.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-28",
@@ -6427,7 +8337,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 232.95
+     "S_exit": 232.95,
+     "entry_conditions": {
+      "sol_30d_change_pct": -17.7,
+      "below_30d_high_pct": 19.9,
+      "iv_percentile": 93.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-29",
@@ -6445,7 +8361,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 232.95
+     "S_exit": 232.95,
+     "entry_conditions": {
+      "sol_30d_change_pct": -21.4,
+      "below_30d_high_pct": 19.8,
+      "iv_percentile": 89.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-30",
@@ -6463,7 +8385,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 203.19
+     "S_exit": 203.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.5,
+      "below_30d_high_pct": 20.7,
+      "iv_percentile": 94.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2024-12-31",
@@ -6481,7 +8409,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 232.95
+     "S_exit": 232.95,
+     "entry_conditions": {
+      "sol_30d_change_pct": -17.1,
+      "below_30d_high_pct": 20.8,
+      "iv_percentile": 87.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-01",
@@ -6499,7 +8433,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 271.32
+     "S_exit": 271.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": -9.4,
+      "below_30d_high_pct": 14.0,
+      "iv_percentile": 72.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-02",
@@ -6517,7 +8457,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 271.32
+     "S_exit": 271.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": -12.4,
+      "below_30d_high_pct": 13.3,
+      "iv_percentile": 70.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-03",
@@ -6535,7 +8481,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 258.95
+     "S_exit": 258.95,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.6,
+      "below_30d_high_pct": 9.6,
+      "iv_percentile": 67.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-04",
@@ -6553,7 +8505,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.74
+     "S_exit": 238.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -9.7,
+      "below_30d_high_pct": 9.1,
+      "iv_percentile": 84.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-05",
@@ -6571,7 +8529,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.74
+     "S_exit": 238.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -9.1,
+      "below_30d_high_pct": 9.6,
+      "iv_percentile": 87.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-06",
@@ -6589,7 +8553,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 235.9
+     "S_exit": 235.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": -9.2,
+      "below_30d_high_pct": 6.8,
+      "iv_percentile": 70.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-08",
@@ -6607,7 +8577,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 271.32
+     "S_exit": 271.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": -12.7,
+      "below_30d_high_pct": 17.5,
+      "iv_percentile": 66.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-09",
@@ -6625,7 +8601,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 271.32
+     "S_exit": 271.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": -12.3,
+      "below_30d_high_pct": 16.8,
+      "iv_percentile": 59.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-10",
@@ -6643,7 +8625,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 271.32
+     "S_exit": 271.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.1,
+      "below_30d_high_pct": 17.6,
+      "iv_percentile": 61.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-11",
@@ -6661,7 +8649,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.74
+     "S_exit": 238.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -17.1,
+      "below_30d_high_pct": 17.5,
+      "iv_percentile": 53.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-12",
@@ -6679,7 +8673,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 271.32
+     "S_exit": 271.32,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.4,
+      "below_30d_high_pct": 18.4,
+      "iv_percentile": 63.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-13",
@@ -6697,7 +8697,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.74
+     "S_exit": 238.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -14.6,
+      "below_30d_high_pct": 16.9,
+      "iv_percentile": 66.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-14",
@@ -6715,7 +8721,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 238.74
+     "S_exit": 238.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -15.0,
+      "below_30d_high_pct": 12.3,
+      "iv_percentile": 65.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-15",
@@ -6733,7 +8745,13 @@
      "days": 30,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 195.9
+     "S_exit": 195.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": -5.7,
+      "below_30d_high_pct": 6.2,
+      "iv_percentile": 59.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-16",
@@ -6751,7 +8769,13 @@
      "days": 30,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 192.78
+     "S_exit": 192.78,
+     "entry_conditions": {
+      "sol_30d_change_pct": -1.2,
+      "below_30d_high_pct": 1.4,
+      "iv_percentile": 82.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-17",
@@ -6769,7 +8793,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 192.78
+     "S_exit": 192.78,
+     "entry_conditions": {
+      "sol_30d_change_pct": 10.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 87.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-18",
@@ -6787,7 +8817,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 199.14
+     "S_exit": 199.14,
+     "entry_conditions": {
+      "sol_30d_change_pct": 42.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-19",
@@ -6805,7 +8841,13 @@
      "days": 28,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 181.48
+     "S_exit": 181.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 31.5,
+      "below_30d_high_pct": 3.6,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-20",
@@ -6823,7 +8865,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 192.78
+     "S_exit": 192.78,
+     "entry_conditions": {
+      "sol_30d_change_pct": 28.7,
+      "below_30d_high_pct": 12.6,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-21",
@@ -6841,7 +8889,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 192.78
+     "S_exit": 192.78,
+     "entry_conditions": {
+      "sol_30d_change_pct": 42.3,
+      "below_30d_high_pct": 4.7,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-22",
@@ -6859,7 +8913,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 165.98
+     "S_exit": 165.98,
+     "entry_conditions": {
+      "sol_30d_change_pct": 30.4,
+      "below_30d_high_pct": 8.1,
+      "iv_percentile": 100.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-23",
@@ -6877,7 +8937,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 181.48
+     "S_exit": 181.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 31.2,
+      "below_30d_high_pct": 4.3,
+      "iv_percentile": 99.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-24",
@@ -6895,7 +8961,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 165.98
+     "S_exit": 165.98,
+     "entry_conditions": {
+      "sol_30d_change_pct": 27.9,
+      "below_30d_high_pct": 8.8,
+      "iv_percentile": 98.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-25",
@@ -6913,7 +8985,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 181.48
+     "S_exit": 181.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 38.9,
+      "below_30d_high_pct": 4.6,
+      "iv_percentile": 97.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-26",
@@ -6931,7 +9009,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 165.98
+     "S_exit": 165.98,
+     "entry_conditions": {
+      "sol_30d_change_pct": 23.0,
+      "below_30d_high_pct": 16.1,
+      "iv_percentile": 96.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-27",
@@ -6949,7 +9033,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 165.98
+     "S_exit": 165.98,
+     "entry_conditions": {
+      "sol_30d_change_pct": 22.1,
+      "below_30d_high_pct": 11.9,
+      "iv_percentile": 93.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-28",
@@ -6967,7 +9057,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 165.98
+     "S_exit": 165.98,
+     "entry_conditions": {
+      "sol_30d_change_pct": 22.0,
+      "below_30d_high_pct": 13.6,
+      "iv_percentile": 95.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-29",
@@ -6985,7 +9081,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 181.48
+     "S_exit": 181.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 25.8,
+      "below_30d_high_pct": 12.0,
+      "iv_percentile": 90.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-30",
@@ -7003,7 +9105,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 165.98
+     "S_exit": 165.98,
+     "entry_conditions": {
+      "sol_30d_change_pct": 24.4,
+      "below_30d_high_pct": 13.1,
+      "iv_percentile": 84.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-01-31",
@@ -7021,7 +9129,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 181.48
+     "S_exit": 181.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 12.0,
+      "below_30d_high_pct": 15.0,
+      "iv_percentile": 71.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-01",
@@ -7039,7 +9153,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 161.08
+     "S_exit": 161.08,
+     "entry_conditions": {
+      "sol_30d_change_pct": 1.9,
+      "below_30d_high_pct": 22.0,
+      "iv_percentile": 66.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-02",
@@ -7057,7 +9177,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -8.0,
+      "below_30d_high_pct": 26.6,
+      "iv_percentile": 71.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-03",
@@ -7075,7 +9201,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -5.4,
+      "below_30d_high_pct": 24.6,
+      "iv_percentile": 85.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-04",
@@ -7093,7 +9225,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -4.7,
+      "below_30d_high_pct": 24.4,
+      "iv_percentile": 82.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-05",
@@ -7111,7 +9249,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -6.5,
+      "below_30d_high_pct": 25.5,
+      "iv_percentile": 67.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-06",
@@ -7129,7 +9273,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -1.6,
+      "below_30d_high_pct": 29.0,
+      "iv_percentile": 58.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-07",
@@ -7147,7 +9297,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": 1.5,
+      "below_30d_high_pct": 28.9,
+      "iv_percentile": 56.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-08",
@@ -7165,7 +9321,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": 6.4,
+      "below_30d_high_pct": 24.8,
+      "iv_percentile": 69.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-09",
@@ -7183,7 +9345,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.0,
+      "below_30d_high_pct": 25.2,
+      "iv_percentile": 69.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-10",
@@ -7201,7 +9369,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.7,
+      "below_30d_high_pct": 24.6,
+      "iv_percentile": 68.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-11",
@@ -7219,7 +9393,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": 7.2,
+      "below_30d_high_pct": 28.0,
+      "iv_percentile": 52.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-12",
@@ -7237,7 +9417,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": 4.0,
+      "below_30d_high_pct": 28.8,
+      "iv_percentile": 51.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-18",
@@ -7255,7 +9441,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 128.45
+     "S_exit": 128.45,
+     "entry_conditions": {
+      "sol_30d_change_pct": -35.3,
+      "below_30d_high_pct": 34.9,
+      "iv_percentile": 58.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-19",
@@ -7273,7 +9465,13 @@
      "days": 5,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -27.5,
+      "below_30d_high_pct": 33.9,
+      "iv_percentile": 66.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-20",
@@ -7291,7 +9489,13 @@
      "days": 4,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -32.0,
+      "below_30d_high_pct": 32.3,
+      "iv_percentile": 66.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-21",
@@ -7309,7 +9513,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.1,
+      "below_30d_high_pct": 33.8,
+      "iv_percentile": 55.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-22",
@@ -7327,7 +9537,13 @@
      "days": 2,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 136.36
+     "S_exit": 136.36,
+     "entry_conditions": {
+      "sol_30d_change_pct": -33.4,
+      "below_30d_high_pct": 33.2,
+      "iv_percentile": 50.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-24",
@@ -7345,7 +9561,13 @@
      "days": 27,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.94
+     "S_exit": 138.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -47.3,
+      "below_30d_high_pct": 42.9,
+      "iv_percentile": 55.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-25",
@@ -7363,7 +9585,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.94
+     "S_exit": 138.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -38.4,
+      "below_30d_high_pct": 41.3,
+      "iv_percentile": 83.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-26",
@@ -7381,7 +9609,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.46
+     "S_exit": 139.46,
+     "entry_conditions": {
+      "sol_30d_change_pct": -41.0,
+      "below_30d_high_pct": 41.0,
+      "iv_percentile": 90.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-27",
@@ -7399,7 +9633,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 134.57
+     "S_exit": 134.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -45.2,
+      "below_30d_high_pct": 46.2,
+      "iv_percentile": 94.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-02-28",
@@ -7417,7 +9657,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.46
+     "S_exit": 139.46,
+     "entry_conditions": {
+      "sol_30d_change_pct": -40.4,
+      "below_30d_high_pct": 39.6,
+      "iv_percentile": 96.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-01",
@@ -7435,7 +9681,13 @@
      "days": 35,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 119.13
+     "S_exit": 119.13,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.1,
+      "below_30d_high_pct": 37.7,
+      "iv_percentile": 90.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-02",
@@ -7453,7 +9705,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 123.09
+     "S_exit": 123.09,
+     "entry_conditions": {
+      "sol_30d_change_pct": -29.7,
+      "below_30d_high_pct": 23.3,
+      "iv_percentile": 90.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-03",
@@ -7471,7 +9729,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.57
+     "S_exit": 144.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -35.8,
+      "below_30d_high_pct": 33.8,
+      "iv_percentile": 92.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-04",
@@ -7489,7 +9753,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.57
+     "S_exit": 144.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -28.2,
+      "below_30d_high_pct": 30.3,
+      "iv_percentile": 97.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-05",
@@ -7507,7 +9777,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.57
+     "S_exit": 144.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -27.3,
+      "below_30d_high_pct": 27.5,
+      "iv_percentile": 98.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-06",
@@ -7525,7 +9801,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.57
+     "S_exit": 144.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -29.6,
+      "below_30d_high_pct": 29.4,
+      "iv_percentile": 97.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-07",
@@ -7543,7 +9825,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.57
+     "S_exit": 144.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.3,
+      "below_30d_high_pct": 32.1,
+      "iv_percentile": 96.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-08",
@@ -7561,7 +9849,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -27.5,
+      "below_30d_high_pct": 31.7,
+      "iv_percentile": 79.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-09",
@@ -7579,7 +9873,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.94
+     "S_exit": 138.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -33.6,
+      "below_30d_high_pct": 37.4,
+      "iv_percentile": 81.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-10",
@@ -7597,7 +9897,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.94
+     "S_exit": 138.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.7,
+      "below_30d_high_pct": 39.8,
+      "iv_percentile": 87.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-11",
@@ -7615,7 +9921,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.94
+     "S_exit": 138.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.3,
+      "below_30d_high_pct": 39.8,
+      "iv_percentile": 95.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-12",
@@ -7633,7 +9945,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.94
+     "S_exit": 138.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.3,
+      "below_30d_high_pct": 36.8,
+      "iv_percentile": 96.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-13",
@@ -7651,7 +9969,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.46
+     "S_exit": 139.46,
+     "entry_conditions": {
+      "sol_30d_change_pct": -36.2,
+      "below_30d_high_pct": 36.6,
+      "iv_percentile": 92.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-14",
@@ -7669,7 +9993,13 @@
      "days": 23,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.2,
+      "below_30d_high_pct": 32.4,
+      "iv_percentile": 76.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-15",
@@ -7687,7 +10017,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.6,
+      "below_30d_high_pct": 31.3,
+      "iv_percentile": 70.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-16",
@@ -7705,7 +10041,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -34.1,
+      "below_30d_high_pct": 33.0,
+      "iv_percentile": 78.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-17",
@@ -7723,7 +10065,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.57
+     "S_exit": 144.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -35.1,
+      "below_30d_high_pct": 31.1,
+      "iv_percentile": 77.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-18",
@@ -7741,7 +10089,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 144.57
+     "S_exit": 144.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -30.8,
+      "below_30d_high_pct": 28.6,
+      "iv_percentile": 68.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-19",
@@ -7759,7 +10113,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.3,
+      "below_30d_high_pct": 23.8,
+      "iv_percentile": 65.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-20",
@@ -7777,7 +10137,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -24.4,
+      "below_30d_high_pct": 27.3,
+      "iv_percentile": 54.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-30",
@@ -7795,7 +10161,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.6,
+      "below_30d_high_pct": 22.4,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-03-31",
@@ -7813,7 +10185,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -11.9,
+      "below_30d_high_pct": 21.9,
+      "iv_percentile": 59.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-01",
@@ -7831,7 +10209,13 @@
      "days": 5,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 97.01
+     "S_exit": 97.01,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.2,
+      "below_30d_high_pct": 16.2,
+      "iv_percentile": 52.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-02",
@@ -7849,7 +10233,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.71
+     "S_exit": 138.71,
+     "entry_conditions": {
+      "sol_30d_change_pct": -12.7,
+      "below_30d_high_pct": 20.2,
+      "iv_percentile": 54.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-03",
@@ -7867,7 +10257,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 134.94
+     "S_exit": 134.94,
+     "entry_conditions": {
+      "sol_30d_change_pct": -17.4,
+      "below_30d_high_pct": 20.5,
+      "iv_percentile": 76.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-04",
@@ -7885,7 +10281,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.71
+     "S_exit": 138.71,
+     "entry_conditions": {
+      "sol_30d_change_pct": -18.6,
+      "below_30d_high_pct": 16.3,
+      "iv_percentile": 67.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-05",
@@ -7903,7 +10305,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.57
+     "S_exit": 139.57,
+     "entry_conditions": {
+      "sol_30d_change_pct": -17.5,
+      "below_30d_high_pct": 17.6,
+      "iv_percentile": 75.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-06",
@@ -7921,7 +10329,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 128.52
+     "S_exit": 128.52,
+     "entry_conditions": {
+      "sol_30d_change_pct": -30.1,
+      "below_30d_high_pct": 32.9,
+      "iv_percentile": 90.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-07",
@@ -7939,7 +10353,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 134.3
+     "S_exit": 134.3,
+     "entry_conditions": {
+      "sol_30d_change_pct": -22.2,
+      "below_30d_high_pct": 24.8,
+      "iv_percentile": 92.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-08",
@@ -7957,7 +10377,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 134.3
+     "S_exit": 134.3,
+     "entry_conditions": {
+      "sol_30d_change_pct": -16.2,
+      "below_30d_high_pct": 25.7,
+      "iv_percentile": 93.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-09",
@@ -7975,7 +10401,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 134.3
+     "S_exit": 134.3,
+     "entry_conditions": {
+      "sol_30d_change_pct": -6.8,
+      "below_30d_high_pct": 20.6,
+      "iv_percentile": 94.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-10",
@@ -7993,7 +10425,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 138.71
+     "S_exit": 138.71,
+     "entry_conditions": {
+      "sol_30d_change_pct": -5.3,
+      "below_30d_high_pct": 19.3,
+      "iv_percentile": 88.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-11",
@@ -8011,7 +10449,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.74
+     "S_exit": 151.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": 0.0,
+      "below_30d_high_pct": 14.0,
+      "iv_percentile": 86.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-12",
@@ -8029,7 +10473,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.9
+     "S_exit": 154.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 3.1,
+      "below_30d_high_pct": 11.1,
+      "iv_percentile": 73.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-13",
@@ -8047,7 +10497,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.9
+     "S_exit": 154.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": -0.4,
+      "below_30d_high_pct": 8.5,
+      "iv_percentile": 72.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-14",
@@ -8065,7 +10521,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.9
+     "S_exit": 154.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": -2.3,
+      "below_30d_high_pct": 9.0,
+      "iv_percentile": 72.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-15",
@@ -8083,7 +10545,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.74
+     "S_exit": 151.74,
+     "entry_conditions": {
+      "sol_30d_change_pct": -3.4,
+      "below_30d_high_pct": 13.7,
+      "iv_percentile": 64.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-16",
@@ -8101,7 +10569,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 154.9
+     "S_exit": 154.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 7.3,
+      "below_30d_high_pct": 7.1,
+      "iv_percentile": 62.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-17",
@@ -8119,7 +10593,13 @@
      "days": 8,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.51
+     "S_exit": 151.51,
+     "entry_conditions": {
+      "sol_30d_change_pct": 7.4,
+      "below_30d_high_pct": 6.7,
+      "iv_percentile": 59.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-18",
@@ -8137,7 +10617,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 149.8
+     "S_exit": 149.8,
+     "entry_conditions": {
+      "sol_30d_change_pct": 3.5,
+      "below_30d_high_pct": 4.1,
+      "iv_percentile": 57.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-19",
@@ -8155,7 +10641,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.64
+     "S_exit": 151.64,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.1,
+      "below_30d_high_pct": 3.5,
+      "iv_percentile": 52.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-20",
@@ -8173,7 +10665,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 147.3
+     "S_exit": 147.3,
+     "entry_conditions": {
+      "sol_30d_change_pct": 8.8,
+      "below_30d_high_pct": 3.0,
+      "iv_percentile": 52.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-21",
@@ -8191,7 +10689,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 151.64
+     "S_exit": 151.64,
+     "entry_conditions": {
+      "sol_30d_change_pct": 6.8,
+      "below_30d_high_pct": 3.0,
+      "iv_percentile": 54.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-22",
@@ -8209,7 +10713,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 165.19
+     "S_exit": 165.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.2,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 52.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-04-23",
@@ -8227,7 +10737,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 165.19
+     "S_exit": 165.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": 5.6,
+      "below_30d_high_pct": 2.9,
+      "iv_percentile": 53.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-14",
@@ -8245,7 +10761,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.9
+     "S_exit": 207.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": 20.1,
+      "below_30d_high_pct": 4.2,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-15",
@@ -8263,7 +10785,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 209.41
+     "S_exit": 209.41,
+     "entry_conditions": {
+      "sol_30d_change_pct": 8.6,
+      "below_30d_high_pct": 8.0,
+      "iv_percentile": 60.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-16",
@@ -8281,7 +10809,13 @@
      "days": 23,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 219.48
+     "S_exit": 219.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 6.0,
+      "below_30d_high_pct": 6.6,
+      "iv_percentile": 52.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-17",
@@ -8299,7 +10833,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 209.41
+     "S_exit": 209.41,
+     "entry_conditions": {
+      "sol_30d_change_pct": 2.0,
+      "below_30d_high_pct": 12.3,
+      "iv_percentile": 58.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-18",
@@ -8317,7 +10857,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 209.41
+     "S_exit": 209.41,
+     "entry_conditions": {
+      "sol_30d_change_pct": 1.1,
+      "below_30d_high_pct": 12.4,
+      "iv_percentile": 55.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-19",
@@ -8335,7 +10881,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 209.41
+     "S_exit": 209.41,
+     "entry_conditions": {
+      "sol_30d_change_pct": -5.0,
+      "below_30d_high_pct": 12.2,
+      "iv_percentile": 53.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-20",
@@ -8353,7 +10905,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.9
+     "S_exit": 207.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": -5.6,
+      "below_30d_high_pct": 9.1,
+      "iv_percentile": 54.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-21",
@@ -8371,7 +10929,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 207.9
+     "S_exit": 207.9,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.9,
+      "below_30d_high_pct": 10.6,
+      "iv_percentile": 54.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-22",
@@ -8389,7 +10953,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 222.41
+     "S_exit": 222.41,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.2,
+      "below_30d_high_pct": 0.3,
+      "iv_percentile": 56.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-23",
@@ -8407,7 +10977,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.61
+     "S_exit": 237.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": 16.4,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 63.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-24",
@@ -8425,7 +11001,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 222.41
+     "S_exit": 222.41,
+     "entry_conditions": {
+      "sol_30d_change_pct": 7.1,
+      "below_30d_high_pct": 3.3,
+      "iv_percentile": 71.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-25",
@@ -8443,7 +11025,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 219.48
+     "S_exit": 219.48,
+     "entry_conditions": {
+      "sol_30d_change_pct": 0.8,
+      "below_30d_high_pct": 8.6,
+      "iv_percentile": 70.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-26",
@@ -8461,7 +11049,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.61
+     "S_exit": 237.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": 5.1,
+      "below_30d_high_pct": 2.1,
+      "iv_percentile": 67.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-27",
@@ -8479,7 +11073,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.61
+     "S_exit": 237.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": 14.6,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 75.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-28",
@@ -8497,7 +11097,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.61
+     "S_exit": 237.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.5,
+      "below_30d_high_pct": 2.0,
+      "iv_percentile": 87.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-29",
@@ -8515,7 +11121,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 223.45
+     "S_exit": 223.45,
+     "entry_conditions": {
+      "sol_30d_change_pct": 13.2,
+      "below_30d_high_pct": 3.7,
+      "iv_percentile": 91.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-30",
@@ -8533,7 +11145,13 @@
      "days": 12,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.61
+     "S_exit": 237.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": 20.1,
+      "below_30d_high_pct": 4.5,
+      "iv_percentile": 77.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-08-31",
@@ -8551,7 +11169,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.61
+     "S_exit": 237.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": 23.4,
+      "below_30d_high_pct": 4.8,
+      "iv_percentile": 75.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-01",
@@ -8569,7 +11193,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.61
+     "S_exit": 237.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": 25.3,
+      "below_30d_high_pct": 5.2,
+      "iv_percentile": 66.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-02",
@@ -8587,7 +11217,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 246.45
+     "S_exit": 246.45,
+     "entry_conditions": {
+      "sol_30d_change_pct": 28.4,
+      "below_30d_high_pct": 1.7,
+      "iv_percentile": 60.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-03",
@@ -8605,7 +11241,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 242.64
+     "S_exit": 242.64,
+     "entry_conditions": {
+      "sol_30d_change_pct": 24.5,
+      "below_30d_high_pct": 3.0,
+      "iv_percentile": 66.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-04",
@@ -8623,7 +11265,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 246.45
+     "S_exit": 246.45,
+     "entry_conditions": {
+      "sol_30d_change_pct": 26.7,
+      "below_30d_high_pct": 2.5,
+      "iv_percentile": 70.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-05",
@@ -8641,7 +11289,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 242.64
+     "S_exit": 242.64,
+     "entry_conditions": {
+      "sol_30d_change_pct": 19.5,
+      "below_30d_high_pct": 4.7,
+      "iv_percentile": 65.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-06",
@@ -8659,7 +11313,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 246.45
+     "S_exit": 246.45,
+     "entry_conditions": {
+      "sol_30d_change_pct": 14.5,
+      "below_30d_high_pct": 4.8,
+      "iv_percentile": 63.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-07",
@@ -8677,7 +11337,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 237.82
+     "S_exit": 237.82,
+     "entry_conditions": {
+      "sol_30d_change_pct": 15.2,
+      "below_30d_high_pct": 2.5,
+      "iv_percentile": 60.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-08",
@@ -8695,7 +11361,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 244.42
+     "S_exit": 244.42,
+     "entry_conditions": {
+      "sol_30d_change_pct": 22.6,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 60.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-10",
@@ -8713,7 +11385,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 229.71
+     "S_exit": 229.71,
+     "entry_conditions": {
+      "sol_30d_change_pct": 27.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-11",
@@ -8731,7 +11409,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 182.93
+     "S_exit": 182.93,
+     "entry_conditions": {
+      "sol_30d_change_pct": 19.6,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 53.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-12",
@@ -8749,7 +11433,13 @@
      "days": 28,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 182.93
+     "S_exit": 182.93,
+     "entry_conditions": {
+      "sol_30d_change_pct": 18.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 56.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-09-13",
@@ -8767,7 +11457,13 @@
      "days": 27,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 182.93
+     "S_exit": 182.93,
+     "entry_conditions": {
+      "sol_30d_change_pct": 25.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 50.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-11",
@@ -8785,7 +11481,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 194.04
+     "S_exit": 194.04,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.2,
+      "below_30d_high_pct": 25.9,
+      "iv_percentile": 57.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-12",
@@ -8803,7 +11505,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 142.72
+     "S_exit": 142.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -18.9,
+      "below_30d_high_pct": 20.1,
+      "iv_percentile": 84.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-13",
@@ -8821,7 +11529,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 142.72
+     "S_exit": 142.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -21.0,
+      "below_30d_high_pct": 20.5,
+      "iv_percentile": 63.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-14",
@@ -8839,7 +11553,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 156.91
+     "S_exit": 156.91,
+     "entry_conditions": {
+      "sol_30d_change_pct": -13.9,
+      "below_30d_high_pct": 16.4,
+      "iv_percentile": 58.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-15",
@@ -8857,7 +11577,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 142.72
+     "S_exit": 142.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -18.1,
+      "below_30d_high_pct": 21.2,
+      "iv_percentile": 59.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-16",
@@ -8875,7 +11601,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 202.64
+     "S_exit": 202.64,
+     "entry_conditions": {
+      "sol_30d_change_pct": -25.2,
+      "below_30d_high_pct": 27.4,
+      "iv_percentile": 56.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-17",
@@ -8893,7 +11625,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 202.64
+     "S_exit": 202.64,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.9,
+      "below_30d_high_pct": 23.8,
+      "iv_percentile": 59.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-18",
@@ -8911,7 +11649,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 142.72
+     "S_exit": 142.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.9,
+      "below_30d_high_pct": 22.6,
+      "iv_percentile": 51.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-10-19",
@@ -8929,7 +11673,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 142.72
+     "S_exit": 142.72,
+     "entry_conditions": {
+      "sol_30d_change_pct": -19.4,
+      "below_30d_high_pct": 19.5,
+      "iv_percentile": 51.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-05",
@@ -8947,7 +11697,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 132.11
+     "S_exit": 132.11,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.3,
+      "below_30d_high_pct": 29.3,
+      "iv_percentile": 65.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-16",
@@ -8965,7 +11721,13 @@
      "days": 34,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 125.26
+     "S_exit": 125.26,
+     "entry_conditions": {
+      "sol_30d_change_pct": -24.2,
+      "below_30d_high_pct": 30.3,
+      "iv_percentile": 52.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-18",
@@ -8983,7 +11745,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 125.26
+     "S_exit": 125.26,
+     "entry_conditions": {
+      "sol_30d_change_pct": -27.3,
+      "below_30d_high_pct": 30.7,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-19",
@@ -9001,7 +11769,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 125.26
+     "S_exit": 125.26,
+     "entry_conditions": {
+      "sol_30d_change_pct": -22.4,
+      "below_30d_high_pct": 29.1,
+      "iv_percentile": 66.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-20",
@@ -9019,7 +11793,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 143.73
+     "S_exit": 143.73,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.1,
+      "below_30d_high_pct": 37.1,
+      "iv_percentile": 59.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-21",
@@ -9037,7 +11817,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 141.98
+     "S_exit": 141.98,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.9,
+      "below_30d_high_pct": 37.0,
+      "iv_percentile": 72.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-22",
@@ -9055,7 +11841,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 139.22
+     "S_exit": 139.22,
+     "entry_conditions": {
+      "sol_30d_change_pct": -33.0,
+      "below_30d_high_pct": 36.4,
+      "iv_percentile": 72.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-23",
@@ -9073,7 +11865,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 143.5
+     "S_exit": 143.5,
+     "entry_conditions": {
+      "sol_30d_change_pct": -32.9,
+      "below_30d_high_pct": 35.7,
+      "iv_percentile": 71.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-24",
@@ -9091,7 +11889,13 @@
      "days": 33,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 124.19
+     "S_exit": 124.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -29.7,
+      "below_30d_high_pct": 32.7,
+      "iv_percentile": 71.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-11-25",
@@ -9109,7 +11913,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 124.19
+     "S_exit": 124.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -31.0,
+      "below_30d_high_pct": 30.9,
+      "iv_percentile": 58.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2025-12-01",
@@ -9127,7 +11937,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 124.19
+     "S_exit": 124.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -32.2,
+      "below_30d_high_pct": 27.9,
+      "iv_percentile": 51.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-05",
@@ -9145,7 +11961,13 @@
      "days": 16,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 85.23
+     "S_exit": 85.23,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.9,
+      "below_30d_high_pct": 45.1,
+      "iv_percentile": 74.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-06",
@@ -9163,7 +11985,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 87.26
+     "S_exit": 87.26,
+     "entry_conditions": {
+      "sol_30d_change_pct": -37.2,
+      "below_30d_high_pct": 41.2,
+      "iv_percentile": 94.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-07",
@@ -9181,7 +12009,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 90.19
+     "S_exit": 90.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -37.4,
+      "below_30d_high_pct": 39.8,
+      "iv_percentile": 60.9,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-08",
@@ -9199,7 +12033,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 90.19
+     "S_exit": 90.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -37.2,
+      "below_30d_high_pct": 41.1,
+      "iv_percentile": 85.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-09",
@@ -9217,7 +12057,13 @@
      "days": 22,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 87.52
+     "S_exit": 87.52,
+     "entry_conditions": {
+      "sol_30d_change_pct": -37.9,
+      "below_30d_high_pct": 41.7,
+      "iv_percentile": 85.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-10",
@@ -9235,7 +12081,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 87.26
+     "S_exit": 87.26,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.7,
+      "below_30d_high_pct": 44.2,
+      "iv_percentile": 87.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-11",
@@ -9253,7 +12105,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 87.26
+     "S_exit": 87.26,
+     "entry_conditions": {
+      "sol_30d_change_pct": -42.3,
+      "below_30d_high_pct": 44.3,
+      "iv_percentile": 88.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-12",
@@ -9271,7 +12129,13 @@
      "days": 13,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 87.26
+     "S_exit": 87.26,
+     "entry_conditions": {
+      "sol_30d_change_pct": -45.5,
+      "below_30d_high_pct": 45.5,
+      "iv_percentile": 73.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-13",
@@ -9289,7 +12153,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 90.19
+     "S_exit": 90.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -41.3,
+      "below_30d_high_pct": 40.7,
+      "iv_percentile": 79.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-14",
@@ -9307,7 +12177,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 93.7
+     "S_exit": 93.7,
+     "entry_conditions": {
+      "sol_30d_change_pct": -36.6,
+      "below_30d_high_pct": 36.9,
+      "iv_percentile": 74.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-15",
@@ -9325,7 +12201,13 @@
      "days": 25,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 88.77
+     "S_exit": 88.77,
+     "entry_conditions": {
+      "sol_30d_change_pct": -40.9,
+      "below_30d_high_pct": 40.2,
+      "iv_percentile": 71.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-16",
@@ -9343,7 +12225,13 @@
      "days": 24,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 88.77
+     "S_exit": 88.77,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.2,
+      "below_30d_high_pct": 35.3,
+      "iv_percentile": 81.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-17",
@@ -9361,7 +12249,13 @@
      "days": 23,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 88.77
+     "S_exit": 88.77,
+     "entry_conditions": {
+      "sol_30d_change_pct": -36.1,
+      "below_30d_high_pct": 34.7,
+      "iv_percentile": 83.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-18",
@@ -9379,7 +12273,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 85.82
+     "S_exit": 85.82,
+     "entry_conditions": {
+      "sol_30d_change_pct": -37.0,
+      "below_30d_high_pct": 36.5,
+      "iv_percentile": 73.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-19",
@@ -9397,7 +12297,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 88.77
+     "S_exit": 88.77,
+     "entry_conditions": {
+      "sol_30d_change_pct": -34.6,
+      "below_30d_high_pct": 35.6,
+      "iv_percentile": 61.2,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-23",
@@ -9415,7 +12321,13 @@
      "days": 9,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 90.19
+     "S_exit": 90.19,
+     "entry_conditions": {
+      "sol_30d_change_pct": -39.2,
+      "below_30d_high_pct": 39.5,
+      "iv_percentile": 50.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-24",
@@ -9433,7 +12345,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 88.22
+     "S_exit": 88.22,
+     "entry_conditions": {
+      "sol_30d_change_pct": -33.0,
+      "below_30d_high_pct": 35.2,
+      "iv_percentile": 53.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-25",
@@ -9451,7 +12369,13 @@
      "days": 18,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 93.7
+     "S_exit": 93.7,
+     "entry_conditions": {
+      "sol_30d_change_pct": -29.8,
+      "below_30d_high_pct": 31.3,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-02-28",
@@ -9469,7 +12393,13 @@
      "days": 17,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 93.97
+     "S_exit": 93.97,
+     "entry_conditions": {
+      "sol_30d_change_pct": -25.1,
+      "below_30d_high_pct": 26.1,
+      "iv_percentile": 53.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-01",
@@ -9487,7 +12417,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 93.7
+     "S_exit": 93.7,
+     "entry_conditions": {
+      "sol_30d_change_pct": -29.2,
+      "below_30d_high_pct": 21.0,
+      "iv_percentile": 60.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-02",
@@ -9505,7 +12441,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 94.47
+     "S_exit": 94.47,
+     "entry_conditions": {
+      "sol_30d_change_pct": -18.5,
+      "below_30d_high_pct": 18.1,
+      "iv_percentile": 60.1,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-03",
@@ -9523,7 +12465,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 91.82
+     "S_exit": 91.82,
+     "entry_conditions": {
+      "sol_30d_change_pct": -13.6,
+      "below_30d_high_pct": 16.3,
+      "iv_percentile": 56.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-04",
@@ -9541,7 +12489,13 @@
      "days": 31,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 79.61
+     "S_exit": 79.61,
+     "entry_conditions": {
+      "sol_30d_change_pct": -13.7,
+      "below_30d_high_pct": 7.8,
+      "iv_percentile": 56.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-05",
@@ -9559,7 +12513,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 91.82
+     "S_exit": 91.82,
+     "entry_conditions": {
+      "sol_30d_change_pct": -9.3,
+      "below_30d_high_pct": 2.1,
+      "iv_percentile": 52.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-06",
@@ -9577,7 +12537,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 94.47
+     "S_exit": 94.47,
+     "entry_conditions": {
+      "sol_30d_change_pct": -6.7,
+      "below_30d_high_pct": 6.9,
+      "iv_percentile": 54.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-07",
@@ -9595,7 +12561,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 93.97
+     "S_exit": 93.97,
+     "entry_conditions": {
+      "sol_30d_change_pct": 4.3,
+      "below_30d_high_pct": 8.5,
+      "iv_percentile": 58.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-08",
@@ -9613,7 +12585,13 @@
      "days": 15,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 91.7
+     "S_exit": 91.7,
+     "entry_conditions": {
+      "sol_30d_change_pct": -2.5,
+      "below_30d_high_pct": 8.3,
+      "iv_percentile": 62.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-09",
@@ -9631,7 +12609,13 @@
      "days": 29,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 84.45
+     "S_exit": 84.45,
+     "entry_conditions": {
+      "sol_30d_change_pct": -0.6,
+      "below_30d_high_pct": 4.3,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-10",
@@ -9649,7 +12633,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 81.79
+     "S_exit": 81.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": 0.1,
+      "below_30d_high_pct": 5.7,
+      "iv_percentile": 55.7,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-11",
@@ -9667,7 +12657,13 @@
      "days": 27,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 84.45
+     "S_exit": 84.45,
+     "entry_conditions": {
+      "sol_30d_change_pct": 1.5,
+      "below_30d_high_pct": 5.3,
+      "iv_percentile": 53.8,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-14",
@@ -9685,7 +12681,13 @@
      "days": 30,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 86.06
+     "S_exit": 86.06,
+     "entry_conditions": {
+      "sol_30d_change_pct": 11.8,
+      "below_30d_high_pct": 2.7,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-15",
@@ -9703,7 +12705,13 @@
      "days": 32,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 88.1
+     "S_exit": 88.1,
+     "entry_conditions": {
+      "sol_30d_change_pct": 10.1,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 54.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-03-20",
@@ -9721,7 +12729,13 @@
      "days": 26,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 85.24
+     "S_exit": 85.24,
+     "entry_conditions": {
+      "sol_30d_change_pct": 9.4,
+      "below_30d_high_pct": 4.6,
+      "iv_percentile": 53.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-06-30",
@@ -9739,7 +12753,13 @@
      "days": 14,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 77.371
+     "S_exit": 77.371,
+     "entry_conditions": {
+      "sol_30d_change_pct": -7.3,
+      "below_30d_high_pct": 6.0,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-23",
@@ -9757,7 +12777,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 101.79
+     "S_exit": 101.79,
+     "entry_conditions": {
+      "sol_30d_change_pct": 27.6,
+      "below_30d_high_pct": 0.4,
+      "iv_percentile": 60.4,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-24",
@@ -9775,7 +12801,13 @@
      "days": 10,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 103.598
+     "S_exit": 103.598,
+     "entry_conditions": {
+      "sol_30d_change_pct": 34.0,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 62.3,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-27",
@@ -9793,7 +12825,13 @@
      "days": 21,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 105.718
+     "S_exit": 105.718,
+     "entry_conditions": {
+      "sol_30d_change_pct": 43.3,
+      "below_30d_high_pct": 0.0,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-28",
@@ -9811,7 +12849,13 @@
      "days": 20,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 105.718
+     "S_exit": 105.718,
+     "entry_conditions": {
+      "sol_30d_change_pct": 41.5,
+      "below_30d_high_pct": 2.5,
+      "iv_percentile": 59.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-08-29",
@@ -9829,7 +12873,13 @@
      "days": 19,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 105.718
+     "S_exit": 105.718,
+     "entry_conditions": {
+      "sol_30d_change_pct": 42.4,
+      "below_30d_high_pct": 1.5,
+      "iv_percentile": 53.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-11-01",
@@ -9847,7 +12897,13 @@
      "days": 11,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 79.657
+     "S_exit": 79.657,
+     "entry_conditions": {
+      "sol_30d_change_pct": -21.1,
+      "below_30d_high_pct": 22.6,
+      "iv_percentile": 50.0,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-11-06",
@@ -9865,7 +12921,13 @@
      "days": 7,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 75.205
+     "S_exit": 75.205,
+     "entry_conditions": {
+      "sol_30d_change_pct": -21.5,
+      "below_30d_high_pct": 19.9,
+      "iv_percentile": 59.6,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-11-08",
@@ -9883,7 +12945,13 @@
      "days": 6,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 69.911
+     "S_exit": 69.911,
+     "entry_conditions": {
+      "sol_30d_change_pct": -22.2,
+      "below_30d_high_pct": 24.0,
+      "iv_percentile": 61.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-11-10",
@@ -9901,7 +12969,13 @@
      "days": 4,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 69.911
+     "S_exit": 69.911,
+     "entry_conditions": {
+      "sol_30d_change_pct": -26.0,
+      "below_30d_high_pct": 23.2,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     },
     {
      "date": "2026-11-11",
@@ -9919,7 +12993,13 @@
      "days": 3,
      "chain": "model",
      "verdict": "RICH",
-     "S_exit": 69.911
+     "S_exit": 69.911,
+     "entry_conditions": {
+      "sol_30d_change_pct": -23.6,
+      "below_30d_high_pct": 22.8,
+      "iv_percentile": 50.5,
+      "verdict": "RICH"
+     }
     }
    ]
   }

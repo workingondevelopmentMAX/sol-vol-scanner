@@ -1,4 +1,11 @@
 {
+ "evidence": {
+  "held_back_trades": 4,
+  "label": "mixed",
+  "text": "Mixed: made money in only one of the two periods. Thin evidence: only 4 unseen-period trades (fewer than 20).",
+  "thin": true,
+  "thin_below": 20
+ },
  "period": [
   "2024-04-21",
   "2025-12-31"
@@ -22,6 +29,7 @@
      "wins": 3
     }
    },
+   "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
    "dca_sol": {
     "buys": 27,
     "every_days": 7,
@@ -64,6 +72,7 @@
      "wins": 10
     }
    },
+   "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
    "dca_sol": {
     "buys": 57,
     "every_days": 7,
@@ -117,6 +126,12 @@
    "date": "2024-06-14",
    "days": 29,
    "delta": -0.24,
+   "entry_conditions": {
+    "below_30d_high_pct": 20.7,
+    "iv_percentile": null,
+    "sol_30d_change_pct": -11.8,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2024-07-13",
    "expiry": "2024-07-19",
@@ -135,6 +150,12 @@
    "date": "2024-08-03",
    "days": 20,
    "delta": -0.247,
+   "entry_conditions": {
+    "below_30d_high_pct": 26.8,
+    "iv_percentile": 56.9,
+    "sol_30d_change_pct": 11.2,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2024-08-23",
    "expiry": "2024-09-13",
@@ -153,6 +174,12 @@
    "date": "2024-09-02",
    "days": 17,
    "delta": -0.248,
+   "entry_conditions": {
+    "below_30d_high_pct": 15.5,
+    "iv_percentile": 53.7,
+    "sol_30d_change_pct": -4.4,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2024-09-19",
    "expiry": "2024-10-11",
@@ -171,6 +198,12 @@
    "date": "2024-10-29",
    "days": 13,
    "delta": -0.248,
+   "entry_conditions": {
+    "below_30d_high_pct": 0.8,
+    "iv_percentile": 50.7,
+    "sol_30d_change_pct": 13.8,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2024-11-11",
    "expiry": "2024-12-06",
@@ -189,6 +222,12 @@
    "date": "2024-11-11",
    "days": 22,
    "delta": -0.245,
+   "entry_conditions": {
+    "below_30d_high_pct": 0.0,
+    "iv_percentile": 94.5,
+    "sol_30d_change_pct": 52.1,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2024-12-03",
    "expiry": "2024-12-20",
@@ -207,6 +246,12 @@
    "date": "2024-12-03",
    "days": 18,
    "delta": -0.246,
+   "entry_conditions": {
+    "below_30d_high_pct": 8.8,
+    "iv_percentile": 75.9,
+    "sol_30d_change_pct": 46.8,
+    "verdict": "RICH"
+   },
    "exit": "stop",
    "exit_date": "2024-12-21",
    "expiry": "2025-01-10",
@@ -225,6 +270,12 @@
    "date": "2024-12-21",
    "days": 12,
    "delta": -0.242,
+   "entry_conditions": {
+    "below_30d_high_pct": 28.8,
+    "iv_percentile": 92.7,
+    "sol_30d_change_pct": -29.2,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2025-01-02",
    "expiry": "2025-01-24",
@@ -243,6 +294,12 @@
    "date": "2025-01-02",
    "days": 16,
    "delta": -0.245,
+   "entry_conditions": {
+    "below_30d_high_pct": 13.3,
+    "iv_percentile": 70.0,
+    "sol_30d_change_pct": -12.4,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2025-01-18",
    "expiry": "2025-02-07",
@@ -261,6 +318,12 @@
    "date": "2025-01-18",
    "days": 15,
    "delta": -0.247,
+   "entry_conditions": {
+    "below_30d_high_pct": 0.0,
+    "iv_percentile": 100.0,
+    "sol_30d_change_pct": 42.0,
+    "verdict": "RICH"
+   },
    "exit": "stop",
    "exit_date": "2025-02-02",
    "expiry": "2025-02-14",
@@ -279,6 +342,12 @@
    "date": "2025-02-02",
    "days": 22,
    "delta": -0.242,
+   "entry_conditions": {
+    "below_30d_high_pct": 26.6,
+    "iv_percentile": 71.4,
+    "sol_30d_change_pct": -8.0,
+    "verdict": "RICH"
+   },
    "exit": "stop",
    "exit_date": "2025-02-24",
    "expiry": "2025-03-14",
@@ -297,6 +366,12 @@
    "date": "2025-02-24",
    "days": 27,
    "delta": -0.248,
+   "entry_conditions": {
+    "below_30d_high_pct": 42.9,
+    "iv_percentile": 55.6,
+    "sol_30d_change_pct": -47.3,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2025-03-23",
    "expiry": "2025-04-04",
@@ -315,6 +390,12 @@
    "date": "2025-03-30",
    "days": 7,
    "delta": -0.244,
+   "entry_conditions": {
+    "below_30d_high_pct": 22.4,
+    "iv_percentile": 56.6,
+    "sol_30d_change_pct": -11.6,
+    "verdict": "RICH"
+   },
    "exit": "stop",
    "exit_date": "2025-04-06",
    "expiry": "2025-05-09",
@@ -333,6 +414,12 @@
    "date": "2025-04-06",
    "days": 6,
    "delta": -0.247,
+   "entry_conditions": {
+    "below_30d_high_pct": 32.9,
+    "iv_percentile": 90.7,
+    "sol_30d_change_pct": -30.1,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2025-04-12",
    "expiry": "2025-05-16",
@@ -351,6 +438,12 @@
    "date": "2025-04-12",
    "days": 12,
    "delta": -0.245,
+   "entry_conditions": {
+    "below_30d_high_pct": 11.1,
+    "iv_percentile": 73.5,
+    "sol_30d_change_pct": 3.1,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2025-04-24",
    "expiry": "2025-05-23",
@@ -369,6 +462,12 @@
    "date": "2025-08-14",
    "days": 24,
    "delta": -0.234,
+   "entry_conditions": {
+    "below_30d_high_pct": 4.2,
+    "iv_percentile": 61.5,
+    "sol_30d_change_pct": 20.1,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2025-09-07",
    "expiry": "2025-09-19",
@@ -387,6 +486,12 @@
    "date": "2025-09-07",
    "days": 9,
    "delta": -0.248,
+   "entry_conditions": {
+    "below_30d_high_pct": 2.5,
+    "iv_percentile": 60.7,
+    "sol_30d_change_pct": 15.2,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2025-09-16",
    "expiry": "2025-10-17",
@@ -405,6 +510,12 @@
    "date": "2025-10-11",
    "days": 14,
    "delta": -0.248,
+   "entry_conditions": {
+    "below_30d_high_pct": 25.9,
+    "iv_percentile": 57.9,
+    "sol_30d_change_pct": -23.2,
+    "verdict": "RICH"
+   },
    "exit": "take profit",
    "exit_date": "2025-10-25",
    "expiry": "2025-11-14",
@@ -423,6 +534,12 @@
    "date": "2025-11-05",
    "days": 31,
    "delta": -0.241,
+   "entry_conditions": {
+    "below_30d_high_pct": 29.3,
+    "iv_percentile": 65.8,
+    "sol_30d_change_pct": -31.3,
+    "verdict": "RICH"
+   },
    "exit": "time exit",
    "exit_date": "2025-12-06",
    "expiry": "2025-12-12",
@@ -432,6 +549,10 @@
    "verdict": "RICH"
   }
  ],
+ "window_labels": {
+  "held_back": "Unseen period (Jul 2025 - today): kept aside and never used to choose rules, the fairer test. Results here count for more.",
+  "in_sample": "Practice period (Jun 2024 - Jun 2025): the rules were chosen while looking at these days, so good results here prove little."
+ },
  "windows": {
   "held_back": [
    "2025-07-01",

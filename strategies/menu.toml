@@ -1,0 +1,92 @@
+# The strategy menu agreed in docs/STRATEGIES.md, in the same order. DISPLAY ONLY.
+# The dashboard lists every entry with today's status. Nothing here changes a decision: trading rules live in each
+# strategy's own file (e.g. strategies/bull_put_spread.toml), and only "live" entries with a file are run.
+#
+# market:  "rich" / "cheap" / "fair" / "any"   (the IV state the strategy is meant for)
+# status:  "live" / "in_testing" / "not_built"
+# budget:  "premium caps"                       per-trade max loss + total cap, shared by all premium trades
+#          "big-move budget (1% of portfolio per month)"
+#          "core-holding share"                 sized to a share of core SOL, not the risk budget
+#          "owner-set"                          set by the owner
+#          "none"
+# roadmap_step: where it is built (docs/ROADMAP.md), shown while not built
+
+[[strategy]]
+id = "bull_put_spread"
+name = "Bull put spread"
+market = "rich"
+purpose = "Income: paid to agree to buy SOL lower."
+budget = "premium caps"
+status = "live"
+file = "bull_put_spread.toml"
+
+[[strategy]]
+id = "bear_call_spread"
+name = "Bear call spread"
+market = "rich"
+purpose = "Income from a stalled rally (bearish, or SOL stretched after a rally)."
+budget = "premium caps"
+status = "not_built"
+roadmap_step = "5.3"
+
+[[strategy]]
+id = "iron_condor"
+name = "Iron condor"
+market = "rich"
+purpose = "Income if SOL stays in a range (put spread + call spread)."
+budget = "premium caps"
+status = "not_built"
+roadmap_step = "5.3"
+
+[[strategy]]
+id = "protective_hedge"
+name = "Zero-cost protective hedge"
+market = "rich"
+purpose = "Protect core SOL near highs without selling: buy a put spread, pay with a call spread."
+budget = "core-holding share"
+status = "not_built"
+roadmap_step = "5.4"
+
+[[strategy]]
+id = "call_debit_spread"
+name = "Call debit spread"
+market = "cheap"
+purpose = "Cheap exposure to a big move up."
+budget = "big-move budget (1% of portfolio per month)"
+status = "not_built"
+roadmap_step = "5.2"
+
+[[strategy]]
+id = "put_debit_spread"
+name = "Put debit spread"
+market = "cheap"
+purpose = "Cheap exposure to a big drop, or a cheap hedge."
+budget = "big-move budget (1% of portfolio per month)"
+status = "not_built"
+roadmap_step = "5.2"
+
+[[strategy]]
+id = "big_move"
+name = "No-direction big-move trade"
+market = "cheap"
+purpose = "Paid on a large move either way (long strangle or both debit spreads)."
+budget = "big-move budget (1% of portfolio per month)"
+status = "not_built"
+roadmap_step = "5.2"
+
+[[strategy]]
+id = "accumulation"
+name = "Accumulation helper"
+market = "any"
+purpose = "Scheduled SOL buys plus extra buys on fear days, benchmarked against plain weekly buying."
+budget = "owner-set"
+status = "not_built"
+roadmap_step = "5.5"
+
+[[strategy]]
+id = "fair_no_trade"
+name = "IV fair: no options trade"
+market = "fair"
+purpose = "Discipline: on most days the answer is no."
+budget = "none"
+status = "live"                     # no rule file: the scanner already suggests nothing on FAIR days
