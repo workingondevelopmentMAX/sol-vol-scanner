@@ -23,7 +23,8 @@ publishes a dashboard to GitHub Pages: https://workingondevelopmentmax.github.io
 3. **One engine.** `engine.py` makes every trade decision for both the daily scan (`main.py`) and the backtest
    (`backtest.py`). Never add selection or exit logic anywhere else.
 4. **Rules live in strategy files** (`strategies/*.toml`), versioned and fingerprinted. Changing behaviour =
-   changing a strategy file, not hard-coding numbers.
+   changing a strategy file, not hard-coding numbers. The same goes for what the backtest compares: only the
+   file's `[[variants]]`, judged on its fixed `[evaluation]` windows. Never add a comparison in code.
 5. **Tests must pass**, including the golden test (`tests/golden/sample_decision.json`). If a change is meant to
    alter the sample-day decision, update the golden file deliberately (`python tests/golden_tools.py --update`)
    and say so in the pull request. The same applies to the backtest golden file (`tests/golden/backtest_slice.json`).
@@ -38,14 +39,14 @@ publishes a dashboard to GitHub Pages: https://workingondevelopmentmax.github.io
 |---|---|
 | `main.py` | Daily entry point: fetch, analyse, write history/log/dashboard data. `--sample` runs offline, `--backfill` fills past IV |
 | `engine.py` | The decision engine: `decide()`, `exit_plan()`, `synthetic_chain()`, `manage()`, `open_position()` |
-| `strategies/bull_put_spread.toml` | Put spread rules: entry, strikes, filters, exits, backtest pricing assumptions |
+| `strategies/bull_put_spread.toml` | Put spread rules: entry, strikes, filters, exits, backtest pricing; `[evaluation]` windows and `[[variants]]` to compare |
 | `config.toml` | Shared settings: Deribit, rich/cheap gauge, reference risk limits, backfill, DVOL check |
 | `data_fetch.py` | Read-only Deribit public API client (retries, history host for backfill) |
 | `vol_gauge.py` | Option chain, ATM IV, realised vol, 12-month rich/cheap verdict, history file |
 | `suggest.py` | Candidate search, filters and sizing (called through `engine.decide`) |
 | `exits.py` | Exit plan: take profit, Greek-informed price stop, mark-price stop, time exit |
 | `rationale.py`, `explain.py` | Conviction score, plain-language "why", Greeks panel (templates only) |
-| `backtest.py` | Replays a strategy file over stored files with the same engine; writes `data/backtest.json` (with input fingerprints) |
+| `backtest.py` | Replays the strategy file's declared variants over stored files with the same engine; fixed scorecard, in-sample vs held back; writes `data/backtest.json` (with input fingerprints) |
 | `chain_store.py` | Saves/loads one compressed SOL option chain per day; SHA-256 fingerprints of input files |
 | `data/iv_history.csv` | One row per day since 2024-04: price, 30-day ATM IV, RV20, RV30, IV source |
 | `data/chains/` | `YYYY-MM-DD.json.gz`: the first real SOL chain of each UTC day, never overwritten (from 2026-11) |

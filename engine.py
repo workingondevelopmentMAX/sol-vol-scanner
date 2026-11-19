@@ -44,6 +44,38 @@ def with_strategy(cfg: dict, st: dict) -> dict:
     return out
 
 
+VARIANT_KEYS = {"name", "exits", "require_verdict", "one_at_a_time"}
+
+
+def variants(st: dict) -> list[dict]:
+    """The comparisons declared in the strategy file's [[variants]] list, each as a full strategy.
+
+    Returns [{"name", "settings" (the overrides as written), "strategy", "one_at_a_time"}]. Unknown keys or
+    exit rules that the strategy file does not have are refused, so a typo can never silently test nothing."""
+    out, seen = [], set()
+    for v in st.get("variants", []):
+        name = v.get("name")
+        if not name or name in seen:
+            raise ValueError(f"[[variants]] entries need a unique name (got {name!r})")
+        seen.add(name)
+        bad = set(v) - VARIANT_KEYS
+        if bad:
+            raise ValueError(f"variant {name!r}: unknown setting(s) {sorted(bad)}")
+        ex = v.get("exits", {})
+        bad = set(ex) - set(st["exits"])
+        if bad:
+            raise ValueError(f"variant {name!r}: no such exit rule(s) {sorted(bad)}")
+        s = copy.deepcopy({k: x for k, x in st.items() if k not in ("variants", "evaluation")})
+        s["exits"].update(ex)
+        if "require_verdict" in v:
+            s["entry"]["require_verdict"] = v["require_verdict"] or None
+        out.append({"name": name, "settings": {k: x for k, x in v.items() if k != "name"},
+                    "strategy": s, "one_at_a_time": bool(v.get("one_at_a_time", True))})
+    if not out:
+        raise ValueError("the strategy file declares no [[variants]] to compare")
+    return out
+
+
 # ------------------------------------------------------------------ the decision
 def decide(cfg: dict, st: dict, verdict: dict, chain: list[dict]) -> dict:
     """Return {"trade": best candidate or None, "alternates": [...], "reason": str or None}."""

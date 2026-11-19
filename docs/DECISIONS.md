@@ -2,6 +2,21 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-19 · Testing rules set in advance (step 3)
+What the backtest compares now lives in the strategy file: `[[variants]]` (9 entries: the 7 exit-rule variants,
+"no rich filter" and "overlapping") and `[evaluation]` windows, in-sample 2024-06-01 to 2025-06-30 (the period the
+rules were chosen on) and held back 2025-07-01 onwards. Each variant runs once over all of history; a trade counts
+in the window of its entry day (one no-filter trade on 2024-05-31 is before both windows). The 12 other
+combinations the old code printed (every exit variant without the rich filter, and overlapping) were dropped;
+any can come back as one `[[variants]]` entry. Trades are identical to before: only the reporting changed.
+First results, per $1,000 max loss per trade (in-sample | held back):
+as written -$1,268 over 14 trades | +$288 over 11; stop 2x +$316/11 | +$111/11; stop 3x or no stop with no time
+exit -$675/10 | +$1,278/10 (all 10 won); no stop, close 7 days out -$200/11 | +$738/10; no rich filter
+-$1,849/23 | -$2,980/32. Holding $1,000 of SOL: -$90 | -$495; buying it weekly instead: -$66 | -$300. The held-back period was good for selling puts on
+rich days but small (10-13 trades). Only stop 2x made money in both windows, modestly; the no-stop variants did
+best held back but lost in-sample. Strategy version stays 1:
+the trading rules did not change (the fingerprint did, because the file did).
+
 ### 2026-11-19 · Strategy menu agreed (see docs/STRATEGIES.md)
 Rich IV: bull put spreads, bear call spreads, iron condors, and a zero-cost hedge for core SOL near highs. Cheap IV:
 buy call or put debit spreads (or a no-direction big-move trade). Plus an accumulation helper. Direction combines a

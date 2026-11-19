@@ -3,6 +3,92 @@
   "2024-04-21",
   "2025-12-31"
  ],
+ "scorecard": {
+  "held_back": {
+   "avg_days": 19.5,
+   "avg_per_1000": 30.2,
+   "best_per_1000": 137.7,
+   "by_condition": {
+    "RICH, SOL down": {
+     "avg_per_1000": -274.6,
+     "total_per_1000": -274.6,
+     "trades": 1,
+     "wins": 0
+    },
+    "RICH, SOL up": {
+     "avg_per_1000": 131.9,
+     "total_per_1000": 395.6,
+     "trades": 3,
+     "wins": 3
+    }
+   },
+   "dca_sol": {
+    "buys": 27,
+    "every_days": 7,
+    "per_1000": -265.5
+   },
+   "exits": {
+    "take profit": 3,
+    "time exit": 1
+   },
+   "hold_sol": {
+    "from": "2025-07-01",
+    "per_1000": -167.2,
+    "sol_from": 149.13,
+    "sol_to": 124.2,
+    "to": "2025-12-31"
+   },
+   "max_drawdown_per_1000": -274.6,
+   "max_losing_streak": 1,
+   "stored_chain_entries": 0,
+   "total_per_1000": 121.0,
+   "trades": 4,
+   "win_rate": 0.75,
+   "worst_per_1000": -274.6
+  },
+  "in_sample": {
+   "avg_days": 16.9,
+   "avg_per_1000": -90.6,
+   "best_per_1000": 141.0,
+   "by_condition": {
+    "RICH, SOL down": {
+     "avg_per_1000": -651.4,
+     "total_per_1000": -2605.6,
+     "trades": 4,
+     "wins": 0
+    },
+    "RICH, SOL up": {
+     "avg_per_1000": 133.8,
+     "total_per_1000": 1337.7,
+     "trades": 10,
+     "wins": 10
+    }
+   },
+   "dca_sol": {
+    "buys": 57,
+    "every_days": 7,
+    "per_1000": -66.5
+   },
+   "exits": {
+    "stop": 4,
+    "take profit": 10
+   },
+   "hold_sol": {
+    "from": "2024-06-01",
+    "per_1000": -89.8,
+    "sol_from": 165.04,
+    "sol_to": 150.22,
+    "to": "2025-06-30"
+   },
+   "max_drawdown_per_1000": -2201.8,
+   "max_losing_streak": 2,
+   "stored_chain_entries": 0,
+   "total_per_1000": -1267.9,
+   "trades": 14,
+   "win_rate": 0.7143,
+   "worst_per_1000": -805.0
+  }
+ },
  "strategy_version": 1,
  "summary": {
   "avg_days": 17.4,
@@ -25,6 +111,7 @@
    "Kl": 113.0,
    "Ks": 126.0,
    "S": 143.66,
+   "S_exit": 144.99,
    "chain": "model",
    "credit": 2.4739,
    "date": "2024-06-14",
@@ -35,12 +122,14 @@
    "expiry": "2024-07-19",
    "max_loss": 10.5261,
    "pnl": 1.237,
-   "pnl_per_1000": 117.5
+   "pnl_per_1000": 117.5,
+   "verdict": "RICH"
   },
   {
    "Kl": 109.0,
    "Ks": 121.0,
    "S": 140.88,
+   "S_exit": 154.72,
    "chain": "model",
    "credit": 2.5428,
    "date": "2024-08-03",
@@ -51,12 +140,14 @@
    "expiry": "2024-09-13",
    "max_loss": 9.4572,
    "pnl": 1.2714,
-   "pnl_per_1000": 134.4
+   "pnl_per_1000": 134.4,
+   "verdict": "RICH"
   },
   {
    "Kl": 104.0,
    "Ks": 116.0,
    "S": 134.67,
+   "S_exit": 151.15,
    "chain": "model",
    "credit": 2.5296,
    "date": "2024-09-02",
@@ -67,12 +158,14 @@
    "expiry": "2024-10-11",
    "max_loss": 9.4704,
    "pnl": 1.2648,
-   "pnl_per_1000": 133.6
+   "pnl_per_1000": 133.6,
+   "verdict": "RICH"
   },
   {
    "Kl": 140.0,
    "Ks": 155.0,
    "S": 178.58,
+   "S_exit": 222.5,
    "chain": "model",
    "credit": 3.1267,
    "date": "2024-10-29",
@@ -83,12 +176,14 @@
    "expiry": "2024-12-06",
    "max_loss": 11.8733,
    "pnl": 1.5633,
-   "pnl_per_1000": 131.7
+   "pnl_per_1000": 131.7,
+   "verdict": "RICH"
   },
   {
    "Kl": 167.5,
    "Ks": 187.5,
    "S": 222.5,
+   "S_exit": 237.04,
    "chain": "model",
    "credit": 4.3095,
    "date": "2024-11-11",
@@ -99,12 +194,14 @@
    "expiry": "2024-12-20",
    "max_loss": 15.6905,
    "pnl": 2.1548,
-   "pnl_per_1000": 137.3
+   "pnl_per_1000": 137.3,
+   "verdict": "RICH"
   },
   {
    "Kl": 182.5,
    "Ks": 202.5,
    "S": 237.04,
+   "S_exit": 184.16,
    "chain": "model",
    "credit": 4.2569,
    "date": "2024-12-03",
@@ -115,12 +212,14 @@
    "expiry": "2025-01-10",
    "max_loss": 15.7431,
    "pnl": -8.6566,
-   "pnl_per_1000": -549.9
+   "pnl_per_1000": -549.9,
+   "verdict": "RICH"
   },
   {
    "Kl": 140.0,
    "Ks": 155.0,
    "S": 184.16,
+   "S_exit": 207.72,
    "chain": "model",
    "credit": 3.1738,
    "date": "2024-12-21",
@@ -131,12 +230,14 @@
    "expiry": "2025-01-24",
    "max_loss": 11.8262,
    "pnl": 1.5869,
-   "pnl_per_1000": 134.2
+   "pnl_per_1000": 134.2,
+   "verdict": "RICH"
   },
   {
    "Kl": 160.0,
    "Ks": 177.5,
    "S": 207.72,
+   "S_exit": 271.32,
    "chain": "model",
    "credit": 3.7027,
    "date": "2025-01-02",
@@ -147,12 +248,14 @@
    "expiry": "2025-02-07",
    "max_loss": 13.7973,
    "pnl": 1.8513,
-   "pnl_per_1000": 134.2
+   "pnl_per_1000": 134.2,
+   "verdict": "RICH"
   },
   {
    "Kl": 207.5,
    "Ks": 230.0,
    "S": 271.32,
+   "S_exit": 199.14,
    "chain": "model",
    "credit": 4.8871,
    "date": "2025-01-18",
@@ -163,12 +266,14 @@
    "expiry": "2025-02-14",
    "max_loss": 17.6129,
    "pnl": -12.2783,
-   "pnl_per_1000": -697.1
+   "pnl_per_1000": -697.1,
+   "verdict": "RICH"
   },
   {
    "Kl": 150.0,
    "Ks": 167.5,
    "S": 199.14,
+   "S_exit": 136.36,
    "chain": "model",
    "credit": 3.7027,
    "date": "2025-02-02",
@@ -179,12 +284,14 @@
    "expiry": "2025-03-14",
    "max_loss": 13.7973,
    "pnl": -11.107,
-   "pnl_per_1000": -805.0
+   "pnl_per_1000": -805.0,
+   "verdict": "RICH"
   },
   {
    "Kl": 105.0,
    "Ks": 117.0,
    "S": 136.36,
+   "S_exit": 138.94,
    "chain": "model",
    "credit": 2.5574,
    "date": "2025-02-24",
@@ -195,12 +302,14 @@
    "expiry": "2025-04-04",
    "max_loss": 9.4426,
    "pnl": 1.2787,
-   "pnl_per_1000": 135.4
+   "pnl_per_1000": 135.4,
+   "verdict": "RICH"
   },
   {
    "Kl": 96.0,
    "Ks": 107.0,
    "S": 125.86,
+   "S_exit": 97.01,
    "chain": "model",
    "credit": 2.3259,
    "date": "2025-03-30",
@@ -211,12 +320,14 @@
    "expiry": "2025-05-09",
    "max_loss": 8.6741,
    "pnl": -4.8023,
-   "pnl_per_1000": -553.6
+   "pnl_per_1000": -553.6,
+   "verdict": "RICH"
   },
   {
    "Kl": 73.0,
    "Ks": 81.0,
    "S": 97.01,
+   "S_exit": 128.52,
    "chain": "model",
    "credit": 1.7601,
    "date": "2025-04-06",
@@ -227,12 +338,14 @@
    "expiry": "2025-05-16",
    "max_loss": 6.2399,
    "pnl": 0.88,
-   "pnl_per_1000": 141.0
+   "pnl_per_1000": 141.0,
+   "verdict": "RICH"
   },
   {
    "Kl": 97.0,
    "Ks": 108.0,
    "S": 128.52,
+   "S_exit": 154.9,
    "chain": "model",
    "credit": 2.3843,
    "date": "2025-04-12",
@@ -243,12 +356,14 @@
    "expiry": "2025-05-23",
    "max_loss": 8.6157,
    "pnl": 1.1921,
-   "pnl_per_1000": 138.4
+   "pnl_per_1000": 138.4,
+   "verdict": "RICH"
   },
   {
    "Kl": 150.0,
    "Ks": 167.5,
    "S": 197.15,
+   "S_exit": 207.9,
    "chain": "model",
    "credit": 3.4736,
    "date": "2025-08-14",
@@ -259,12 +374,14 @@
    "expiry": "2025-09-19",
    "max_loss": 14.0264,
    "pnl": 1.7368,
-   "pnl_per_1000": 123.8
+   "pnl_per_1000": 123.8,
+   "verdict": "RICH"
   },
   {
    "Kl": 160.0,
    "Ks": 177.5,
    "S": 207.9,
+   "S_exit": 237.82,
    "chain": "model",
    "credit": 3.7796,
    "date": "2025-09-07",
@@ -275,12 +392,14 @@
    "expiry": "2025-10-17",
    "max_loss": 13.7204,
    "pnl": 1.8898,
-   "pnl_per_1000": 137.7
+   "pnl_per_1000": 137.7,
+   "verdict": "RICH"
   },
   {
    "Kl": 142.5,
    "Ks": 157.5,
    "S": 182.59,
+   "S_exit": 194.04,
    "chain": "model",
    "credit": 3.1717,
    "date": "2025-10-11",
@@ -291,12 +410,14 @@
    "expiry": "2025-11-14",
    "max_loss": 11.8283,
    "pnl": 1.5859,
-   "pnl_per_1000": 134.1
+   "pnl_per_1000": 134.1,
+   "verdict": "RICH"
   },
   {
    "Kl": 122.5,
    "Ks": 135.0,
    "S": 158.84,
+   "S_exit": 132.11,
    "chain": "model",
    "credit": 2.6117,
    "date": "2025-11-05",
@@ -307,7 +428,18 @@
    "expiry": "2025-12-12",
    "max_loss": 9.8883,
    "pnl": -2.7149,
-   "pnl_per_1000": -274.6
+   "pnl_per_1000": -274.6,
+   "verdict": "RICH"
   }
- ]
+ ],
+ "windows": {
+  "held_back": [
+   "2025-07-01",
+   "2025-12-31"
+  ],
+  "in_sample": [
+   "2024-06-01",
+   "2025-06-30"
+  ]
+ }
 }
