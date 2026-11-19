@@ -8,17 +8,13 @@ Full rationale: the "Deterministic Strategy Engine Plan" doc. Work through one s
   rules in `strategies/bull_put_spread.toml`; results stamped with name, version, fingerprint; golden test.
 - **Private local settings** (2026-11-19). `config.local.toml` and `my_premium_log.local.csv` on the laptop
   only; laptop runs write to `private/` and `site/data/private/`, never to shared files.
+- **Step 2: fixed, recorded data** (2026-11-19). Daily scan keeps the day's SOL chain in
+  `data/chains/YYYY-MM-DD.json.gz` (first snapshot of the UTC day, never overwritten, committed by the workflow).
+  The backtest uses a stored chain instead of `synthetic_chain()` where one exists (entries and exits), reads only
+  committed files, lists the SHA-256 of each in `data/backtest.json` plus a `data_fingerprint`, and re-runs
+  byte-identically. Golden test on a frozen 2024-04 to 2025-12 history slice.
 
 ## Next
-
-### Step 2: fixed, recorded data
-- Keep one compressed snapshot of the SOL option chain per day, permanently (e.g. `data/chains/YYYY-MM-DD.json.gz`,
-  SOL options only, the fields the engine uses). Commit it from the daily workflow.
-- Backtests read only stored files: record a fingerprint (SHA-256) of every input file in `data/backtest.json`.
-- When a stored real chain exists for a day, the backtest uses it instead of `synthetic_chain()`.
-- Locked-down tests on the backtest output for a fixed slice of history (golden file, like the sample decision).
-- **Done when:** a daily chain file appears each day; `data/backtest.json` lists input fingerprints; re-running
-  the backtest on the same files gives byte-identical output; tests pass.
 
 ### Step 3: testing rules set in advance
 - Variants to compare are declared in the strategy file (e.g. a `[[variants]]` list), not in code.

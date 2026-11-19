@@ -24,6 +24,7 @@ import explain
 import suggest
 import vol_gauge
 import bsmodel
+import chain_store
 import rationale
 import engine
 import exits
@@ -34,6 +35,7 @@ LOCAL_CONFIG = ROOT / "config.local.toml"   # private overrides on your own comp
 SUGGESTIONS_CSV = ROOT / "logs" / "suggestions.csv"
 TERM_HISTORY = ROOT / "data" / "term_history.json"
 SITE_DATA = ROOT / "site" / "data"
+CHAINS_DIR = chain_store.CHAINS_DIR   # one stored option chain per day (None = don't store, e.g. sample runs)
 
 LOG_FIELDS = ["run_at", "date", "verdict", "mode", "atm_iv", "rv30", "percentile", "iv_rv_ratio", "trade",
               "conviction", "conviction_score",
@@ -47,8 +49,9 @@ SAMPLE_DIR = ROOT / "sample_output"
 
 def use_sample_paths() -> None:
     """Keep sample runs away from your real history and log."""
-    global SUGGESTIONS_CSV, TERM_HISTORY
+    global SUGGESTIONS_CSV, TERM_HISTORY, CHAINS_DIR
     SAMPLE_DIR.mkdir(exist_ok=True)
+    CHAINS_DIR = None                    # sample data is synthetic: never stored as a real chain
     SUGGESTIONS_CSV = SAMPLE_DIR / "suggestions.csv"
     TERM_HISTORY = SAMPLE_DIR / "term_history.json"
     vol_gauge.HISTORY_CSV = SAMPLE_DIR / "iv_history.csv"
@@ -67,8 +70,9 @@ def use_private_paths() -> None:
     everything to private/ and site/data/private/, both ignored by Git. The dashboard shows the private
     view when it exists, so you see your own limits and premium log; the cloud copy stays generic.
     """
-    global SUGGESTIONS_CSV, TERM_HISTORY, SITE_DATA
+    global SUGGESTIONS_CSV, TERM_HISTORY, SITE_DATA, CHAINS_DIR
     PRIVATE_DIR.mkdir(exist_ok=True)
+    CHAINS_DIR = PRIVATE_DIR / "chains"
     for name in ("iv_history.csv", "term_history.json"):
         shared = ROOT / "data" / name
         if shared.exists():
@@ -90,11 +94,12 @@ def merge_settings(base: dict, over: dict) -> dict:
     return out
 
 
-def load_config(strategy_path=None) -> dict:
-    """config.toml (market data, risk limits, vol gauge) + the strategy file's rules, as one settings view."""
+def load_config(strategy_path=None, local: bool = True) -> dict:
+    """config.toml (market data, risk limits, vol gauge) + the strategy file's rules, as one settings view.
+    local=False ignores config.local.toml (the backtest uses only committed files, so every computer agrees)."""
     with CONFIG.open("rb") as f:
         cfg = tomllib.load(f)
-    if LOCAL_CONFIG.exists():
+    if local and LOCAL_CONFIG.exists():
         with LOCAL_CONFIG.open("rb") as f:
             cfg = merge_settings(cfg, tomllib.load(f))
     st = engine.load_strategy(strategy_path or engine.DEFAULT_STRATEGY)
@@ -288,6 +293,8 @@ def analyse(cfg: dict, snap: dict) -> dict:
 def save_outputs(cfg: dict, snap: dict, out: dict, sample: bool = False) -> dict:
     result, hist, today, now = out["result"], out["history"], out["today"], out["now"]
     vol_gauge.save_history(hist)
+    if CHAINS_DIR is not None and not sample:   # today's real chain, kept for the backtest (first run of the day)
+        chain_store.save(snap, CHAINS_DIR, cfg["deribit"]["instrument_prefix"])
 
     # term structure memory, for "last week" comparison on the dashboard
     th = json.loads(TERM_HISTORY.read_text(encoding="utf-8")) if TERM_HISTORY.exists() else {}

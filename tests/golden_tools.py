@@ -1,4 +1,4 @@
-"""Shared helper: run the full daily analysis on the stored sample snapshot with a frozen history copy."""
+"""Shared helpers for the golden tests: the sample-day decision and a backtest on a frozen slice of history."""
 import json
 import shutil
 import sys
@@ -11,6 +11,9 @@ import main  # noqa: E402
 import vol_gauge  # noqa: E402
 
 GOLDEN = ROOT / "tests" / "golden" / "sample_decision.json"
+BACKTEST_GOLDEN = ROOT / "tests" / "golden" / "backtest_slice.json"
+BACKTEST_HISTORY = ROOT / "tests" / "golden" / "backtest_history.csv"   # frozen copy, 2024-04-21 to 2025-12-31
+NO_CHAINS = ROOT / "tests" / "golden" / "no_chains"                       # empty: the slice is model-priced
 
 
 def sample_decision() -> dict:
@@ -33,9 +36,26 @@ def sample_decision() -> dict:
     return out
 
 
+def backtest_slice() -> dict:
+    """The strategy file's own rules, rich days, one trade at a time, on the frozen history slice."""
+    import backtest
+    cfg = main.load_config(local=False)
+    st = cfg["_strategy"]
+    days = backtest.load_days(cfg, BACKTEST_HISTORY)
+    trades = backtest.run(cfg, st, days, True, NO_CHAINS)
+    return {"period": [days[0]["date"], days[-1]["date"]], "strategy_version": st["_stamp"]["version"],
+            "summary": backtest.summarise(trades), "trades": trades}
+
+
+def dump(x: dict) -> str:
+    return json.dumps(x, indent=1, sort_keys=True) + "\n"
+
+
 if __name__ == "__main__":   # python tests/golden_tools.py --update   (only after a deliberate rule change)
     if "--update" in sys.argv:
         GOLDEN.write_text(json.dumps(sample_decision(), indent=1, sort_keys=True), encoding="utf-8")
-        print("golden file updated")
+        BACKTEST_GOLDEN.write_text(dump(backtest_slice()), encoding="utf-8")
+        print("golden files updated")
     else:
         print(json.dumps(sample_decision(), indent=1, sort_keys=True))
+        print(json.dumps(backtest_slice()["summary"], indent=1, sort_keys=True))

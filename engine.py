@@ -1,7 +1,8 @@
 """The one decision engine, shared by the daily scan and the backtest.
 
     strategy file  +  a day's market (option chain, verdict)  ->  trade or no trade, then the exit plan
-    (live: the real Deribit chain; backtest: a chain rebuilt from that day's ATM IV, priced the same way)
+    (live: the real Deribit chain; backtest: that day's stored real chain from data/chains/ when there is one,
+     otherwise a chain rebuilt from that day's ATM IV, priced the same way)
 
 Nothing here fetches data or calls an LLM: same inputs, same outputs, every time.
 """
@@ -15,8 +16,10 @@ from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 
 import bsmodel
+import chain_store
 import exits
 import suggest
+import vol_gauge
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_STRATEGY = ROOT / "strategies" / "bull_put_spread.toml"
@@ -119,6 +122,12 @@ def synthetic_chain(st: dict, day: str, spot: float, atm: float) -> list[dict]:
     return chain
 
 
+def stored_chain(day: str, chains_dir=chain_store.CHAINS_DIR) -> list[dict] | None:
+    """The real chain recorded on that day (data/chains/), in the same shape as a live run's chain, or None."""
+    snap = chain_store.load(day, chains_dir)
+    return vol_gauge.build_chain(snap) if snap else None
+
+
 # ------------------------------------------------------------------ managing an open trade
 def fee(bt: dict, S: float, px: float) -> float:
     return min(bt["fee_rate"] * S, bt["fee_cap"] * px) if px > 0 else 0.0
@@ -133,14 +142,33 @@ def buyback_cost(st: dict, pos: dict, S: float, atm: float, days_left: float) ->
     return s["ask"] - l["bid"] + fee(bt, S, s["mid"]) + fee(bt, S, l["mid"]), s["mid"]
 
 
-def manage(st: dict, pos: dict, day: str, S: float, atm: float) -> tuple[str, float] | None:
-    """One day's check of an open spread against its exit plan. Returns (reason, pnl per SOL) or None to hold."""
+def real_buyback_cost(st: dict, pos: dict, S: float, chain: list[dict] | None) -> tuple[float, float] | None:
+    """Same as buyback_cost, but from a stored real chain: short put's ask, long put's bid, short put's mark.
+    None when either leg is missing or lacks those quotes (the model is used instead)."""
+    if not chain:
+        return None
+    legs = {}
+    for o in chain:
+        if o["type"] == "put" and o["expiry_ms"] == pos["expiry_ms"] and o["strike"] in (pos["Ks"], pos["Kl"]):
+            legs[o["strike"]] = o
+    s, l = legs.get(pos["Ks"]), legs.get(pos["Kl"])
+    if not s or not l or s["ask"] is None or s["mark"] is None or l["bid"] is None:
+        return None
+    bt = st["backtest"]
+    s_px, l_px = s["mid"] or s["mark"], l["mid"] or l["mark"] or l["bid"]
+    return s["ask"] - l["bid"] + fee(bt, S, s_px) + fee(bt, S, l_px), s["mark"]
+
+
+def manage(st: dict, pos: dict, day: str, S: float, atm: float,
+           chain: list[dict] | None = None) -> tuple[str, float] | None:
+    """One day's check of an open spread against its exit plan. Returns (reason, pnl per SOL) or None to hold.
+    With that day's stored real chain, the buy-back cost comes from real quotes; otherwise from the model."""
     e = st["exits"]
     left = (pos["expiry_dt"] - datetime.combine(date.fromisoformat(day), time(0, 0), timezone.utc)).total_seconds() / 86400
     if left <= 0:
         loss = max(0.0, pos["Ks"] - S) - max(0.0, pos["Kl"] - S)
         return "expiry", pos["credit"] - loss
-    cost, short_mark = buyback_cost(st, pos, S, atm, left)
+    cost, short_mark = real_buyback_cost(st, pos, S, chain) or buyback_cost(st, pos, S, atm, left)
     if float(e.get("stop_multiple", 0)) > 0 and (S <= pos["stop_spot"] or short_mark >= pos["stop_mark"]):
         return "stop", pos["credit"] - cost
     tp = float(e.get("take_profit_pct", 0)) / 100
@@ -159,6 +187,7 @@ def open_position(cfg: dict, st: dict, cand: dict, spot: float) -> dict:
     credit = cand["credit_conservative"] - fee(bt, spot, cand["short"]["mid"]) - fee(bt, spot, cand["long"]["mid"])
     return {"Ks": cand["short"]["strike"], "Kl": cand["long"]["strike"], "credit": credit,
             "width": cand["width"], "max_loss": cand["width"] - credit, "expiry": cand["expiry"],
+            "expiry_ms": cand["short"]["expiry_ms"],
             "expiry_dt": datetime.fromtimestamp(cand["short"]["expiry_ms"] / 1000, timezone.utc),
             "stop_spot": plan["price_stop_spot"], "stop_mark": plan["mark_stop_short_put"],
             "delta": cand["short_delta"]}

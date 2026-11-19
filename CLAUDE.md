@@ -25,7 +25,7 @@ publishes a dashboard to GitHub Pages: https://workingondevelopmentmax.github.io
    changing a strategy file, not hard-coding numbers.
 5. **Tests must pass**, including the golden test (`tests/golden/sample_decision.json`). If a change is meant to
    alter the sample-day decision, update the golden file deliberately (`python tests/golden_tools.py --update`)
-   and say so in the pull request.
+   and say so in the pull request. The same applies to the backtest golden file (`tests/golden/backtest_slice.json`).
 6. **The repository is public.** No API keys, no real position sizes, no personal trade log. Real limits and the
    real premium log live only in `config.local.toml` / `my_premium_log.local.csv` on the owner's laptop
    (both git-ignored). The public copy uses reference sizing: $1,000 max loss per trade, $3,000 total.
@@ -44,8 +44,11 @@ publishes a dashboard to GitHub Pages: https://workingondevelopmentmax.github.io
 | `suggest.py` | Candidate search, filters and sizing (called through `engine.decide`) |
 | `exits.py` | Exit plan: take profit, Greek-informed price stop, mark-price stop, time exit |
 | `rationale.py`, `explain.py` | Conviction score, plain-language "why", Greeks panel (templates only) |
-| `backtest.py` | Replays a strategy file over history with the same engine; writes `data/backtest.json` |
+| `backtest.py` | Replays a strategy file over stored files with the same engine; writes `data/backtest.json` (with input fingerprints) |
+| `chain_store.py` | Saves/loads one compressed SOL option chain per day; SHA-256 fingerprints of input files |
 | `data/iv_history.csv` | One row per day since 2024-04: price, 30-day ATM IV, RV20, RV30, IV source |
+| `data/chains/` | `YYYY-MM-DD.json.gz`: the first real SOL chain of each UTC day, never overwritten (from 2026-11) |
+| `tests/golden/` | Golden files: sample-day decision, backtest on a frozen history slice (`backtest_history.csv`) |
 | `site/` | Static dashboard (plain HTML/JS, no build step); data in `site/data/` |
 | `.github/workflows/daily.yml` | Daily scan, commit of data, Pages deploy; "Run workflow" with optional backfill |
 
@@ -60,6 +63,8 @@ Python 3.11+ standard library only. No pip installs.
 
 ## Data notes
 - Deribit publishes no SOL volatility index (the `get_volatility_index_data` currencies are BTC, ETH, USDC, USDT, EURR).
+- The backtest uses a stored real chain (`data/chains/`) on days that have one, the model chain otherwise. It
+  reads only committed files (never `config.local.toml`) and has no timestamps: same files, byte-identical output.
 - Past IV (2024-05-31 to 2026-11) is estimated from public trades on `history.deribit.com`; daily readings since
   2026-11-15 come from the live chain (`iv_source = snapshot`).
 - SOL options are USDC-settled (linear), European, contract size 10 SOL; prices are quoted per 1 SOL.
