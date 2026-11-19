@@ -10,6 +10,11 @@
 #          "owner-set"                          set by the owner
 #          "none"
 # roadmap_step: where it is built (docs/ROADMAP.md), shown while not built
+# judged_on: the scorecard it is (or will be) judged on, from docs/STRATEGIES.md "How each strategy is judged":
+#          "standard"      the step 3 scorecard (premium and debit trades)
+#          "hedge"         how much it reduced core-holding drawdowns versus its cost
+#          "accumulation"  SOL acquired per dollar versus plain weekly buying
+#          "none"          not a trade (e.g. "IV fair: no options trade")
 
 [[strategy]]
 id = "bull_put_spread"
@@ -19,6 +24,7 @@ purpose = "Income: paid to agree to buy SOL lower."
 budget = "premium caps"
 status = "live"
 file = "bull_put_spread.toml"
+judged_on = "standard"
 
 [[strategy]]
 id = "bear_call_spread"
@@ -28,6 +34,7 @@ purpose = "Income from a stalled rally (bearish, or SOL stretched after a rally)
 budget = "premium caps"
 status = "not_built"
 roadmap_step = "5.3"
+judged_on = "standard"
 
 [[strategy]]
 id = "iron_condor"
@@ -37,6 +44,7 @@ purpose = "Income if SOL stays in a range (put spread + call spread)."
 budget = "premium caps"
 status = "not_built"
 roadmap_step = "5.3"
+judged_on = "standard"
 
 [[strategy]]
 id = "protective_hedge"
@@ -46,6 +54,7 @@ purpose = "Protect core SOL near highs without selling: buy a put spread, pay wi
 budget = "core-holding share"
 status = "not_built"
 roadmap_step = "5.4"
+judged_on = "hedge"
 
 [[strategy]]
 id = "call_debit_spread"
@@ -55,6 +64,7 @@ purpose = "Cheap exposure to a big move up."
 budget = "big-move budget (1% of portfolio per month)"
 status = "not_built"
 roadmap_step = "5.2"
+judged_on = "standard"
 
 [[strategy]]
 id = "put_debit_spread"
@@ -64,6 +74,7 @@ purpose = "Cheap exposure to a big drop, or a cheap hedge."
 budget = "big-move budget (1% of portfolio per month)"
 status = "not_built"
 roadmap_step = "5.2"
+judged_on = "standard"
 
 [[strategy]]
 id = "big_move"
@@ -73,6 +84,7 @@ purpose = "Paid on a large move either way (long strangle or both debit spreads)
 budget = "big-move budget (1% of portfolio per month)"
 status = "not_built"
 roadmap_step = "5.2"
+judged_on = "standard"
 
 [[strategy]]
 id = "accumulation"
@@ -82,6 +94,7 @@ purpose = "Scheduled SOL buys plus extra buys on fear days, benchmarked against 
 budget = "owner-set"
 status = "not_built"
 roadmap_step = "5.5"
+judged_on = "accumulation"
 
 [[strategy]]
 id = "fair_no_trade"
@@ -90,3 +103,4 @@ market = "fair"
 purpose = "Discipline: on most days the answer is no."
 budget = "none"
 status = "live"                     # no rule file: the scanner already suggests nothing on FAIR days
+judged_on = "none"

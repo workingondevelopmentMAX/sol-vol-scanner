@@ -69,7 +69,9 @@ The owner reviews outcomes, not code. In every session and pull request:
 | `data/iv_history.csv` | One row per day since 2024-04: price, 30-day ATM IV, RV20, RV30, IV source |
 | `data/chains/` | `YYYY-MM-DD.json.gz`: the first real SOL chain of each UTC day, never overwritten (from 2026-11) |
 | `tests/golden/` | Golden files: sample-day decision, backtest on a frozen history slice (`backtest_history.csv`) |
-| `site/` | Static dashboard (plain HTML/JS, no build step); data in `site/data/` (`latest.json`/`data.js` daily, `backtest.json`/`backtest.js` evidence) |
+| `lab.py` | Strategy Lab data: every version's scorecard, running result/drawdown series, entry-day groups, trades, benchmarks; writes `site/data/lab.json` + `lab.js` (display only) |
+| `site/lab.html` | Strategy Lab page (full evidence for every strategy on the menu); shares `site/style.css` and `site/charts.js` with `index.html` |
+| `site/` | Static dashboard (plain HTML/JS, no build step); data in `site/data/` (`latest.json`/`data.js` daily, `backtest.json`/`backtest.js` evidence, `lab.json`/`lab.js` Strategy Lab) |
 | `.github/workflows/daily.yml` | Daily scan, commit of data, Pages deploy; "Run workflow" with optional backfill |
 
 ## How to run

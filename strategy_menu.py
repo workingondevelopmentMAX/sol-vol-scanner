@@ -19,7 +19,8 @@ MENU = ROOT / "strategies" / "menu.toml"
 MARKETS = {"rich", "cheap", "fair", "any"}
 STATUSES = {"live", "in_testing", "not_built"}
 BUDGETS = {"premium caps", "big-move budget (1% of portfolio per month)", "core-holding share", "owner-set", "none"}
-FIELDS = {"id", "name", "market", "purpose", "budget", "status", "file", "roadmap_step"}
+JUDGED_ON = {"standard", "hedge", "accumulation", "none"}
+FIELDS = {"id", "name", "market", "purpose", "budget", "status", "file", "roadmap_step", "judged_on"}
 
 
 def load(path: Path | str = MENU) -> list[dict]:
@@ -41,6 +42,8 @@ def load(path: Path | str = MENU) -> list[dict]:
             raise ValueError(f"{where}: market must be one of {sorted(MARKETS)}")
         if e["status"] not in STATUSES:
             raise ValueError(f"{where}: status must be one of {sorted(STATUSES)}")
+        if e.get("judged_on", "standard") not in JUDGED_ON:
+            raise ValueError(f"{where}: judged_on must be one of {sorted(JUDGED_ON)}")
         if e["budget"] not in BUDGETS:
             raise ValueError(f"{where}: budget must be one of {sorted(BUDGETS)}")
         if e.get("file") and not (Path(path).parent / e["file"]).exists():

@@ -28,16 +28,15 @@ Full rationale: the "Deterministic Strategy Engine Plan" doc. Work through one s
 - **Step 4b: daily page shows the evidence** (2026-11-19). Today at a glance (every menu strategy and its status),
   idea cards with an evidence box (practice vs unseen period), for and against today (rule-based cautions), and
   results on past days with similar entry-day conditions; all worked out in `report.py`, display only.
+- **Step 4c: Strategy Lab page** (2026-11-19). `site/lab.html` (data from `lab.py` in `site/data/lab.json`): every
+  version of every built strategy in strategy-file order, practice vs unseen side by side, running result and
+  drawdown charts with holding/weekly-buying benchmarks, results by entry-day conditions, and a trade list with a
+  price chart per trade; not-built strategies listed with the scorecard they will be judged on.
+- **Step 4 done** (4a + 4b + 4c): the dashboard shows the evidence behind every idea and every strategy.
 
 ## Next
 
-### Step 4c: Strategy Lab page
-- New dashboard page generated nightly from `data/backtest.json`: running P&L and drawdown chart, scorecard
-  table (in-sample vs held back), results by market condition, trade list linked to each day's chart.
-- Header: data range, strategy name/version/fingerprint, data fingerprint. Template text only.
-- **Done when:** the page renders on phone, iPad and desktop and every number matches `data/backtest.json`.
-
-### Step 5: more strategies as files (see docs/STRATEGIES.md)
+### Step 5 (next): more strategies as files (see docs/STRATEGIES.md)
 Agreed menu (2026-11-19): rich IV = bull put spread (exists), bear call spread, iron condor, zero-cost protective
 hedge for core SOL near highs; cheap IV = call or put debit spreads (and a no-direction big-move option); always =
 accumulation helper. Direction = tested data signal (trend, momentum/drawdown, options-market signals, crash/fear)

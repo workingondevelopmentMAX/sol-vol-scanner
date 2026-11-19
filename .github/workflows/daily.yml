@@ -56,6 +56,10 @@ jobs:
         continue-on-error: true
         run: python report.py
 
+      - name: Rebuild the Strategy Lab page's data
+        continue-on-error: true
+        run: python lab.py
+
       - name: Save history, log, today's option chain (data/chains/) and dashboard data
         run: |
           git config user.name "sol-vol-scanner bot"
