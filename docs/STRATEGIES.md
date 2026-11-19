@@ -17,7 +17,7 @@ signal combined with the owner's stated view.
 | IV rich | Bearish, or SOL stretched after a rally | Bear call spread | Income from a stalled rally | Same caps, shared with all premium trades |
 | IV rich | No direction, range expected | Iron condor (put spread + call spread) | Income if SOL stays in a range | Same caps |
 | IV rich, SOL near recent highs | Protective | Zero-cost hedge: buy put spread, pay with a call spread | Protect core SOL near tops without selling (setup 4) | Sized to a share of core holdings, not the risk budget |
-| IV cheap | Bullish | Call debit spread | Cheap exposure to a big move up | "Big move" budget: 1% of portfolio per month (assumption) |
+| IV cheap | Bullish | Call debit spread | Cheap exposure to a big move up | "Big move" budget: 1% of portfolio per month (confirmed) |
 | IV cheap | Bearish | Put debit spread | Cheap exposure to a big drop, or a cheap hedge | Same budget |
 | IV cheap | No direction, big move expected | Long strangle or both debit spreads | Paid on a large move either way | Same budget |
 | Any | — | Accumulation helper | Scheduled SOL buys + extra buys on fear days | Set by the owner; benchmarked against plain weekly buying |
@@ -42,11 +42,12 @@ switches itself off. The view tilts the data score; how much it can tilt is a se
 **Important limit:** past views were never recorded, so the view's effect cannot be backtested. Backtests use the
 data signal only. From now on, every daily run records the view in force, so its effect can be measured over time.
 
-## Assumptions the owner skipped (change any time)
-- **Structure for cheap-IV trades:** debit spreads by default; the backtest also tries outright options and the
+## Settings for the cheap-IV ("big move") trades
+- **Budget (confirmed by the owner 2026-11-19):** at most 1% of portfolio per month on trades that can expire
+  worthless. Real figure in the owner's private settings; the public copy uses a round reference figure.
+- **Structure (decided by testing):** debit spreads by default; the backtest also tries outright options and the
   held-back results decide.
-- **Big-move budget:** 1% of portfolio per month at most (public copy uses a round reference figure).
-- **Horizon:** the backtest compares about 30, 60 and 90 days to expiry; held-back results pick.
+- **Horizon (decided by testing):** the backtest compares about 30, 60 and 90 days to expiry; held-back results pick.
 
 ## How each strategy is judged
 Same scorecard for all (ROADMAP step 3): trades, win rate, average and total per $1,000 risked, worst trade,
