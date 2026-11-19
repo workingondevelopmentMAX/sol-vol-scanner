@@ -57,4 +57,4 @@ min_trades_per_day = 2
 
 [report]
 # How backtest evidence is labelled on the dashboard. Display rules only: they never change a decision.
-held_back_thin_below = 20  # fewer unseen-period (held-back) trades than this = "thin evidence" (starting value, owner to confirm)
+held_back_thin_below = 20  # fewer unseen-period (held-back) trades than this = "thin evidence" (confirmed by the owner 2026-11-19)
