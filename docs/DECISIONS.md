@@ -2,6 +2,21 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-20 · Put spread stop moves to 2x the credit (strategy version 2)
+The owner switched the stop from a loss of 1.5x the credit to 2x (buy-back at 3x the credit instead of
+2.5x). Why: 2x was the only declared version that made money in both periods (practice +$316 over 11 trades,
+unseen +$111 over 11, per $1,000 risked per trade); 1.5x lost -$1,268 in practice. Trade-off: fewer
+stop-outs on temporary dips, but a bigger loss each time the stop fires. Caveats: small samples, all model
+prices (no real stored quotes yet), and the unseen period has now been used to choose, so the fair test of
+this rule is new days from 2026-11-21 onwards. The old rule stays on the Lab page as
+'Stop 1.5x (rule until 2026-11-20)'.
+Effect on the exit plan (same trade picked, entry and strikes unchanged): on 19 Nov's stored prices
+(25 Dec 66/60 spread, credit $0.98) the SOL price stop moves from $66.18 to $63.13, the loss if the stop fires
+from $279 to $372, and the win rate needed to break even from 75% to 80%. Rules fingerprint 26b253abbac9 ->
+56febf4a1a57. Golden files regenerated: sample-day price stop 119.4379 -> 115.642; frozen-slice backtest
+18 trades / -$1,147 -> 15 trades / +$437 (practice 14 / -$1,268 -> 11 / +$316; unseen part unchanged at
+4 / +$121).
+
 ### 2026-11-19 · Strategy Lab page
 A second page, lab.html, shows the full backtest for every strategy on the menu: every declared version
 in the order written in its strategy file (never ranked by results), practice and unseen periods side by

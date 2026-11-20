@@ -50,6 +50,4 @@ tilted by `view.toml`. Build order:
   and shown on the dashboard only after passing.
 
 ## Decisions waiting on the owner
-- Exit rules for the put spread: the current 1.5x stop lost money in the backtest; 2x / 3x / no stop did better
-  on 20-25 trades. Step 3's held-back test is now available (see DECISIONS 2026-11-19, "Testing rules set in
-  advance"): only 10-13 held-back trades per variant, so treat it as a hint, not proof. The owner decides.
+- None right now. (The put spread exit rule was decided on 2026-11-20: stop at 2x the credit; see DECISIONS.)

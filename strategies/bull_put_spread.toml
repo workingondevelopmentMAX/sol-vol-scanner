@@ -5,7 +5,7 @@
 [strategy]
 name = "bull_put_spread"
 title = "Bull put spread: sell rich put premium"
-version = 1
+version = 2                         # v2 (2026-11-20): stop moved from 1.5x to 2x the credit
 
 [entry]
 require_verdict = "RICH"            # only trade when IV is rich (12-month percentile, see config.toml [vol])
@@ -26,7 +26,7 @@ max_alternates = 2
 [exits]
 take_profit_pct = 50                # buy the spread back once you've kept this % of the credit
 split_take_profit = false           # true = take profit on half, let the other half run to expiry
-stop_multiple = 1.5                 # stop when the loss reaches this many times the credit (0 = no stop)
+stop_multiple = 2.0                 # stop when the loss reaches 2x the credit (buy-back costs 3x the credit); 0 = no stop
 iv_points_per_pct_drop = 1.0        # assume implied vol rises this many points for each 1% SOL falls
 stop_assumed_days = 3               # assume this many days have passed when the stop is hit
 time_exit_dte = 7                   # close anything still open this many days before expiry (0 = hold to expiry)
@@ -64,8 +64,8 @@ name = "Stop 1x"
 exits = { stop_multiple = 1.0 }
 
 [[variants]]
-name = "Stop 2x"
-exits = { stop_multiple = 2.0 }
+name = "Stop 1.5x (rule until 2026-11-20)"
+exits = { stop_multiple = 1.5 }
 
 [[variants]]
 name = "Stop 3x, no time exit"
