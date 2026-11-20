@@ -45,7 +45,11 @@ tilted by `view.toml`. Build order:
    `strategies/direction.toml` + `direction.py`; trend, momentum, drawdown and crash/fear tested with a pass rule set in
    advance: **none passed** (crash/fear came closest: big gains after fear days, but only 2 unseen-period episodes);
    skew and term structure recording only. View and reading recorded daily. Display only.
-2. Call and put debit spreads on cheap-IV days.
+2. ~~Call and put debit spreads on cheap-IV days.~~ **Done 2026-11-20:** `strategies/debit_spreads.toml` on the shared
+   engine (pre-registered). Chosen version: "Strategy file as written" (60 days, spreads; kept because three
+   candidates had fewer than 5 practice trades). Unseen period: 8 trades, +$1,308 per $1,000 vs weekly buying -$2,611
+   with the same money -> **passed** (barely: exactly 8 trades; model prices assume an expiry every week, but Deribit
+   lists few SOL expiries 45-75 days out). Paper trades recorded daily from real quotes.
 3. Bear call spread and iron condor on rich-IV days.
 4. Zero-cost protective hedge.
 5. Accumulation helper, benchmarked against plain weekly buying.

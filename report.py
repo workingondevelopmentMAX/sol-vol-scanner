@@ -118,6 +118,8 @@ def glance(result: dict, today: dict, view: dict) -> dict:
         st, reason = s["status"], s["reason"]
         if st == "suggested":
             text = reason
+        elif st == "paper_idea":
+            text = reason
         elif st == "no_trade":
             text = f"Right conditions, but nothing passed the rules today: {reason}"
         elif st == "not_eligible":
@@ -129,7 +131,9 @@ def glance(result: dict, today: dict, view: dict) -> dict:
             text = f"Not built yet (roadmap step {s.get('roadmap_step')})"
         rows.append({"id": s["id"], "name": s["name"], "market": s["market"],
                      "market_text": MARKET_TEXT[s["market"]], "status": st, "text": text,
-                     "card": f"idea-{s['id']}" if st == "suggested" and s.get("suggestion") else None})
+                     "card": f"idea-{s['id']}" if st == "suggested" and s.get("suggestion") else None,
+                     "lab": (f"lab.html#lab-{Path(s['file']).stem}" if s.get("file") and
+                             st in ("paper_idea", "suggested", "no_trade") else None)})
     any_trade = any(r["card"] for r in rows)
     d = result.get("direction")
     dline = None
@@ -144,9 +148,11 @@ def glance(result: dict, today: dict, view: dict) -> dict:
 
 # ------------------------------------------------------------------ 4. evidence box
 def live_variant(bt: dict | None, strategy_file: str | None) -> dict | None:
+    """The version in use: "Strategy file as written", or the version chosen by the file's [selection] rule."""
     if not bt or (strategy_file and (bt.get("strategy") or {}).get("file") != strategy_file):
         return None
-    return next((v for v in bt.get("variants", []) if v["name"] == LIVE_VARIANT), None)
+    name = (bt.get("selection") or {}).get("chosen") or LIVE_VARIANT
+    return next((v for v in bt.get("variants", []) if v["name"] == name), None)
 
 
 def window_rows(sc: dict) -> list[dict]:
@@ -312,7 +318,60 @@ def cautions(rep: dict, s: dict, spot: float, today: dict, v: dict | None, match
 
 
 # ------------------------------------------------------------------ the whole report
-def build(cfg: dict, result: dict, bt: dict | None, annotated_history: list[dict], view: dict) -> dict:
+def for_list_debit(cfg: dict, result: dict, s: dict, sc: dict) -> list[str]:
+    """Rules a debit idea passed (strategies/debit_spreads.toml), restated from the engine's checks."""
+    vd = result["verdict"]
+    out = [f"IV is {vd['label']}" + (f" at the {ordinal(vd['percentile'])} percentile" if vd.get("percentile") is not None
+                                     else "") + " (rule: this strategy buys only on CHEAP days)."]
+    out.append(f"Direction reading {s['direction']}: " + {"bullish": "buy the call spread.", "bearish":
+               "buy the put spread.", "neutral": "buy both sides at half size each."}.get(s["direction"], ""))
+    for x in s["sides"]:
+        bits = f"{x['name'].capitalize()}: {x['dte']:.0f} days to expiry (rule: {sc['dte_min']} to {sc['dte_max']})"
+        if x["cost_pct_of_width"] is not None:
+            bits += f", costs {x['cost_pct_of_width']:.0f}% of its width (rule: at most {sc['max_cost_pct_of_width']}%)"
+        out.append(bits + ".")
+    out.append(f"Within the big-move budget: ${s['cost_usd']:,.0f} of ${s['budget_left_usd']:,.0f} left this month; "
+               "the most you can lose is what you pay.")
+    return out
+
+
+def cautions_debit(rep: dict, today: dict, v: dict | None, match: bool | None, similar: dict | None) -> list[dict]:
+    """The same caution rules as the put spread, minus the cushion one (a debit spread has no break-even cushion)."""
+    out = []
+    move, lim = today.get("sol_30d_change_pct"), float(rep["caution_move_30d_pct"])
+    if move is not None and abs(move) > lim:
+        out.append({"key": "big_move", "text": f"SOL moved {move:+.1f}% in the last 30 days, more than the "
+                                                f"±{lim:.0f}% caution level."})
+    if v is not None:
+        n, thin_below = v["scorecard"]["held_back"]["trades"], int(rep["held_back_thin_below"])
+        if n < thin_below:
+            out.append({"key": "thin", "text": f"Thin evidence: only {n} trades in the unseen period "
+                                               f"(fewer than {thin_below})."})
+        for k, title in (("in_sample", "practice period"), ("held_back", "unseen period")):
+            sc = v["scorecard"][k]
+            if sc["trades"] and sc["total_per_1000"] < 0:
+                out.append({"key": "lost", "text": f"This rule lost {money(sc['total_per_1000'])[1:]} per $1,000 in the "
+                                                   f"{title} ({sc['trades']} trades)."})
+    if match is False:
+        out.append({"key": "older_rules", "text": "The evidence is for an older version of the rules."})
+    if similar is not None and not similar["enough"]:
+        out.append({"key": "few_similar", "text": f"Only {similar['count']} similar past days (fewer than "
+                                                   f"{similar['min_trades']}): too few to tell."})
+    return out
+
+
+def load_other_backtests() -> dict:
+    """Backtest output of the other strategy files (data/backtest_<name>.json), by strategy file name."""
+    out = {}
+    for p in sorted((ROOT / "data").glob("backtest_*.json")):
+        b = load_backtest(p)
+        if b and (b.get("strategy") or {}).get("file"):
+            out[b["strategy"]["file"]] = b
+    return out
+
+
+def build(cfg: dict, result: dict, bt: dict | None, annotated_history: list[dict], view: dict,
+          others: dict | None = None) -> dict:
     rep = cfg["report"]
     verdict_label = (result.get("verdict") or {}).get("label")
     today = todays_conditions(annotated_history, verdict_label)
@@ -320,18 +379,27 @@ def build(cfg: dict, result: dict, bt: dict | None, annotated_history: list[dict
     out = {"today": today, "view": view, "banners": banners(result, bt), "rules_match": match,
            "glance": glance(result, today, view), "cards": [], "settings": dict(rep)}
     spot = float(result.get("index_price") or 0)
+    bts = dict(others or {})
+    if bt and (bt.get("strategy") or {}).get("file"):
+        bts[bt["strategy"]["file"]] = bt
     for s in result.get("strategies") or []:
         if s["status"] != "suggested" or not s.get("suggestion"):
             continue
         sug = s["suggestion"]
-        v = live_variant(bt, s.get("file"))
-        sim = similar_days(bt, v, today, rep) if v else None
+        b = bts.get(s.get("file"))
+        v = live_variant(b, s.get("file"))
+        sim = similar_days(b, v, today, rep) if v else None
+        debit = sug.get("type") == "debit_spread"
+        if debit:
+            import engine
+            dst = engine.load_strategy(ROOT / "strategies" / s["file"])
+            m = None if not b else b["strategy"]["fingerprint"] == dst["_stamp"]["fingerprint"]
         out["cards"].append({
-            "id": s["id"], "anchor": f"idea-{s['id']}", "name": s["name"],
-            "evidence": evidence_box(bt, v, s["id"]) if v else None,
+            "id": s["id"], "anchor": f"idea-{s['id']}", "name": s["name"], "type": sug.get("type", "bull_put_spread"),
+            "evidence": evidence_box(b, v, s["id"]) if v else None,
             "evidence_missing": None if v else "No backtest results for this rule yet, so its track record can't be shown.",
-            "for": for_list(cfg, result, sug),
-            "cautions": cautions(rep, sug, spot, today, v, match, sim),
+            "for": for_list_debit(cfg, result, sug, dst["strikes"]) if debit else for_list(cfg, result, sug),
+            "cautions": cautions_debit(rep, today, v, m, sim) if debit else cautions(rep, sug, spot, today, v, match, sim),
             "closing": CLOSING,
             "similar": sim,
             "during_trade": during_trade(v) if v else None,
@@ -362,7 +430,7 @@ def refresh(site_data: Path | None = None) -> dict:
     if res.get("direction"):
         import direction
         direction.refresh_block(direction.load_rules(), res["direction"], direction.load_test())
-    res["report"] = build(cfg, res, load_backtest(), hist, load_view(today=today))
+    res["report"] = build(cfg, res, load_backtest(), hist, load_view(today=today), load_other_backtests())
     old, main.SITE_DATA = main.SITE_DATA, site_data
     try:
         main.write_dashboard(dash, bool(dash.get("sample")))

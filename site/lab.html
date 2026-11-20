@@ -122,7 +122,7 @@ table.trades tr.open td { background:var(--surface-0); }
       <tr><th></th>${W.map(w => `<th class="grp col-${w.key}" colspan="${COLS.length}">${esc(w.title)}</th>`).join("")}</tr>
       <tr><th>Version (strategy-file order) and evidence</th>${W.map(w => COLS.map(c => `<th class="col-${w.key}">${c[1]}</th>`).join("")).join("")}</tr></thead><tbody>`;
     S.variants.forEach(v => {
-      t += `<tr class="${v.live ? "live" : ""}"><td><b>${esc(v.name)}</b>${v.live ? `<span class="livetag">Live rule</span>` : ""}<div class="ev">Evidence: ${esc(v.evidence_title)}</div></td>`
+      t += `<tr class="${v.live ? "live" : ""}"><td><b>${esc(v.name)}</b>${v.live ? `<span class="livetag">${esc(S.live_label)}</span>` : ""}<div class="ev">Evidence: ${esc(v.evidence_title)}</div></td>`
         + W.map(w => COLS.map(c => { const x = cell(v.windows[w.key].rows, c[0]);
             return `<td class="col-${w.key} ${money_keys.includes(c[0]) && c[0] !== "worst_per_1000" && c[0] !== "max_drawdown_per_1000" ? cls(x.value) : ""}">${esc(x.text)}</td>`; }).join("")).join("")
         + `</tr>`;
@@ -136,9 +136,12 @@ table.trades tr.open td { background:var(--surface-0); }
     html += `<section class="card" id="${S.anchor}"><h2>${esc(S.name)}</h2>
       <h3 class="sub">The rules in plain words</h3><ul class="rules">${S.rules.map(r => `<li>${esc(r)}</li>`).join("")}</ul>
       <div class="muted" style="margin-top:4px">Rules: ${esc(S.stamp.title)} · version ${esc(S.stamp.version)} · fingerprint ${esc(S.stamp.fingerprint)}. ${esc(S.quotes_line)}</div>
+      ${S.selection ? `<div class="subcard"><h3>Which version is used, and has it passed?</h3>
+        <p style="margin:0 0 4px"><b>Chosen version:</b> ${esc(S.selection.reason)}</p><p class="muted" style="margin:0 0 8px">${esc(S.selection.rule)}</p>
+        ${S.pass ? `<p style="margin:0 0 4px"><b>${S.pass.passed ? "Passed" : "In testing"}:</b> ${esc(S.pass.text)}</p><p class="muted" style="margin:0">${esc(S.pass.rule)}</p>` : ""}</div>` : ""}
       <div class="subcard"><h3>Scorecard: every version, both periods</h3>${t}</div>
       <div class="subcard"><h3>Pick a version to look into</h3>
-        <div class="picker"><select id="pick-${si}" aria-label="Version">${S.variants.map(v => `<option value="${esc(v.name)}"${v.name === S.default_variant ? " selected" : ""}>${esc(v.name)}${v.live ? " (live rule)" : ""}</option>`).join("")}</select></div>
+        <div class="picker"><select id="pick-${si}" aria-label="Version">${S.variants.map(v => `<option value="${esc(v.name)}"${v.name === S.default_variant ? " selected" : ""}>${esc(v.name)}${v.live ? ` (${esc(S.live_label.toLowerCase())})` : ""}</option>`).join("")}</select></div>
         <div class="vtext" id="vtext-${si}"></div></div>
       <div class="subcard"><h3>Running result</h3>
         <div class="controls"><div class="seg"><button id="bench-${si}" aria-pressed="false">Show holding / weekly buying</button></div></div>
@@ -149,6 +152,8 @@ table.trades tr.open td { background:var(--surface-0); }
         <div class="chart" id="dd-${si}"></div>
         <div class="muted">How far the running result fell below its previous best, in each period.</div></div>
       <div class="subcard"><h3>Results by entry-day conditions</h3><div id="groups-${si}"></div></div>
+      ${S.paper ? `<div class="subcard"><h3>Paper trades (recorded daily from real quotes)</h3>${S.paper.length ? `<div class="tablewrap"><table><tr><th>Date</th><th>Event</th><th>Status then</th><th>Direction</th><th>Legs</th><th>Cost</th><th>Take profit</th><th>Close by</th><th>Reason / result</th></tr>
+        ${S.paper.map(p => `<tr><td>${esc(p.date)}</td><td>${esc(p.event.replace("_", " "))}</td><td>${esc(p.status)}</td><td>${esc(p.direction)}</td><td>${esc(p.legs || p.side)}</td><td>${p.cost_usd ? usd(+p.cost_usd, 0) : ""}</td><td>${esc(p.take_profit)}</td><td>${esc(p.time_exit)}</td><td>${esc(p.reason)}${p.result_per_1000 ? ` (${money(+p.result_per_1000)} per $1,000)` : ""}</td></tr>`).join("")}</table></div>` : `<div class="muted">No paper trades recorded yet: the first daily run after this change starts the log.</div>`}</div>` : ""}
       <div class="subcard"><h3>Trade list</h3><div class="muted">Newest first. Losing trades have a red edge. Tap a trade to see SOL's price from entry to exit.</div>
         <div class="tablewrap" id="trades-${si}"></div></div>
     </section>`;
@@ -216,12 +221,12 @@ table.trades tr.open td { background:var(--surface-0); }
     if (t.price_from == null || t.price_to == null) { host.innerHTML = `<div class="muted">No price history for these dates.</div>`; return; }
     const P = D.prices.slice(t.price_from, t.price_to + 1);
     const f = frame(host, 170);
-    const vals = P.map(p => p[1]).concat([t.short_strike, t.long_strike, t.break_even]);
+    const vals = P.map(p => p[1]).concat(t.lines.map(l => l[0]));
     let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
     const x0 = ms(P[0][0]), x1 = Math.max(ms(P[P.length - 1][0]), x0 + 864e5);
     const x = v => f.m.l + (v - x0) / (x1 - x0) * f.iw, y = v => f.m.t + (hi - v) / (hi - lo) * f.ih;
     axes(f, x, y, niceTicks(lo, hi, 4), v => "$" + v.toFixed(v < 20 ? 1 : 0), [x0, x1], v => new Date(v).toLocaleDateString("en-SG", {day:"numeric", month:"short", timeZone:"UTC"}));
-    [[t.short_strike, "Short " + t.short_strike, "--rich"], [t.long_strike, "Long " + t.long_strike, "--text-muted"], [t.break_even, "Break-even " + t.break_even.toFixed(2), "--series-rv"]].forEach(([v, l, c]) => {
+    t.lines.forEach(([v, l, c]) => {
       el("line", {x1:f.m.l, x2:f.W - f.m.r, y1:y(v), y2:y(v), stroke:css(c), "stroke-width":1, "stroke-dasharray":"4 3"}, f.svg);
       const tx = el("text", {x:f.W - f.m.r - 2, y:y(v) - 3, "text-anchor":"end", "font-size":10.5, fill:css(c)}, f.svg); tx.textContent = l; });
     const pts = P.map(p => [x(ms(p[0])), y(p[1])]);
@@ -237,7 +242,7 @@ table.trades tr.open td { background:var(--surface-0); }
     host.innerHTML = `<table class="trades"><tr><th>Entry</th><th>Period</th><th>SOL</th><th>30-day move</th><th>IV pct</th><th>Strikes</th><th>Expiry</th><th>Result</th><th>Exit</th><th>Exit date</th><th>Prices</th></tr>
       ${v.trades.map((t, i) => `<tr class="trow${t.loss ? " loss" : ""}" data-i="${i}" tabindex="0"><td>${t.date}</td><td>${t.window === "held_back" ? "Unseen" : t.window === "in_sample" ? "Practice" : "Before"}</td><td>${usd(t.sol)}</td>
         <td>${t.move_30d_pct == null ? "-" : (t.move_30d_pct > 0 ? "+" : "") + t.move_30d_pct.toFixed(1) + "%"}</td><td>${t.iv_percentile == null ? "-" : Math.round(t.iv_percentile)}</td>
-        <td>${t.short_strike}/${t.long_strike}</td><td>${t.expiry}</td><td class="${cls(t.pnl_per_1000)}">${esc(t.result)}</td><td>${esc(t.exit)}</td><td>${t.exit_date}</td><td>${esc(t.quotes)}</td></tr>`).join("")}</table>`;
+        <td>${esc(t.strikes_text)}</td><td>${t.expiry}</td><td class="${cls(t.pnl_per_1000)}">${esc(t.result)}</td><td>${esc(t.exit)}</td><td>${t.exit_date}</td><td>${esc(t.quotes)}</td></tr>`).join("")}</table>`;
     host.querySelectorAll("tr.trow").forEach(tr => {
       const open = () => {
         const next = tr.nextElementSibling;
