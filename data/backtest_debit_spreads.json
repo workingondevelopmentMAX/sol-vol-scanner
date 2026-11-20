@@ -15,11 +15,11 @@
   "data/chains/2026-11-19.json.gz": "65b1e0bc09bbc3cc014e351cc3d7499cba8ec743f97f279182cb763d423b004a",
   "data/chains/2026-11-20.json.gz": "048df8aa5c332a952419fc22ecdd291d7a490a33a2afa01ff328989f0912adce",
   "data/direction_test.json": "1a3317598f7d4a70d7d77c76e97ea4a572d8d8b792a23cebc576b77f2ef6401b",
-  "data/iv_history.csv": "7ea3c174edd0cad66523ba52d6272505b5a60ea5623227ef1ce85110ac7fe6dd",
+  "data/iv_history.csv": "ac51b3de8efbf3a09f6e166511dffa01ded0a11c8c8bfb09c91a1f97d0e89590",
   "strategies/debit_spreads.toml": "ddecfaf647833ba366013cbebb38172a0b3c79d84dcbddf292bdb2fe0483e5e9",
   "strategies/direction.toml": "b52f64e51948567a1634e963c72f372a0d13c18770bd2a0bd4a09adac5af785d"
  },
- "data_fingerprint": "3864e466e163",
+ "data_fingerprint": "21873bfb7490",
  "stored_chain_days": 2,
  "windows": {
   "in_sample": [
@@ -120,13 +120,13 @@
       "from": "2025-07-01",
       "to": "2026-11-20",
       "sol_from": 149.13,
-      "sol_to": 72.5296,
-      "per_1000": -513.6
+      "sol_to": 71.9604,
+      "per_1000": -517.5
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -326.4
+      "per_1000": -331.7
      }
     }
    },
@@ -806,13 +806,13 @@
       "from": "2025-07-01",
       "to": "2026-11-20",
       "sol_from": 149.13,
-      "sol_to": 72.5296,
-      "per_1000": -513.6
+      "sol_to": 71.9604,
+      "per_1000": -517.5
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -326.4
+      "per_1000": -331.7
      }
     }
    },
@@ -2018,13 +2018,13 @@
       "from": "2025-07-01",
       "to": "2026-11-20",
       "sol_from": 149.13,
-      "sol_to": 72.5296,
-      "per_1000": -513.6
+      "sol_to": 71.9604,
+      "per_1000": -517.5
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -326.4
+      "per_1000": -331.7
      }
     }
    },
@@ -2557,13 +2557,13 @@
       "from": "2025-07-01",
       "to": "2026-11-20",
       "sol_from": 149.13,
-      "sol_to": 72.5296,
-      "per_1000": -513.6
+      "sol_to": 71.9604,
+      "per_1000": -517.5
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -326.4
+      "per_1000": -331.7
      }
     }
    },
@@ -3238,13 +3238,13 @@
       "from": "2025-07-01",
       "to": "2026-11-20",
       "sol_from": 149.13,
-      "sol_to": 72.5296,
-      "per_1000": -513.6
+      "sol_to": 71.9604,
+      "per_1000": -517.5
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -326.4
+      "per_1000": -331.7
      }
     }
    },
@@ -3861,13 +3861,13 @@
       "from": "2025-07-01",
       "to": "2026-11-20",
       "sol_from": 149.13,
-      "sol_to": 72.5296,
-      "per_1000": -513.6
+      "sol_to": 71.9604,
+      "per_1000": -517.5
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -326.4
+      "per_1000": -331.7
      }
     }
    },
@@ -4523,13 +4523,13 @@
       "from": "2025-07-01",
       "to": "2026-11-20",
       "sol_from": 149.13,
-      "sol_to": 72.5296,
-      "per_1000": -513.6
+      "sol_to": 71.9604,
+      "per_1000": -517.5
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -326.4
+      "per_1000": -331.7
      }
     }
    },
@@ -5203,13 +5203,13 @@
       "from": "2025-07-01",
       "to": "2026-11-20",
       "sol_from": 149.13,
-      "sol_to": 72.5296,
-      "per_1000": -513.6
+      "sol_to": 71.9604,
+      "per_1000": -517.5
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -326.4
+      "per_1000": -331.7
      }
     }
    },
@@ -5776,13 +5776,13 @@
       "from": "2025-07-01",
       "to": "2026-11-20",
       "sol_from": 149.13,
-      "sol_to": 72.5296,
-      "per_1000": -513.6
+      "sol_to": 71.9604,
+      "per_1000": -517.5
      },
      "dca_sol": {
       "buys": 73,
       "every_days": 7,
-      "per_1000": -326.4
+      "per_1000": -331.7
      }
     }
    },
@@ -6682,7 +6682,7 @@
   "chosen": "Strategy file as written",
   "trades": 8,
   "total_per_1000": 1307.9,
-  "weekly_same_money": -2611.2,
+  "weekly_same_money": -2653.6,
   "checks": {
    "min_trades": true,
    "positive": true,
@@ -6690,7 +6690,7 @@
   },
   "passed": true,
   "status": "live",
-  "text": "Unseen period, \"Strategy file as written\": 8 trades (needs at least 8), total +1,308 per $1,000 (needs above 0), weekly buying with the same money -2,611 (must beat it). PASSED: it can be shown as a live idea.",
+  "text": "Unseen period, \"Strategy file as written\": 8 trades (needs at least 8), total +1,308 per $1,000 (needs above 0), weekly buying with the same money -2,654 (must beat it). PASSED: it can be shown as a live idea.",
   "rule": "At least 8 unseen-period trades, a total above 0 per $1,000, and better than buying SOL weekly with the same total money."
  }
 }
