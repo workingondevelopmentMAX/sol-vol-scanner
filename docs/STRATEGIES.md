@@ -36,6 +36,13 @@ All option trades are defined-risk. No naked short options.
 The score maps to bullish / neutral / bearish. Factor choice and weights are fixed on in-sample data
 (2024-06 to 2025-06) and judged only on held-back data (2025-07 onwards).
 
+**Result of the first test (2026-11-20, rules version 1, see DECISIONS):** no factor passed, so the data signal
+stays neutral and only the owner's view tilts the reading.
+- Failed: **trend** (practice period backwards, -21 points; unseen +0.6), **momentum** (-11 | -0.6, backwards in
+  practice), **drawdown** (+16.5 in practice, -1.9 unseen), **crash/fear** (+10.9 | +18.7 points, but only 2
+  non-overlapping fear periods in the unseen period, fewer than the 4 required).
+- Recording only (not enough history to test): **skew**, **term structure**, recorded daily from the stored chains.
+
 **The owner's view (`view.toml`).** Bullish / neutral / bearish, strength 1-3, and an expiry date so a stale view
 switches itself off. The view tilts the data score; how much it can tilt is a setting in each strategy file.
 

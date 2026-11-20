@@ -55,6 +55,9 @@ The owner reviews outcomes, not code. In every session and pull request:
 | `main.py` | Daily entry point: fetch, analyse, write history/log/dashboard data. `--sample` runs offline, `--backfill` fills past IV |
 | `engine.py` | The decision engine: `decide()`, `exit_plan()`, `synthetic_chain()`, `manage()`, `open_position()` |
 | `strategies/bull_put_spread.toml` | Put spread rules: entry, strikes, filters, exits, backtest pricing; `[evaluation]` windows and `[[variants]]` to compare |
+| `strategies/direction.toml` | Direction rules (factors, view tilt, pass test set in advance); versioned and fingerprinted; display only for now |
+| `direction.py` | Direction factors (no look-ahead), the pass test (`python direction.py` -> `data/direction_test.json`), today's reading, daily recording |
+| `data/view_history.csv`, `data/direction_history.csv` | The owner's view and the direction reading, one row per UTC day (first run wins; public, so no private notes) |
 | `strategies/menu.toml` | The agreed strategy menu (docs/STRATEGIES.md) with status; display only, never changes a decision |
 | `report.py` | The daily page's explanations (at a glance, evidence box, cautions, similar past days): numbers + templates, display only; `python report.py` refreshes them after the backtest |
 | `strategy_menu.py` | Loads the menu and turns today's verdict and the scan's result into one status per strategy (templates) |

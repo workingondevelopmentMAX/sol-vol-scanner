@@ -230,6 +230,46 @@ def strategy_section(entry: dict, bt: dict, st: dict, rep: dict, days: list[dict
     }
 
 
+# ------------------------------------------------------------------ direction signal section
+DIRECTION_EXPLAIN = [
+    "\"Next 30-day move\" is SOL's % change from a day's close to the close 30 days later; each factor is judged on "
+    "whether its bullish days were followed by bigger moves than its bearish days.",
+    "Days only 1 day apart share almost the same next 30 days, so they are not independent: \"non-overlapping "
+    "periods\" counts how many separate 30-day stretches each state really covers (take a day, skip 30 days, take "
+    "the next), and a factor needs at least 4 in each state to count.",
+]
+
+
+def direction_section(test: dict | None) -> dict | None:
+    if not test:
+        return None
+    pr = test["pass_rule"]
+    rows = []
+    for f in test["factors"]:                         # the order written in strategies/direction.toml
+        r = {"name": f["name"], "title": f["title"], "result": f["result"], "note": f.get("note"),
+             "one_sided": f.get("one_sided", False), "windows": []}
+        if f["result"] != "RECORDING ONLY":
+            for k, title in WINDOWS:
+                g, j = f["windows"][k], f["judge"]["windows"][k]
+                groups = (("fear", "Fear days"), ("other", "Other days")) if f.get("one_sided") else                     (("bullish", "Bullish"), ("neutral", "Neutral"), ("bearish", "Bearish"))
+                r["windows"].append({"key": k, "title": title, "spread_points": j["spread_points"],
+                                     "enough_periods": j["enough_periods"], "pass": j["pass"],
+                                     "unknown_days": g["unknown_days"],
+                                     "groups": [{"state": lbl, **g[s]} for s, lbl in groups]})
+        rows.append(r)
+    passed = test["passed"]
+    return {"rules": test["rules"], "windows": test["windows"], "explain": DIRECTION_EXPLAIN,
+            "pass_rule": (f"PASS needs, in both periods: average next-30-day move when bullish minus when bearish of at "
+                          f"least +{pr['min_spread_points']:g} points, and at least {pr['min_periods']} non-overlapping "
+                          "30-day periods in each state (one-sided crash/fear: fear days vs all other days, at least "
+                          f"{pr['min_periods']} fear periods). Set in advance in strategies/direction.toml."),
+            "summary": (f"{len(passed)} of {sum(1 for f in test['factors'] if f['result'] != 'RECORDING ONLY')} tested "
+                        "factors passed" + (f": {', '.join(passed)}." if passed else
+                                            ", so the data signal stays neutral and only your view tilts it.")),
+            "baseline": [{"key": k, "title": t, **test["baseline"][k]} for k, t in WINDOWS],
+            "factors": rows}
+
+
 # ------------------------------------------------------------------ the whole page
 def load_backtests(entries: list[dict]) -> dict:
     """Backtest output per strategy file. Today data/backtest.json covers the default strategy; another strategy
@@ -250,7 +290,7 @@ def load_backtests(entries: list[dict]) -> dict:
 
 
 def build(cfg: dict, entries: list[dict], bts: dict, history: list[dict], latest: dict | None,
-          now: str | None = None) -> dict:
+          now: str | None = None, direction_test: dict | None = None) -> dict:
     rep = cfg["report"]
     days = [{"date": r["date"], "S": r["index_price"]} for r in history if r.get("index_price")]
     prices = [[d["date"], d["S"]] for d in days]
@@ -262,7 +302,8 @@ def build(cfg: dict, entries: list[dict], bts: dict, history: list[dict], latest
            "how_to_read": how_to_read(bt0, st0), "footer": FOOTER, "banners": banners,
            "period": bt0["period"] if bt0 else None,
            "data_fingerprint": bt0.get("data_fingerprint") if bt0 else None,
-           "menu": [], "strategies": [], "prices": prices, "settings": dict(rep)}
+           "menu": [], "strategies": [], "prices": prices, "settings": dict(rep),
+           "direction": direction_section(direction_test)}
     for e in entries:
         bt = bts.get(e.get("file")) if e.get("file") else None
         row = {"id": e["id"], "name": e["name"], "market_text": report.MARKET_TEXT[e["market"]],
@@ -292,7 +333,8 @@ def publish(site_data: Path = SITE_DATA, now: str | None = None) -> dict:
     if latest_path.exists():
         latest = (json.loads(latest_path.read_text(encoding="utf-8")).get("latest")) or None
     hist = vol_gauge.load_history()
-    lab = build(cfg, entries, load_backtests(entries), hist, latest, now)
+    import direction
+    lab = build(cfg, entries, load_backtests(entries), hist, latest, now, direction.load_test())
     text = json.dumps(lab, default=str, allow_nan=False)
     site_data.mkdir(parents=True, exist_ok=True)
     (site_data / "lab.json").write_text(text, encoding="utf-8")

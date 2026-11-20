@@ -92,6 +92,24 @@ table.trades tr.open td { background:var(--surface-0); }
       <div class="mm">for ${esc(r.market_text)}</div>
       <div class="mt">${r.evidence_title ? `Live rule: <b>${esc(r.evidence_title)}</b>. <a href="#${r.anchor}">See the full results ↓</a>` : esc(r.note)}</div></div>`).join("")}</section>`;
 
+  // ---- direction signal (above the strategies)
+  if (D.direction) {
+    const X = D.direction;
+    const pct = v => v == null ? "-" : (v > 0 ? "+" : "") + v.toFixed(1) + "%";
+    html += `<section class="card" id="lab-direction"><h2>Direction signal</h2>
+      <p style="margin:0 0 6px;font-weight:650">${esc(X.summary)}</p>
+      ${X.explain.map(t => `<p class="muted" style="margin:4px 0">${esc(t)}</p>`).join("")}
+      <p class="muted" style="margin:4px 0 8px">${esc(X.pass_rule)} Rules: version ${esc(X.rules.version)} · fingerprint ${esc(X.rules.fingerprint)}.</p>
+      ${X.factors.map(f => `<div class="subcard"><h3>${esc(f.title)} <span class="chip ${f.result === "PASS" ? "live" : ""}">${esc(f.result)}</span></h3>
+        ${f.result === "RECORDING ONLY" ? `<div class="muted">${esc(f.note)}</div>` : `<div class="twocol">${f.windows.map(w => `<div><h4 style="margin:4px 0">${esc(w.title)}: ${w.spread_points == null ? "no comparison" : `${w.spread_points > 0 ? "+" : ""}${w.spread_points.toFixed(1)} points`} ${w.pass ? "✓" : "✗"}${w.enough_periods ? "" : " (too few periods)"}</h4>
+          <div class="tablewrap" style="margin-top:0"><table><tr><th>State</th><th>Non-overlapping periods</th><th>Days</th><th>Avg next 30 days</th><th>% of days SOL rose</th></tr>
+          ${w.groups.map(g => `<tr><td>${esc(g.state)}</td><td><b>${g.periods}</b></td><td>${g.days}</td><td class="${g.avg_move_pct == null ? "" : g.avg_move_pct >= 0 ? "pos" : "neg"}">${pct(g.avg_move_pct)}</td><td>${g.pct_up == null ? "-" : g.pct_up.toFixed(0) + "%"}</td></tr>`).join("")}</table></div>
+          ${w.unknown_days ? `<div class="muted">${w.unknown_days} day(s) without enough history are left out.</div>` : ""}</div>`).join("")}</div>`}</div>`).join("")}
+      <div class="subcard"><h3>Baseline: always neutral (every day)</h3><div class="tablewrap" style="margin-top:0"><table><tr><th>Period</th><th>Non-overlapping periods</th><th>Days</th><th>Avg next 30 days</th><th>% of days SOL rose</th></tr>
+        ${X.baseline.map(b => `<tr><td>${esc(b.title)}</td><td><b>${b.periods}</b></td><td>${b.days}</td><td class="${b.avg_move_pct >= 0 ? "pos" : "neg"}">${pct(b.avg_move_pct)}</td><td>${b.pct_up.toFixed(0)}%</td></tr>`).join("")}</table></div></div>
+    </section>`;
+  }
+
   // ---- 4. one section per built strategy
   const COLS = [["trades","Trades"],["win_rate","Win rate"],["total_per_1000","Total"],["avg_per_1000","Avg"],
                 ["worst_per_1000","Worst"],["max_losing_streak","Losing streak"],["max_drawdown_per_1000","Max drawdown"]];

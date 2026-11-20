@@ -2,6 +2,22 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-20 · Direction signal built and tested (step 5.1)
+Factors trend, momentum, drawdown and crash/fear were tested against SOL's next-30-day move with a pass rule
+set in advance (bullish minus bearish at least +5 points in both periods, at least 4 non-overlapping 30-day
+periods per state). Result: none passed. Trend: -21.1 points in practice (SOL above both averages was followed by
+-17% on average; only 3 bearish periods), +0.6 unseen. Momentum: -11.0 | -0.6 (backwards in practice).
+Drawdown (deep dip = bullish, owner's choice): +16.5 in practice but -1.9 unseen. Crash/fear (fear days vs all
+other days, owner's choice): +10.9 | +18.7 points, but only 6 fear days in each period, i.e. 4 and 2
+non-overlapping fear periods, so it fails the 4-period rule in the unseen period; the most promising factor, to
+watch as fear days accumulate (rules unchanged: no tuning after results). Baseline (always neutral): average
+next-30-day move +2.6% practice, -2.1% unseen. Skew and term structure are recorded daily
+from stored chains but cannot be tested yet. The owner's view (view.toml) is now recorded every day in
+data/view_history.csv, and tilts the reading by 0.15 per strength point (reading bullish at +0.25 or more, bearish
+at -0.25 or less, so a strength-1 view alone stays neutral). No live trade uses direction yet.
+Caveat: the unseen period's SOL path was already known, so this is a weak test; forward recording is the
+real one. The rules file was committed on its own before any result was run.
+
 ### 2026-11-20 · Put spread stop moves to 2x the credit (strategy version 2)
 The owner switched the stop from a loss of 1.5x the credit to 2x (buy-back at 3x the credit instead of
 2.5x). Why: 2x was the only declared version that made money in both periods (practice +$316 over 11 trades,

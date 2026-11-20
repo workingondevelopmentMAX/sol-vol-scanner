@@ -41,7 +41,10 @@ Agreed menu (2026-11-19): rich IV = bull put spread (exists), bear call spread, 
 hedge for core SOL near highs; cheap IV = call or put debit spreads (and a no-direction big-move option); always =
 accumulation helper. Direction = tested data signal (trend, momentum/drawdown, options-market signals, crash/fear)
 tilted by `view.toml`. Build order:
-1. Direction signal module + `view.toml`, and record the view in force on every daily run.
+1. ~~Direction signal module + `view.toml`, and record the view in force on every daily run.~~ **Done 2026-11-20:**
+   `strategies/direction.toml` + `direction.py`; trend, momentum, drawdown and crash/fear tested with a pass rule set in
+   advance: **none passed** (crash/fear came closest: big gains after fear days, but only 2 unseen-period episodes);
+   skew and term structure recording only. View and reading recorded daily. Display only.
 2. Call and put debit spreads on cheap-IV days.
 3. Bear call spread and iron condor on rich-IV days.
 4. Zero-cost protective hedge.
