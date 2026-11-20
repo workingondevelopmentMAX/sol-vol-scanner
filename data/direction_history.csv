@@ -1,0 +1,2 @@
+date,rules_version,rules_fingerprint,trend,momentum,drawdown,crash_fear,skew,skew_points,term_structure,term_points,factors_passed,data_score,view_direction,view_strength,view_in_force,final_score,final_reading
+2026-11-20,1,b52f64e51948,bearish,bearish,bullish,neutral,neutral,3.96,bearish,13.05,,0.0,neutral,1,true,0.0,neutral
