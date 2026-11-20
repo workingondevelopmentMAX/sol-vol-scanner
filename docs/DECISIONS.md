@@ -10,7 +10,7 @@ reading is neutral unless the owner's view is strong enough. Budget: one trade p
 (1% of a $100,000 reference portfolio). Chosen version: "Strategy file as written" (60-day spreads) because three
 of the four candidates had fewer than 5 practice-period trades (60 days 4, 90 days 3, outright 4), so the 5-trade
 fallback applied. Unseen result: 8 trades, +$1,308 per $1,000, 88% won, worst -$819; buying SOL weekly with the same
-money (8 x $1,000) lost -$2,611 -> passed, so it can show as a live idea on CHEAP days. Caveats: about 4 and 8 trades,
+money (8 x $1,000) lost -$2,654 -> passed, so it can show as a live idea on CHEAP days. Caveats: about 4 and 8 trades,
 model prices only; paper trades are now recorded daily from real quotes. Most of the unseen gain came from two
 months where SOL swung both ways and both sides doubled (+$1,000 each); the pass needs exactly 8 trades and the
 "beats weekly buying" bar was low because SOL fell. Because no view was recorded in the past and no direction factor

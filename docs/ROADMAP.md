@@ -47,7 +47,7 @@ tilted by `view.toml`. Build order:
    skew and term structure recording only. View and reading recorded daily. Display only.
 2. ~~Call and put debit spreads on cheap-IV days.~~ **Done 2026-11-20:** `strategies/debit_spreads.toml` on the shared
    engine (pre-registered). Chosen version: "Strategy file as written" (60 days, spreads; kept because three
-   candidates had fewer than 5 practice trades). Unseen period: 8 trades, +$1,308 per $1,000 vs weekly buying -$2,611
+   candidates had fewer than 5 practice trades). Unseen period: 8 trades, +$1,308 per $1,000 vs weekly buying -$2,654
    with the same money -> **passed** (barely: exactly 8 trades; model prices assume an expiry every week, but Deribit
    lists few SOL expiries 45-75 days out). Paper trades recorded daily from real quotes.
 3. Bear call spread and iron condor on rich-IV days.
