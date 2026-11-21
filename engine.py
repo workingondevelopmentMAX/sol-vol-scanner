@@ -148,6 +148,39 @@ def model_put(bt: dict, F: float, K: float, T: float, atm: float) -> dict:
     return model_option(bt, F, K, T, atm, "put")
 
 
+def _last_friday(year: int, month: int) -> date:
+    d = date(year + (month == 12), month % 12 + 1, 1) - timedelta(days=1)
+    return d - timedelta(days=(d.weekday() - 4) % 7)
+
+
+def listed_expiries(day: date, cal: dict) -> list[date]:
+    """Expiry dates as Deribit lists SOL options (strategy file [backtest.calendar]): Fridays up to
+    `weekly_ahead_days` away, the last Friday of the current and next `month_ends_ahead - 1` months, and the last
+    Friday of the next `quarter_ends_ahead` quarter months (Mar, Jun, Sep, Dec). Only dates after `day`."""
+    out = set()
+    d = day
+    for _ in range(int(cal["weekly_ahead_days"])):
+        d += timedelta(days=1)
+        if d.weekday() == 4:
+            out.add(d)
+    y, m, n = day.year, day.month, 0
+    while n < int(cal["month_ends_ahead"]):
+        lf = _last_friday(y, m)
+        if lf > day:
+            out.add(lf)
+            n += 1
+        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    y, m, n = day.year, day.month, 0
+    while n < int(cal["quarter_ends_ahead"]):
+        if m in (3, 6, 9, 12):
+            lf = _last_friday(y, m)
+            if lf > day:
+                out.add(lf)
+                n += 1
+        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    return sorted(out)
+
+
 def synthetic_chain(st: dict, day: str, spot: float, atm: float) -> list[dict]:
     """Puts (and calls, if the strategy's [backtest] option_types asks for them) for every weekly expiry up to
     max_expiry_days, in the same shape as vol_gauge.build_chain()."""
@@ -155,11 +188,15 @@ def synthetic_chain(st: dict, day: str, spot: float, atm: float) -> list[dict]:
     now = datetime.combine(date.fromisoformat(day), time(0, 0), timezone.utc)
     step = strike_step(spot)
     chain = []
-    d = now.date()
-    for _ in range(int(bt["max_expiry_days"])):
-        d += timedelta(days=1)
-        if d.weekday() != int(bt["expiry_weekday"]):
-            continue
+    if bt.get("calendar"):                                  # the expiries Deribit really lists
+        dates = listed_expiries(now.date(), bt["calendar"])
+    else:                                                   # every week (files written before the calendar existed)
+        dates, d = [], now.date()
+        for _ in range(int(bt["max_expiry_days"])):
+            d += timedelta(days=1)
+            if d.weekday() == int(bt["expiry_weekday"]):
+                dates.append(d)
+    for d in dates:
         exp = datetime.combine(d, time(8, 0), timezone.utc)
         dte = (exp - now).total_seconds() / 86400
         T = dte / 365

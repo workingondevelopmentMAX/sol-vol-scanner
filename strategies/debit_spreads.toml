@@ -5,11 +5,14 @@
 # PRE-REGISTERED: every rule, every [[variants]] entry, the version-selection rule and the pass rule below were
 # committed on their own (2026-11-20) BEFORE any result was computed. Do not tune after seeing results:
 # a change is a new version, judged on new days only.
+# Version 2 (2026-11-21) changes ONLY the backtest's expiry calendar (realism, not performance) and holds the strategy
+# in testing; trading rules, versions, selection and pass rules are unchanged. Its re-run uses the same windows as v1,
+# whose results were already seen, so it is a weaker test; new days from 2026-11-21 are the fair one.
 
 [strategy]
 name = "debit_spreads"
 title = "Debit spreads on cheap-IV days: buy a big move"
-version = 1
+version = 2                         # v2 (2026-11-21): model chain uses Deribit's real SOL expiry calendar; held in testing
 type = "debit_spread"               # engine path: buy the near leg, sell the far leg (or buy the near leg alone)
 budget_pool = "big_move"            # separate from the put spread's "premium" pool
 
@@ -52,8 +55,8 @@ reference_per_month_usd = 1000      # reference: 1% of a $100,000 reference port
 
 [backtest]
 # Past days without a stored chain are rebuilt from that day's 30-day ATM IV (engine.synthetic_chain), calls and puts.
-expiry_weekday = 4                  # Deribit weekly expiries: Fridays 08:00 UTC
-max_expiry_days = 120               # far enough for the "90 days" version (68-113 days)
+expiry_weekday = 4                  # (used only without [backtest.calendar])
+max_expiry_days = 120               # (used only without [backtest.calendar])
 option_types = ["put", "call"]
 put_skew = [[0.0, 1.0], [0.10, 1.0386], [0.20, 1.1045], [0.30, 1.1894]]                  # IV/ATM at ln(F/K), puts
 call_skew = [[0.0, 1.0], [0.10, 1.0184], [0.20, 1.0782], [0.30, 1.1732], [0.40, 1.2824]]  # IV/ATM at ln(K/F), calls
@@ -64,6 +67,15 @@ fee_rate = 0.0003                   # per leg per trade: 0.03% of the underlying
 fee_cap = 0.125                     # ...capped at 12.5% of the option price
 contract_size = 10
 direction = "data_only"             # see [direction]
+
+[backtest.calendar]
+# v2: past days are rebuilt with only the expiries Deribit actually lists for SOL (08:00 UTC), as seen in the stored
+# chains of 2026-11-19/20/21: Fridays up to about 15 days away, the last Friday of this month and next month, and the
+# last Friday of the next two quarter months (Mar, Jun, Sep, Dec). Daily expiries are left out (too short to matter).
+# v1 assumed an expiry every Friday out to 120 days, so it always found a 60-day expiry; the real list often has none.
+weekly_ahead_days = 15
+month_ends_ahead = 2
+quarter_ends_ahead = 2
 
 [evaluation]
 in_sample = ["2024-06-01", "2025-06-30"]   # same windows as strategies/bull_put_spread.toml
@@ -84,6 +96,8 @@ min_trades = 8                      # the chosen version needs at least 8 unseen
 total_above = 0                     # a positive total per $1,000,
 beat_weekly_buying = true           # and must beat buying SOL weekly with the SAME total money: total per $1,000 >
                                     # trades x (weekly buying's result per $1,000 over the unseen period)
+go_live = false                     # owner decision 2026-11-21: stays "in testing" (paper trades only) even if it
+                                    # passes, until the owner sets this to true
 
 # ------------------------------------------------------------------ versions compared (in this order)
 [[variants]]
