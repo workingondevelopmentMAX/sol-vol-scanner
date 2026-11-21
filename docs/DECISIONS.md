@@ -2,6 +2,20 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-21 · Debit spreads v2: Deribit's real expiry calendar; held in testing
+The owner chose to keep the debit spreads in testing and to make the backtest's model chain use the expiries Deribit
+really lists for SOL. Seen in the stored chains of 2026-11-19/20/21: Fridays up to about 15 days away, the last Friday
+of this month and next month, and the next two quarter-ends (late Mar, Jun, Sep, Dec). Daily expiries are left out.
+v2 of `strategies/debit_spreads.toml` changes only that calendar (committed before the re-run) and adds
+`go_live = false` (owner decision: paper trades only, even if it passes). Result on the same windows as v1, whose
+results were already seen (so a weaker test): "Strategy file as written" kept by the 5-trade fallback (60 days 4,
+90 days 3, outright 4 practice trades); unseen 7 trades, +$1,199 per $1,000, weekly buying with the same money
+-$2,538 -> **not passed** (needs 8 trades). Practice 4 trades, +$416. v1 for comparison: unseen 8 trades, +$1,308.
+Frozen-slice golden: 7 trades / +$1,532.5 -> 6 / +$1,419.1.
+**Put spread affected too, not changed yet:** its model still assumes an expiry every Friday out to 70 days. Re-priced
+on the real calendar (measured, not committed), the live 2x rule goes from 11 trades +$316 | 11 trades +$111
+(practice | unseen) to 14 trades -$1,003 | 14 trades -$349. To be handled in its own pull request with the owner.
+
 ### 2026-11-20 · Debit spreads on cheap-IV days built and tested (step 5.2)
 Rules, variants, the version-selection rule (practice period only) and the pass rule (unseen period: at least
 8 trades, positive total, beats weekly buying) were committed before any result was run. Direction: bullish

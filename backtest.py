@@ -230,13 +230,16 @@ def pass_check(st: dict, variants: list[dict], chosen: str | None) -> dict | Non
     checks = {"min_trades": n >= int(pr["min_trades"]), "positive": total > float(pr["total_above"]),
               "beats_weekly": (not pr.get("beat_weekly_buying")) or (same_money is not None and total > same_money)}
     ok = all(checks.values())
+    go_live = bool(pr.get("go_live", True))
     text = (f"Unseen period, \"{chosen}\": {n} trades (needs at least {pr['min_trades']}), total "
             f"{total:+,.0f} per $1,000 (needs above {pr['total_above']:g}), weekly buying with the same money "
             + ("n/a" if same_money is None else f"{same_money:+,.0f}") + " (must beat it). "
-            + ("PASSED: it can be shown as a live idea." if ok else
-               "Not passed: stays \"in testing\" and records paper trades every day."))
+            + (("PASSED: it can be shown as a live idea." if go_live else
+                "PASSED, but held \"in testing\" by the owner's decision (go_live = false): paper trades only.")
+               if ok else "Not passed: stays \"in testing\" and records paper trades every day."))
     return {"chosen": chosen, "trades": n, "total_per_1000": total, "weekly_same_money": same_money,
-            "checks": checks, "passed": ok, "status": "live" if ok else "in_testing", "text": text,
+            "checks": checks, "passed": ok, "go_live": go_live,
+            "status": "live" if ok and go_live else "in_testing", "text": text,
             "rule": (f"At least {pr['min_trades']} unseen-period trades, a total above {pr['total_above']:g} per $1,000, "
                      "and better than buying SOL weekly with the same total money.")}
 

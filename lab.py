@@ -381,8 +381,10 @@ def build(cfg: dict, entries: list[dict], bts: dict, history: list[dict], latest
             live = next(v for v in sec["variants"] if v["live"]) if any(v["live"] for v in sec["variants"]) \
                 else sec["variants"][0]
             row.update(anchor=sec["anchor"], evidence_title=live["evidence_title"])
-            if (sec.get("pass") or {}).get("passed"):
+            if (sec.get("pass") or {}).get("status") == "live":
                 row["status_text"] = "Passed its test"
+            elif (sec.get("pass") or {}).get("passed"):
+                row["status_text"] = "Passed, held in testing"
         else:
             row["note"] = ("No backtest yet. " if e.get("judged_on", "standard") != "none" else "") + \
                 JUDGED_ON_TEXT[e.get("judged_on", "standard")]

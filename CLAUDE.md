@@ -91,6 +91,9 @@ python backtest.py strategies/debit_spreads.toml   # another strategy file -> da
 Python 3.11+ standard library only. No pip installs.
 
 ## Data notes
+- Deribit lists SOL expiries only about 15 days out weekly, plus this and next month-end and the next two quarter-ends.
+  Strategy files with `[backtest.calendar]` (debit spreads v2) model only those; files without it (the put spread,
+  for now) still assume an expiry every Friday, which flatters their backtest (see DECISIONS 2026-11-21).
 - Deribit publishes no SOL volatility index (the `get_volatility_index_data` currencies are BTC, ETH, USDC, USDT, EURR).
 - The backtest uses a stored real chain (`data/chains/`) on days that have one, the model chain otherwise. It
   reads only committed files (never `config.local.toml`) and has no timestamps: same files, byte-identical output.

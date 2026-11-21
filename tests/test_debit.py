@@ -252,3 +252,53 @@ class Reproducible(unittest.TestCase):                                          
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ExpiryCalendar(unittest.TestCase):
+    """v2: the model chain lists only the expiries Deribit really lists for SOL."""
+    CAL = ST["backtest"]["calendar"]
+
+    def test_matches_every_stored_chain(self):
+        import chain_store
+        import vol_gauge
+        from datetime import date
+        for p in sorted((ROOT / "data" / "chains").glob("*.json.gz")):
+            day = p.name[:10]
+            real = {o["expiry"] for o in vol_gauge.build_chain(chain_store.load(day))
+                    if date.fromisoformat(o["expiry"]).weekday() == 4 and o["expiry"] > day}
+            model = {d.isoformat() for d in engine.listed_expiries(date.fromisoformat(day), self.CAL)}
+            self.assertEqual(model, real, day)
+
+    def test_month_and_quarter_ends(self):
+        from datetime import date
+        got = [d.isoformat() for d in engine.listed_expiries(date(2025, 5, 1), self.CAL)]
+        self.assertEqual(got, ["2025-05-02", "2025-05-09", "2025-05-16", "2025-05-30", "2025-06-27", "2025-09-26"])
+
+    def test_model_chain_uses_only_listed_expiries(self):
+        from datetime import date
+        listed = {d.isoformat() for d in engine.listed_expiries(date(2025, 5, 1), self.CAL)}
+        self.assertEqual({o["expiry"] for o in CHAIN}, listed)
+
+    def test_put_spread_keeps_every_friday(self):
+        put = engine.load_strategy()
+        self.assertNotIn("calendar", put["backtest"])
+        exps = sorted({o["expiry"] for o in engine.synthetic_chain(put, "2025-05-01", 150.0, 0.6)})
+        self.assertEqual(len(exps), 10)                                   # every Friday out to 70 days, as before
+
+
+class HeldInTesting(unittest.TestCase):
+    def test_go_live_false_holds_a_pass(self):
+        st = copy.deepcopy(ST)
+        v = {"name": "x", "scorecard": {"held_back": {"trades": 9, "total_per_1000": 500.0,
+                                                      "dca_sol": {"per_1000": -300.0}}}}
+        p = backtest.pass_check(st, [v], "x")
+        self.assertTrue(p["passed"])
+        self.assertEqual(p["status"], "in_testing")                       # go_live = false (owner, 2026-11-21)
+        self.assertIn("held \"in testing\"", p["text"])
+        st["pass_rule"]["go_live"] = True
+        self.assertEqual(backtest.pass_check(st, [v], "x")["status"], "live")
+
+    def test_daily_status_is_in_testing(self):
+        cfg = main.load_config()
+        d, _ = main.debit_today(cfg, {"label": "CHEAP"}, CHAIN, 150.0, "2025-05-01", "neutral")
+        self.assertEqual(d["status"], "in_testing")

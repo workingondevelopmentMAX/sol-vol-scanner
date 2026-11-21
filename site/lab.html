@@ -138,7 +138,7 @@ table.trades tr.open td { background:var(--surface-0); }
       <div class="muted" style="margin-top:4px">Rules: ${esc(S.stamp.title)} · version ${esc(S.stamp.version)} · fingerprint ${esc(S.stamp.fingerprint)}. ${esc(S.quotes_line)}</div>
       ${S.selection ? `<div class="subcard"><h3>Which version is used, and has it passed?</h3>
         <p style="margin:0 0 4px"><b>Chosen version:</b> ${esc(S.selection.reason)}</p><p class="muted" style="margin:0 0 8px">${esc(S.selection.rule)}</p>
-        ${S.pass ? `<p style="margin:0 0 4px"><b>${S.pass.passed ? "Passed" : "In testing"}:</b> ${esc(S.pass.text)}</p><p class="muted" style="margin:0">${esc(S.pass.rule)}</p>` : ""}</div>` : ""}
+        ${S.pass ? `<p style="margin:0 0 4px"><b>${S.pass.status === "live" ? "Passed" : "In testing"}:</b> ${esc(S.pass.text)}</p><p class="muted" style="margin:0">${esc(S.pass.rule)}</p>` : ""}</div>` : ""}
       <div class="subcard"><h3>Scorecard: every version, both periods</h3>${t}</div>
       <div class="subcard"><h3>Pick a version to look into</h3>
         <div class="picker"><select id="pick-${si}" aria-label="Version">${S.variants.map(v => `<option value="${esc(v.name)}"${v.name === S.default_variant ? " selected" : ""}>${esc(v.name)}${v.live ? ` (${esc(S.live_label.toLowerCase())})` : ""}</option>`).join("")}</select></div>

@@ -322,8 +322,8 @@ def debit_today(cfg: dict, vd: dict, chain: list[dict], spot: float, today: str,
     dst = engine.load_strategy(DEBIT_STRATEGY)
     bt = report.load_backtest(DEBIT_BACKTEST)
     ps = (bt or {}).get("pass") or {}
-    status = "live" if ps.get("passed") and (bt or {}).get("strategy", {}).get("fingerprint") == \
-        dst["_stamp"]["fingerprint"] else "in_testing"
+    status = "live" if ps.get("status") == "live" and dst["pass_rule"].get("go_live", True) and \
+        (bt or {}).get("strategy", {}).get("fingerprint") == dst["_stamp"]["fingerprint"] else "in_testing"
     out = {"stamp": dst["_stamp"], "status": status, "pass_text": ps.get("text"),
            "chosen": ((bt or {}).get("selection") or {}).get("chosen"), "reading": reading,
            "trade": False, "reason": None, "view": None}

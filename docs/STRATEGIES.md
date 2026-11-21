@@ -63,8 +63,9 @@ data signal only. From now on, every daily run records the view in force, so its
   sold leg about 25% further out, cost at most 35% of the strike gap; take profit at 2x the cost, close 10 days before
   expiry, no stop (the most a trade can lose is its cost). Direction: bullish = call spread, bearish = put spread,
   neutral = both at half size (one trade).
-- **Caveat on expiries:** the model chain assumes an expiry every Friday; Deribit lists SOL weeklies only about two
-  weeks out plus the month-end and quarter-end expiries, so live trades often find no expiry 45-75 days away.
+- **Expiries (v2, 2026-11-21):** the model chain now lists only the expiries Deribit really lists for SOL (Fridays up
+  to about 15 days, this and next month-end, the next two quarter-ends). With that, 60-day spreads find an expiry in
+  fewer months: unseen 7 trades, +$1,199 per $1,000 -> not passed (needs 8). **Status: in testing** (owner, 2026-11-21).
 
 ## How each strategy is judged
 Same scorecard for all (ROADMAP step 3): trades, win rate, average and total per $1,000 risked, worst trade,
