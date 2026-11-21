@@ -10,6 +10,9 @@ portfolio_value_usd = 0
 max_loss_per_trade_usd = 1000       # reference: $1,000 max loss per trade
 max_total_spread_risk_usd = 3000    # reference: up to 3 trades open at once
 current_open_risk_usd = 0
+# "Big move" pool (debit spreads on cheap-IV days, strategies/debit_spreads.toml): its own monthly budget.
+big_move_budget_per_month_usd = 1000  # reference: 1% of a $100,000 reference portfolio (real figure: config.local.toml)
+budget_used_this_month_usd = 0        # set on the laptop (config.local.toml) to see what is left this month
 
 [vol]
 iv_percentile_min = 50     # RICH when today's IV is at or above this percentile of history

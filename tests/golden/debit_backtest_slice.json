@@ -1,0 +1,405 @@
+{
+ "period": [
+  "2024-04-21",
+  "2025-12-31"
+ ],
+ "scorecard": {
+  "held_back": {
+   "avg_days": 40.5,
+   "avg_per_1000": 501.8,
+   "best_per_1000": 1000.0,
+   "by_condition": {
+    "CHEAP, SOL down": {
+     "avg_per_1000": 501.8,
+     "total_per_1000": 1003.5,
+     "trades": 2,
+     "wins": 2
+    }
+   },
+   "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
+   "dca_sol": {
+    "buys": 27,
+    "every_days": 7,
+    "per_1000": -265.5
+   },
+   "exits": {
+    "take profit": 1,
+    "time exit / take profit": 1
+   },
+   "hold_sol": {
+    "from": "2025-07-01",
+    "per_1000": -167.2,
+    "sol_from": 149.13,
+    "sol_to": 124.2,
+    "to": "2025-12-31"
+   },
+   "max_drawdown_per_1000": 0.0,
+   "max_losing_streak": 0,
+   "stored_chain_entries": 0,
+   "total_per_1000": 1003.5,
+   "trades": 2,
+   "win_rate": 1.0,
+   "worst_per_1000": 3.5
+  },
+  "in_sample": {
+   "avg_days": 50.5,
+   "avg_per_1000": 103.9,
+   "best_per_1000": 329.9,
+   "by_condition": {
+    "CHEAP, SOL down": {
+     "avg_per_1000": 198.8,
+     "total_per_1000": 397.6,
+     "trades": 2,
+     "wins": 2
+    },
+    "CHEAP, SOL up": {
+     "avg_per_1000": 9.0,
+     "total_per_1000": 18.0,
+     "trades": 2,
+     "wins": 2
+    }
+   },
+   "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
+   "dca_sol": {
+    "buys": 57,
+    "every_days": 7,
+    "per_1000": -66.5
+   },
+   "exits": {
+    "take profit / time exit": 3,
+    "time exit / take profit": 1
+   },
+   "hold_sol": {
+    "from": "2024-06-01",
+    "per_1000": -89.8,
+    "sol_from": 165.04,
+    "sol_to": 150.22,
+    "to": "2025-06-30"
+   },
+   "max_drawdown_per_1000": 0.0,
+   "max_losing_streak": 0,
+   "stored_chain_entries": 0,
+   "total_per_1000": 415.6,
+   "trades": 4,
+   "win_rate": 1.0,
+   "worst_per_1000": 4.0
+  }
+ },
+ "strategy_version": 2,
+ "summary": {
+  "avg_days": 47.2,
+  "avg_per_1000": 236.5,
+  "best_per_1000": 1000.0,
+  "exits": {
+   "take profit": 1,
+   "take profit / time exit": 3,
+   "time exit / take profit": 2
+  },
+  "max_drawdown_per_1000": 0.0,
+  "stored_chain_entries": 0,
+  "total_per_1000": 1419.1,
+  "trades": 6,
+  "win_rate": 1.0,
+  "worst_per_1000": 3.5
+ },
+ "trades": [
+  {
+   "Kl": 190.0,
+   "Ks": 237.5,
+   "S": 173.81,
+   "S_exit": 158.74,
+   "chain": "model",
+   "credit": null,
+   "date": "2024-06-04",
+   "days": 43,
+   "direction": "neutral",
+   "entry_conditions": {
+    "below_30d_high_pct": 4.1,
+    "iv_percentile": null,
+    "sol_30d_change_pct": 17.0,
+    "verdict": "CHEAP"
+   },
+   "exit": "time exit / take profit",
+   "exit_date": "2024-07-17",
+   "expiry": "2024-07-26",
+   "max_loss": 1000.0,
+   "pnl_per_1000": 67.7,
+   "sides": [
+    {
+     "Kl": 190.0,
+     "Ks": 237.5,
+     "cost": 7.1981,
+     "exit": "time exit",
+     "exit_date": "2024-07-17",
+     "kind": "call",
+     "pnl_per_1000": -432.3,
+     "share": 0.5,
+     "value": 0.9743
+    },
+    {
+     "Kl": 167.5,
+     "Ks": 125.0,
+     "cost": 11.2912,
+     "exit": "take profit",
+     "exit_date": "2024-06-14",
+     "kind": "put",
+     "pnl_per_1000": 500.0,
+     "share": 0.5,
+     "value": 22.5824
+    }
+   ],
+   "strikes_text": "call 190/237.5 + put 167.5/125",
+   "verdict": "CHEAP"
+  },
+  {
+   "Kl": 177.5,
+   "Ks": 222.5,
+   "S": 156.8,
+   "S_exit": 241.79,
+   "chain": "model",
+   "credit": null,
+   "date": "2024-09-30",
+   "days": 51,
+   "direction": "neutral",
+   "entry_conditions": {
+    "below_30d_high_pct": 0.6,
+    "iv_percentile": 11.4,
+    "sol_30d_change_pct": 18.1,
+    "verdict": "CHEAP"
+   },
+   "exit": "take profit / time exit",
+   "exit_date": "2024-11-20",
+   "expiry": "2024-11-29",
+   "max_loss": 1000.0,
+   "pnl_per_1000": 4.0,
+   "sides": [
+    {
+     "Kl": 177.5,
+     "Ks": 222.5,
+     "cost": 6.07,
+     "exit": "take profit",
+     "exit_date": "2024-11-05",
+     "kind": "call",
+     "pnl_per_1000": 500.0,
+     "share": 0.5,
+     "value": 12.14
+    },
+    {
+     "Kl": 152.5,
+     "Ks": 115.0,
+     "cost": 11.6538,
+     "exit": "time exit",
+     "exit_date": "2024-11-20",
+     "kind": "put",
+     "pnl_per_1000": -496.0,
+     "share": 0.5,
+     "value": 0.0939
+    }
+   ],
+   "strikes_text": "call 177.5/222.5 + put 152.5/115",
+   "verdict": "CHEAP"
+  },
+  {
+   "Kl": 172.5,
+   "Ks": 215.0,
+   "S": 151.51,
+   "S_exit": 145.15,
+   "chain": "model",
+   "credit": null,
+   "date": "2025-04-25",
+   "days": 54,
+   "direction": "neutral",
+   "entry_conditions": {
+    "below_30d_high_pct": 2.2,
+    "iv_percentile": 17.6,
+    "sol_30d_change_pct": 9.1,
+    "verdict": "CHEAP"
+   },
+   "exit": "take profit / time exit",
+   "exit_date": "2025-06-18",
+   "expiry": "2025-06-27",
+   "max_loss": 1000.0,
+   "pnl_per_1000": 329.9,
+   "sides": [
+    {
+     "Kl": 172.5,
+     "Ks": 215.0,
+     "cost": 5.8457,
+     "exit": "take profit",
+     "exit_date": "2025-05-11",
+     "kind": "call",
+     "pnl_per_1000": 500.0,
+     "share": 0.5,
+     "value": 11.6914
+    },
+    {
+     "Kl": 147.5,
+     "Ks": 110.0,
+     "cost": 11.9481,
+     "exit": "time exit",
+     "exit_date": "2025-06-18",
+     "kind": "put",
+     "pnl_per_1000": -170.1,
+     "share": 0.5,
+     "value": 7.884
+    }
+   ],
+   "strikes_text": "call 172.5/215 + put 147.5/110",
+   "verdict": "CHEAP"
+  },
+  {
+   "Kl": 165.0,
+   "Ks": 206.0,
+   "S": 146.69,
+   "S_exit": 186.98,
+   "chain": "model",
+   "credit": null,
+   "date": "2025-06-27",
+   "days": 54,
+   "direction": "neutral",
+   "entry_conditions": {
+    "below_30d_high_pct": 12.2,
+    "iv_percentile": 2.2,
+    "sol_30d_change_pct": -14.8,
+    "verdict": "CHEAP"
+   },
+   "exit": "take profit / time exit",
+   "exit_date": "2025-08-20",
+   "expiry": "2025-08-29",
+   "max_loss": 1000.0,
+   "pnl_per_1000": 14.0,
+   "sides": [
+    {
+     "Kl": 165.0,
+     "Ks": 206.0,
+     "cost": 5.7216,
+     "exit": "take profit",
+     "exit_date": "2025-07-16",
+     "kind": "call",
+     "pnl_per_1000": 500.0,
+     "share": 0.5,
+     "value": 11.4432
+    },
+    {
+     "Kl": 142.0,
+     "Ks": 106.0,
+     "cost": 10.6943,
+     "exit": "time exit",
+     "exit_date": "2025-08-20",
+     "kind": "put",
+     "pnl_per_1000": -486.0,
+     "share": 0.5,
+     "value": 0.2997
+    }
+   ],
+   "strikes_text": "call 165/206 + put 142/106",
+   "verdict": "CHEAP"
+  },
+  {
+   "Kl": 227.5,
+   "Ks": 285.0,
+   "S": 202.22,
+   "S_exit": 156.91,
+   "chain": "model",
+   "credit": null,
+   "date": "2025-09-27",
+   "days": 37,
+   "direction": "neutral",
+   "entry_conditions": {
+    "below_30d_high_pct": 17.9,
+    "iv_percentile": 9.8,
+    "sol_30d_change_pct": -3.2,
+    "verdict": "CHEAP"
+   },
+   "exit": "take profit",
+   "exit_date": "2025-11-03",
+   "expiry": "2025-11-28",
+   "max_loss": 1000.0,
+   "pnl_per_1000": 1000.0,
+   "sides": [
+    {
+     "Kl": 227.5,
+     "Ks": 285.0,
+     "cost": 8.0406,
+     "exit": "take profit",
+     "exit_date": "2025-10-04",
+     "kind": "call",
+     "pnl_per_1000": 500.0,
+     "share": 0.5,
+     "value": 16.0813
+    },
+    {
+     "Kl": 195.0,
+     "Ks": 145.0,
+     "cost": 14.7642,
+     "exit": "take profit",
+     "exit_date": "2025-11-03",
+     "kind": "put",
+     "pnl_per_1000": 500.0,
+     "share": 0.5,
+     "value": 29.5285
+    }
+   ],
+   "strikes_text": "call 227.5/285 + put 195/145",
+   "verdict": "CHEAP"
+  },
+  {
+   "Kl": 175.0,
+   "Ks": 217.5,
+   "S": 156.91,
+   "S_exit": 122.73,
+   "chain": "model",
+   "credit": null,
+   "date": "2025-11-03",
+   "days": 44,
+   "direction": "neutral",
+   "entry_conditions": {
+    "below_30d_high_pct": 32.2,
+    "iv_percentile": 11.7,
+    "sol_30d_change_pct": -33.7,
+    "verdict": "CHEAP"
+   },
+   "exit": "time exit / take profit",
+   "exit_date": "2025-12-17",
+   "expiry": "2025-12-26",
+   "max_loss": 1000.0,
+   "pnl_per_1000": 3.5,
+   "sides": [
+    {
+     "Kl": 175.0,
+     "Ks": 217.5,
+     "cost": 6.1808,
+     "exit": "time exit",
+     "exit_date": "2025-12-17",
+     "kind": "call",
+     "pnl_per_1000": -496.5,
+     "share": 0.5,
+     "value": 0.0429
+    },
+    {
+     "Kl": 152.5,
+     "Ks": 115.0,
+     "cost": 11.2754,
+     "exit": "take profit",
+     "exit_date": "2025-12-15",
+     "kind": "put",
+     "pnl_per_1000": 500.0,
+     "share": 0.5,
+     "value": 22.5509
+    }
+   ],
+   "strikes_text": "call 175/217.5 + put 152.5/115",
+   "verdict": "CHEAP"
+  }
+ ],
+ "windows": {
+  "held_back": [
+   "2025-07-01",
+   "2025-12-31"
+  ],
+  "in_sample": [
+   "2024-06-01",
+   "2025-06-30"
+  ]
+ }
+}

@@ -4,19 +4,19 @@
   "title": "Bull put spread: sell rich put premium",
   "version": 2,
   "file": "bull_put_spread.toml",
-  "fingerprint": "56febf4a1a57"
+  "fingerprint": "233c7ae8c899"
  },
  "period": [
   "2024-04-21",
   "2026-11-21"
  ],
  "inputs": {
-  "config.toml": "4852aefc39cd428044bfcb0e6914fe1ac13bb4304ce4722b9a48a94a56c52154",
+  "config.toml": "b350b2301ec0ed16f200b4bf664ca4ed4b7e19816cc704771446c5fc8b2bbab2",
   "data/chains/2026-11-19.json.gz": "65b1e0bc09bbc3cc014e351cc3d7499cba8ec743f97f279182cb763d423b004a",
   "data/chains/2026-11-20.json.gz": "048df8aa5c332a952419fc22ecdd291d7a490a33a2afa01ff328989f0912adce",
   "data/chains/2026-11-21.json.gz": "4703ce7b3755acfa5231e84390f62be003a65c2cd63251f8da3faeaeee24e8cf",
   "data/iv_history.csv": "b762420a69a977cec9aaea37d411150ebeaa07f8c082b00e8d8eab5668829159",
-  "strategies/bull_put_spread.toml": "56febf4a1a578f1032ea6bace384f7708c3ea725f40567680e81ae952ab1cb05"
+  "strategies/bull_put_spread.toml": "233c7ae8c899b58da7fe480a4fff4e580ed5f3fcc2b00fa709fadae02eb26c5c"
  },
  "data_fingerprint": "19dbbb5cc3d0",
  "stored_chain_days": 3,

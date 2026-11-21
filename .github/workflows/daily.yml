@@ -50,7 +50,9 @@ jobs:
 
       - name: Backtest on the stored files, published to the dashboard (yesterday's evidence stays up if this fails)
         continue-on-error: true
-        run: python backtest.py --publish
+        run: |
+          python backtest.py --publish
+          python backtest.py strategies/debit_spreads.toml
 
       - name: Test the direction factors on the stored history (display only)
         continue-on-error: true
@@ -68,8 +70,8 @@ jobs:
         run: |
           git config user.name "sol-vol-scanner bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/iv_history.csv data/term_history.json logs/suggestions.csv site/data/ data/backtest.json data/direction_test.json
-          for f in data/view_history.csv data/direction_history.csv; do if [ -f "$f" ]; then git add "$f"; fi; done
+          git add data/iv_history.csv data/term_history.json logs/suggestions.csv site/data/ data/backtest.json data/backtest_debit_spreads.json data/direction_test.json
+          for f in data/view_history.csv data/direction_history.csv logs/paper_trades.csv; do if [ -f "$f" ]; then git add "$f"; fi; done
           if [ -d data/chains ]; then git add data/chains/; fi
           if git diff --cached --quiet; then
             echo "Nothing new to save."

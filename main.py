@@ -26,6 +26,7 @@ import suggest
 import vol_gauge
 import bsmodel
 import chain_store
+import paper
 import rationale
 import report
 import strategy_menu
@@ -54,9 +55,9 @@ SAMPLE_DIR = ROOT / "sample_output"
 
 def use_sample_paths() -> None:
     """Keep sample runs away from your real history and log."""
-    global SUGGESTIONS_CSV, TERM_HISTORY, CHAINS_DIR, VIEW_HISTORY, DIRECTION_HISTORY
+    global SUGGESTIONS_CSV, TERM_HISTORY, CHAINS_DIR, VIEW_HISTORY, DIRECTION_HISTORY, PAPER_LOG
     SAMPLE_DIR.mkdir(exist_ok=True)
-    CHAINS_DIR = VIEW_HISTORY = DIRECTION_HISTORY = None                    # sample data is synthetic: never stored as a real chain
+    CHAINS_DIR = VIEW_HISTORY = DIRECTION_HISTORY = PAPER_LOG = None                    # sample data is synthetic: never stored as a real chain
     SUGGESTIONS_CSV = SAMPLE_DIR / "suggestions.csv"
     TERM_HISTORY = SAMPLE_DIR / "term_history.json"
     vol_gauge.HISTORY_CSV = SAMPLE_DIR / "iv_history.csv"
@@ -75,8 +76,9 @@ def use_private_paths() -> None:
     everything to private/ and site/data/private/, both ignored by Git. The dashboard shows the private
     view when it exists, so you see your own limits and premium log; the cloud copy stays generic.
     """
-    global SUGGESTIONS_CSV, TERM_HISTORY, SITE_DATA, CHAINS_DIR, VIEW_HISTORY, DIRECTION_HISTORY
+    global SUGGESTIONS_CSV, TERM_HISTORY, SITE_DATA, CHAINS_DIR, VIEW_HISTORY, DIRECTION_HISTORY, PAPER_LOG
     PRIVATE_DIR.mkdir(exist_ok=True)
+    PAPER_LOG = PRIVATE_DIR / "paper_trades.csv"
     CHAINS_DIR = PRIVATE_DIR / "chains"
     VIEW_HISTORY, DIRECTION_HISTORY = PRIVATE_DIR / "view_history.csv", PRIVATE_DIR / "direction_history.csv"
     for name in ("iv_history.csv", "term_history.json"):
@@ -293,14 +295,55 @@ def analyse(cfg: dict, snap: dict) -> dict:
         s["why"] = rationale.why_trade(cfg, vd, s, ctx, spot, s["conviction"])
     if result["suggestion"] is None:
         result["why_no_trade"] = rationale.why_no_trade(vd, result["no_trade_reason"])
-    # every strategy on the agreed menu with today's status (display only; the decision above is unchanged)
-    ran = {st["_stamp"]["file"]: {"stamp": st["_stamp"], "suggestion": result["suggestion"],
-                                  "no_trade_reason": result["no_trade_reason"]}}
-    result["strategies"] = strategy_menu.statuses(strategy_menu.load(), vd["label"], ran)
-    # direction reading (display only: computed after the decision above and never read by it)
+    # direction reading (computed after the put spread's decision and never read by it)
     result["direction"] = direction.today(direction.load_rules(), hist, chain, ts,
                                           report.load_view(today=today), direction.load_test())
-    return {"result": result, "history": hist, "today": today, "now": now}
+    # debit spreads on cheap-IV days (the "big move" pool): decided by the same engine, with the direction reading
+    debit, positions = debit_today(cfg, vd, chain, spot, today, result["direction"]["final_reading"])
+    result["debit"] = debit
+    # every strategy on the agreed menu with today's status (display only; the decisions above are unchanged)
+    ran = {st["_stamp"]["file"]: {"stamp": st["_stamp"], "suggestion": result["suggestion"],
+                                  "no_trade_reason": result["no_trade_reason"]},
+           debit["stamp"]["file"]: {"stamp": debit["stamp"], "debit": debit,
+                                    "suggestion": debit["view"] if debit["status"] == "live" else None,
+                                    "no_trade_reason": debit["reason"]}}
+    result["strategies"] = strategy_menu.statuses(strategy_menu.load(), vd["label"], ran)
+    return {"result": result, "history": hist, "today": today, "now": now,
+            "debit_ctx": {"positions": positions, "chain": chain, "atm": atm30, "spot": spot}}
+
+
+DEBIT_STRATEGY = ROOT / "strategies" / "debit_spreads.toml"
+DEBIT_BACKTEST = ROOT / "data" / "backtest_debit_spreads.json"
+PAPER_LOG = paper.PAPER_LOG   # paper trades (None = don't record, e.g. sample runs)
+
+
+def debit_today(cfg: dict, vd: dict, chain: list[dict], spot: float, today: str, reading: str) -> tuple[dict, list]:
+    """Today's debit-spread decision, its status (live only while its pass rule holds) and the paper-trade state."""
+    dst = engine.load_strategy(DEBIT_STRATEGY)
+    bt = report.load_backtest(DEBIT_BACKTEST)
+    ps = (bt or {}).get("pass") or {}
+    status = "live" if ps.get("status") == "live" and dst["pass_rule"].get("go_live", True) and \
+        (bt or {}).get("strategy", {}).get("fingerprint") == dst["_stamp"]["fingerprint"] else "in_testing"
+    out = {"stamp": dst["_stamp"], "status": status, "pass_text": ps.get("text"),
+           "chosen": ((bt or {}).get("selection") or {}).get("chosen"), "reading": reading,
+           "trade": False, "reason": None, "view": None}
+    open_until, months = paper.state(paper.read(PAPER_LOG) if PAPER_LOG else [])
+    need = dst["entry"].get("require_verdict")
+    if need and vd.get("label") != need:
+        out["reason"] = f"IV is {vd.get('label')}; this strategy is for {need} days."
+        return out, []
+    ok, why = engine.debit_entry_allowed(dst, today, open_until, months)
+    if not ok:
+        out["reason"] = why
+        return out, []
+    dec = engine.decide(cfg, dst, vd, chain, reading)
+    if dec["trade"] is None:
+        out["reason"] = dec["reason"]
+        return out, []
+    sz = engine.size_debit(cfg, dst, dec["trade"])
+    plan = engine.exit_plan_debit(dst, dec["trade"])
+    out.update(trade=True, view=engine.debit_view(dst, dec["trade"], sz, plan, spot))
+    return out, engine.open_debit(dst, dec["trade"], spot)
 
 
 def save_outputs(cfg: dict, snap: dict, out: dict, sample: bool = False) -> dict:
@@ -310,6 +353,11 @@ def save_outputs(cfg: dict, snap: dict, out: dict, sample: bool = False) -> dict
         chain_store.save(snap, CHAINS_DIR, cfg["deribit"]["instrument_prefix"])
     if VIEW_HISTORY is not None and not sample and result.get("direction"):   # first run of the UTC day wins
         direction.record(today, result["direction"], VIEW_HISTORY, DIRECTION_HISTORY)
+    if PAPER_LOG is not None and not sample and result.get("debit"):   # paper trades, once per UTC day
+        ctx = out.get("debit_ctx") or {}
+        paper.record_day(today, {**result["debit"], "positions": ctx.get("positions", [])},
+                         engine.load_strategy(DEBIT_STRATEGY), ctx.get("spot"), ctx.get("atm"), ctx.get("chain"),
+                         PAPER_LOG)
 
     # term structure memory, for "last week" comparison on the dashboard
     th = json.loads(TERM_HISTORY.read_text(encoding="utf-8")) if TERM_HISTORY.exists() else {}
@@ -344,7 +392,8 @@ def save_outputs(cfg: dict, snap: dict, out: dict, sample: bool = False) -> dict
 
     annotated = vol_gauge.annotate_history(cfg, hist)
     # the page's explanations (display only); refreshed again by report.py after the daily backtest
-    result["report"] = report.build(cfg, result, report.load_backtest(), annotated, report.load_view(today=today))
+    result["report"] = report.build(cfg, result, report.load_backtest(), annotated, report.load_view(today=today),
+                                    report.load_other_backtests())
     premium = read_premium_log()
     dash = {
         "status": "ok",

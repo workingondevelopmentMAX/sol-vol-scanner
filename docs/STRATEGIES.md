@@ -52,9 +52,20 @@ data signal only. From now on, every daily run records the view in force, so its
 ## Settings for the cheap-IV ("big move") trades
 - **Budget (confirmed by the owner 2026-11-19):** at most 1% of portfolio per month on trades that can expire
   worthless. Real figure in the owner's private settings; the public copy uses a round reference figure.
-- **Structure (decided by testing):** debit spreads by default; the backtest also tries outright options and the
-  held-back results decide.
-- **Horizon (decided by testing):** the backtest compares about 30, 60 and 90 days to expiry; held-back results pick.
+- **Structure and horizon (decided by testing, 2026-11-20, `strategies/debit_spreads.toml` v1):** the live version is
+  chosen on the practice period only (best total per $1,000 among 60 / 30 / 90 days and outright options; if any has
+  fewer than 5 practice trades, keep the file as written), then judged on the unseen period.
+  Result: **debit spreads, about 60 days (45-75)**, kept by the 5-trade fallback (60 days 4 trades, 90 days 3, outright
+  4; 30 days had 7). Practice period, per $1,000: 60-day spreads +$505 (4 trades), 30 days +$507 (7), 90 days +$38 (3),
+  outright +$358 (4). Unseen: 60-day spreads +$1,308 (8 trades), 30 days -$1,831 (16), 90 days +$2,004 (6), outright
+  -$532 (8). Only the chosen version's unseen result counts.
+- **Rules:** CHEAP days only; one new trade per calendar month, none while one is open; bought leg near 0.40 delta,
+  sold leg about 25% further out, cost at most 35% of the strike gap; take profit at 2x the cost, close 10 days before
+  expiry, no stop (the most a trade can lose is its cost). Direction: bullish = call spread, bearish = put spread,
+  neutral = both at half size (one trade).
+- **Expiries (v2, 2026-11-21):** the model chain now lists only the expiries Deribit really lists for SOL (Fridays up
+  to about 15 days, this and next month-end, the next two quarter-ends). With that, 60-day spreads find an expiry in
+  fewer months: unseen 7 trades, +$1,199 per $1,000 -> not passed (needs 8). **Status: in testing** (owner, 2026-11-21).
 
 ## How each strategy is judged
 Same scorecard for all (ROADMAP step 3): trades, win rate, average and total per $1,000 risked, worst trade,

@@ -1,0 +1,136 @@
+# Strategy definition: debit spreads on CHEAP-IV days, the "big move" trades (call, put, or both).
+# Both the daily scan and the backtest read this file through engine.py. Long options lose small amounts often and
+# win occasionally: judge them over many trades, not one.
+#
+# PRE-REGISTERED: every rule, every [[variants]] entry, the version-selection rule and the pass rule below were
+# committed on their own (2026-11-20) BEFORE any result was computed. Do not tune after seeing results:
+# a change is a new version, judged on new days only.
+# Version 2 (2026-11-21) changes ONLY the backtest's expiry calendar (realism, not performance) and holds the strategy
+# in testing; trading rules, versions, selection and pass rules are unchanged. Its re-run uses the same windows as v1,
+# whose results were already seen, so it is a weaker test; new days from 2026-11-21 are the fair one.
+
+[strategy]
+name = "debit_spreads"
+title = "Debit spreads on cheap-IV days: buy a big move"
+version = 2                         # v2 (2026-11-21): model chain uses Deribit's real SOL expiry calendar; held in testing
+type = "debit_spread"               # engine path: buy the near leg, sell the far leg (or buy the near leg alone)
+budget_pool = "big_move"            # separate from the put spread's "premium" pool
+
+[entry]
+require_verdict = "CHEAP"           # only when SOL options are cheap (12-month percentile, see config.toml [vol])
+max_new_trades_per_month = 1        # at most one new big-move trade per calendar month...
+only_when_none_open = true          # ...on the first cheap day of a month when no big-move trade is still open
+
+[direction]
+# Uses the combined reading from strategies/direction.toml (data factors that passed, tilted by view.toml).
+sides = "direction"                 # "direction": bullish -> calls, bearish -> puts, neutral -> both
+                                    # "calls" / "puts" / "both": ignore the reading
+neutral_split = 0.5                 # on neutral (or "both") days each side gets this share of the budget
+# Backtest: no view was recorded before 2026-11-20, so past days use the DATA reading only (factors that passed
+# testing in data/direction_test.json; none passed at 2026-11-20, so every past day reads neutral -> both sides).
+
+[strikes]
+structure = "spread"                # "spread": buy near leg, sell far leg; "outright": buy the near leg only
+dte_target = 60                     # expiry about 60 days away...
+dte_min = 45                        # ...accept 45 to 75 days
+dte_max = 75
+long_delta = 0.40                   # bought leg near 0.40 delta (calls) / -0.40 delta (puts)
+short_offset_pct = 25               # sold leg about 25% beyond the bought strike (above for calls, below for puts)
+max_cost_pct_of_width = 35          # skip a spread that costs more than 35% of its strike width (spreads only)
+max_leg_spread_pct_of_mid = 15      # same liquidity filters as the put spread: each leg's bid-ask <= 15% of mid...
+max_leg_spread_abs_usd = 0.10       # ...OR <= this many USDC per SOL
+min_open_interest = 0               # per leg, in SOL
+max_alternates = 0
+
+[exits]
+# No stop: the most a trade can lose is what was paid for it.
+take_profit_multiple = 2.0          # sell when the spread (or option) is worth 2x what it cost; 0 = no take profit
+time_exit_dte = 10                  # close anything still open 10 days before expiry; 0 = hold to expiry
+
+[budget]
+pool = "big_move"
+reference_per_month_usd = 1000      # reference: 1% of a $100,000 reference portfolio (real figure: config.local.toml)
+# Results are per $1,000 spent (= the most that could be lost). A both-sides entry counts as ONE trade (one month's
+# budget), its two halves' results added together.
+
+[backtest]
+# Past days without a stored chain are rebuilt from that day's 30-day ATM IV (engine.synthetic_chain), calls and puts.
+expiry_weekday = 4                  # (used only without [backtest.calendar])
+max_expiry_days = 120               # (used only without [backtest.calendar])
+option_types = ["put", "call"]
+put_skew = [[0.0, 1.0], [0.10, 1.0386], [0.20, 1.1045], [0.30, 1.1894]]                  # IV/ATM at ln(F/K), puts
+call_skew = [[0.0, 1.0], [0.10, 1.0184], [0.20, 1.0782], [0.30, 1.1732], [0.40, 1.2824]]  # IV/ATM at ln(K/F), calls
+# Both skews: medians of IV / that expiry's ATM IV, expiries 25-110 days, from the stored live chains of
+# 2026-11-19 and 2026-11-20 (the only two days stored when this file was written). Held constant over history.
+half_spread = [-0.0037, 0.153, 0.01] # half bid-ask as share of price = a + b*|ln(F/K)|, floor c (as the put spread)
+fee_rate = 0.0003                   # per leg per trade: 0.03% of the underlying...
+fee_cap = 0.125                     # ...capped at 12.5% of the option price
+contract_size = 10
+direction = "data_only"             # see [direction]
+
+[backtest.calendar]
+# v2: past days are rebuilt with only the expiries Deribit actually lists for SOL (08:00 UTC), as seen in the stored
+# chains of 2026-11-19/20/21: Fridays up to about 15 days away, the last Friday of this month and next month, and the
+# last Friday of the next two quarter months (Mar, Jun, Sep, Dec). Daily expiries are left out (too short to matter).
+# v1 assumed an expiry every Friday out to 120 days, so it always found a 60-day expiry; the real list often has none.
+weekly_ahead_days = 15
+month_ends_ahead = 2
+quarter_ends_ahead = 2
+
+[evaluation]
+in_sample = ["2024-06-01", "2025-06-30"]   # same windows as strategies/bull_put_spread.toml
+held_back = ["2025-07-01", ""]             # "" = up to the last day of data
+
+[selection]
+# The version that goes live is chosen on the PRACTICE period only, never the unseen period.
+window = "in_sample"
+candidates = ["Strategy file as written", "30 days", "90 days", "Outright options instead of spreads"]
+metric = "total_per_1000"           # highest total per $1,000 wins (ties: the earlier one in this list)
+min_trades = 5                      # if ANY candidate has fewer than 5 practice trades, keep the fallback
+fallback = "Strategy file as written"
+
+[pass_rule]
+# Before it can be shown as a live idea; otherwise status = "in testing" (paper trades recorded daily).
+window = "held_back"
+min_trades = 8                      # the chosen version needs at least 8 unseen-period trades,
+total_above = 0                     # a positive total per $1,000,
+beat_weekly_buying = true           # and must beat buying SOL weekly with the SAME total money: total per $1,000 >
+                                    # trades x (weekly buying's result per $1,000 over the unseen period)
+go_live = false                     # owner decision 2026-11-21: stays "in testing" (paper trades only) even if it
+                                    # passes, until the owner sets this to true
+
+# ------------------------------------------------------------------ versions compared (in this order)
+[[variants]]
+name = "Strategy file as written"
+
+[[variants]]
+name = "30 days"
+strikes = { dte_target = 30, dte_min = 23, dte_max = 38 }
+
+[[variants]]
+name = "90 days"
+strikes = { dte_target = 90, dte_min = 68, dte_max = 113 }
+
+[[variants]]
+name = "Outright options instead of spreads"
+strikes = { structure = "outright" }
+
+[[variants]]
+name = "Calls only, whatever the direction"
+direction = { sides = "calls" }
+
+[[variants]]
+name = "Puts only, whatever the direction"
+direction = { sides = "puts" }
+
+[[variants]]
+name = "Both sides always"
+direction = { sides = "both" }
+
+[[variants]]
+name = "Hold to expiry, no take profit"
+exits = { take_profit_multiple = 0, time_exit_dte = 0 }
+
+[[variants]]
+name = "No cheap filter (any day)"
+require_verdict = ""

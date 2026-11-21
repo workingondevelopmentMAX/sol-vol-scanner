@@ -59,7 +59,9 @@ def how_to_read(bt: dict | None, st: dict | None) -> list[str]:
 
 
 def rules_summary(st: dict) -> list[str]:
-    """The strategy file's rules in plain words (bull put spread wording; a new strategy type adds its own)."""
+    """The strategy file's rules in plain words, worded for its type."""
+    if engine.strategy_type(st) == "debit_spread":
+        return rules_summary_debit(st)
     e, k, x = st["entry"], st["strikes"], st["exits"]
     need = e.get("require_verdict")
     out = [f"When it trades: only when IV is {need} (the rich/cheap gauge in config.toml)." if need
@@ -72,8 +74,30 @@ def rules_summary(st: dict) -> list[str]:
     return out
 
 
+def rules_summary_debit(st: dict) -> list[str]:
+    e, k, x, b = st["entry"], st["strikes"], st["exits"], st["budget"]
+    need = e.get("require_verdict")
+    return [(f"When it trades: only when IV is {need}" if need else "When it trades: any day")
+            + f", at most {e['max_new_trades_per_month']} new trade per calendar month, and only when no big-move trade "
+              "is still open.",
+            "Direction: from the direction reading (data factors that passed testing, tilted by your view): bullish = "
+            "call spread, bearish = put spread, neutral = both, each at half the budget.",
+            f"Strikes: an expiry about {k['dte_target']} days away ({k['dte_min']}-{k['dte_max']}); buy the "
+            f"{k['long_delta']:.2f}-delta call (or -{k['long_delta']:.2f} put), sell the strike about "
+            f"{k['short_offset_pct']}% further out; skip if it costs more than {k['max_cost_pct_of_width']}% of the "
+            "strike gap or the legs are too illiquid.",
+            "Exits: " + exits_text(x) + ". No stop: the most a trade can lose is what it cost.",
+            f"Budget: the separate big-move pool, ${b['reference_per_month_usd']:,.0f} a month (reference). A both-sides "
+            "entry counts as one trade."]
+
+
 def exits_text(x: dict) -> str:
     parts = []
+    if "take_profit_multiple" in x:                           # debit spreads
+        tp = float(x.get("take_profit_multiple", 0))
+        te = int(x.get("time_exit_dte", 0))
+        return ", ".join([f"take profit when worth {tp:g}x what it cost" if tp else "no take profit",
+                          f"close {te} days before expiry" if te else "hold to expiry"])
     tp = float(x.get("take_profit_pct", 0))
     parts.append(f"take profit when {tp:.0f}% of the credit is kept" if tp else "no take profit")
     sm = float(x.get("stop_multiple", 0))
@@ -92,8 +116,19 @@ def variant_text(name: str, settings: dict, st: dict) -> str:
         x = dict(st["exits"], **settings["exits"])
         bits.append("exits: " + exits_text(x))
     if "require_verdict" in settings:
-        bits.append("trades every day (no rich filter)" if not settings["require_verdict"]
+        bits.append("trades any day (no IV filter)" if not settings["require_verdict"]
                     else f"trades only when IV is {settings['require_verdict']}")
+    if settings.get("strikes"):
+        k = settings["strikes"]
+        if "dte_target" in k:
+            bits.append(f"expiry about {k['dte_target']} days ({k.get('dte_min')}-{k.get('dte_max')})")
+        if k.get("structure") == "outright":
+            bits.append("buys the near option alone instead of a spread")
+    if settings.get("direction"):
+        bits.append({"calls": "always buys the call side, whatever the direction",
+                     "puts": "always buys the put side, whatever the direction",
+                     "both": "always buys both sides, ignoring the direction"}.get(settings["direction"].get("sides"),
+                                                                                   "different direction rule"))
     if settings.get("one_at_a_time") is False:
         bits.append("opens a new trade every eligible day, even with others still open")
     return "Same rules, but " + "; ".join(bits) + "."
@@ -181,6 +216,19 @@ def entry_groups(trades: list[dict], lo: str, hi: str, rep: dict) -> list[dict]:
 
 
 # ------------------------------------------------------------------ one strategy
+def chart_lines(t: dict) -> list[list]:
+    """Horizontal lines for a trade's price chart: [price, label, colour token]."""
+    if t.get("sides"):                                          # debit spreads: bought and sold strikes per side
+        out = []
+        for x in t["sides"]:
+            out.append([x["Kl"], f"Bought {x['kind']} {x['Kl']:g}", "--good"])
+            if x["Ks"] is not None:
+                out.append([x["Ks"], f"Sold {x['kind']} {x['Ks']:g}", "--text-muted"])
+        return out
+    return [[t["Ks"], f"Short {t['Ks']:g}", "--rich"], [t["Kl"], f"Long {t['Kl']:g}", "--text-muted"],
+            [round(t["Ks"] - t["credit"], 4), f"Break-even {t['Ks'] - t['credit']:.2f}", "--series-rv"]]
+
+
 def trade_rows(trades: list[dict], win: dict, index_of: dict) -> list[dict]:
     rows = []
     for t in trades:
@@ -190,18 +238,29 @@ def trade_rows(trades: list[dict], win: dict, index_of: dict) -> list[dict]:
                      "window_title": dict(WINDOWS).get(k, "Before the test periods"),
                      "sol": t["S"], "move_30d_pct": c.get("sol_30d_change_pct"), "iv_percentile": c.get("iv_percentile"),
                      "verdict": c.get("verdict"), "short_strike": t["Ks"], "long_strike": t["Kl"],
-                     "break_even": round(t["Ks"] - t["credit"], 4), "expiry": t["expiry"],
+                     "strikes_text": t.get("strikes_text") or f"{t['Ks']:g}/{t['Kl']:g}",
+                     "break_even": round(t["Ks"] - t["credit"], 4) if t.get("credit") is not None else None,
+                     "expiry": t["expiry"],
                      "pnl_per_1000": t["pnl_per_1000"], "result": report.money(t["pnl_per_1000"]),
                      "loss": t["pnl_per_1000"] < 0, "exit": t["exit"], "exit_date": t["exit_date"],
                      "quotes": "real quotes" if t.get("chain") == "stored" else "model",
-                     "price_from": index_of.get(t["date"]), "price_to": index_of.get(t["exit_date"])})
+                     "price_from": index_of.get(t["date"]), "price_to": index_of.get(t["exit_date"]),
+                     "lines": chart_lines(t)})
     rows.sort(key=lambda r: r["date"], reverse=True)              # newest first
     return rows
 
 
+def paper_rows(st: dict) -> list[dict]:
+    import paper
+    import main
+    rows = [r for r in paper.read(main.PAPER_LOG or paper.PAPER_LOG) if r.get("strategy") == st["strategy"]["name"]]
+    return [{k: r.get(k) for k in ("date", "event", "status", "direction", "legs", "cost_usd", "take_profit",
+                                   "time_exit", "side", "reason", "result_per_1000")} for r in reversed(rows)]
+
+
 def strategy_section(entry: dict, bt: dict, st: dict, rep: dict, days: list[dict], index_of: dict) -> dict:
     win = bt["windows"]
-    live = report.LIVE_VARIANT
+    live = (bt.get("selection") or {}).get("chosen") or report.LIVE_VARIANT
     variants = []
     for v in bt["variants"]:                                   # the strategy file's order, as backtest.py wrote it
         variants.append({
@@ -219,7 +278,11 @@ def strategy_section(entry: dict, bt: dict, st: dict, rep: dict, days: list[dict
     n = len(live_v["trades"])
     real = sum(t.get("chain") == "stored" for t in live_v["trades"])
     return {
-        "id": entry["id"], "name": entry["name"], "anchor": f"lab-{entry['id']}",
+        "id": entry["id"], "anchor": f"lab-{Path(entry['file']).stem}",
+        "name": st["strategy"].get("title", entry["name"]) if engine.strategy_type(st) != "bull_put_spread" else entry["name"],
+        "live_label": "Chosen version" if bt.get("selection") else "Live rule",
+        "selection": bt.get("selection"), "pass": bt.get("pass"),
+        "paper": paper_rows(st) if engine.strategy_type(st) == "debit_spread" else None,
         "stamp": bt["strategy"], "rules": rules_summary(st),
         "quotes_line": f"{real} of {n} trades used real quotes; the rest use model prices built from that day's IV.",
         "windows": [{"key": k, "title": t, "label": (bt.get("window_labels") or {}).get(k, ""),
@@ -310,12 +373,18 @@ def build(cfg: dict, entries: list[dict], bts: dict, history: list[dict], latest
                "status": e["status"], "status_text": STATUS_TEXT[e["status"]], "anchor": None,
                "evidence_title": None, "note": None}
         if bt:
-            st = engine.load_strategy(ROOT / "strategies" / e["file"])
-            sec = strategy_section(e, bt, st, rep, days, index_of)
-            out["strategies"].append(sec)
+            sec = next((x for x in out["strategies"] if x["anchor"] == f"lab-{Path(e['file']).stem}"), None)
+            if sec is None:                                    # one section per strategy file
+                st = engine.load_strategy(ROOT / "strategies" / e["file"])
+                sec = strategy_section(e, bt, st, rep, days, index_of)
+                out["strategies"].append(sec)
             live = next(v for v in sec["variants"] if v["live"]) if any(v["live"] for v in sec["variants"]) \
                 else sec["variants"][0]
             row.update(anchor=sec["anchor"], evidence_title=live["evidence_title"])
+            if (sec.get("pass") or {}).get("status") == "live":
+                row["status_text"] = "Passed its test"
+            elif (sec.get("pass") or {}).get("passed"):
+                row["status_text"] = "Passed, held in testing"
         else:
             row["note"] = ("No backtest yet. " if e.get("judged_on", "standard") != "none" else "") + \
                 JUDGED_ON_TEXT[e.get("judged_on", "standard")]

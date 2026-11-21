@@ -71,7 +71,7 @@
       <div class="glance">${G.rows.map(r => `<div class="grow ${r.status}">
         <div class="gn">${r.card ? `<a href="#${r.card}">${esc(r.name)}</a>` : esc(r.name)}<span class="chip">${esc(r.status.replace("_", " "))}</span></div>
         <div class="gm">for ${esc(r.market_text)}</div>
-        <div class="gt">${esc(r.text)}${r.card ? ` <a href="#${r.card}">See the idea ↓</a>` : ""}</div></div>`).join("")}</div>
+        <div class="gt">${esc(r.text)}${r.card ? ` <a href="#${r.card}">See the idea ↓</a>` : ""}${r.status === "paper_idea" && r.lab ? ` <a href="${esc(r.lab)}">See it on the Strategy Lab →</a>` : ""}</div></div>`).join("")}</div>
       ${G.footer ? `<div class="glance-foot">${esc(G.footer)}</div>` : ""}</section>`;
   }
 
@@ -141,9 +141,39 @@
     return `<section class="card a-idea" id="idea-${esc(row.id)}"><h2><span class="step">2</span>Today's idea: ${esc(row.name.toLowerCase())}</h2>
       <div class="idea-cols"><div class="idea-left">${left}</div><div class="idea-right">${right}</div></div></section>`;
   }
+  // a debit-spread idea (strategy type "debit_spread"): legs, cost, budget, payoff curve and exit plan from Python
+  const debitPayoffs = [];
+  function debitCard(row) {
+    const S = row.suggestion, C = cardOf(row.id), hostId = `payoff-${row.id}`;
+    debitPayoffs.push([hostId, S]);
+    const left = `${S.sides.map(x => `<div class="legs"><div><b>${esc(x.name)}</b> <span class="muted">${Math.round(x.share * 100)}% of the budget</span></div>
+        <div><span class="act">Buy</span>${esc(x.long_leg.name)} <span class="muted">delta ${x.long_delta.toFixed(2)}</span></div>
+        ${x.short_leg ? `<div><span class="act">Sell</span>${esc(x.short_leg.name)}</div>` : ""}</div>
+      <div class="kv" style="margin-bottom:10px">
+        <div class="k">Expiry</div><div class="v">${x.expiry} (${Math.round(x.dte)} days)</div>
+        <div class="k">Cost</div><div class="v">${usd(x.cost)} per SOL${x.cost_pct_of_width != null ? ` (${Math.round(x.cost_pct_of_width)}% of width)` : ""}</div>
+        <div class="k">Size</div><div class="v">${x.contracts} × ${x.contract_size} SOL = ${usd(x.cost_usd)}</div>
+        <div class="k">Most it can lose</div><div class="v">${usd(x.cost_usd)} (what you pay)</div>
+        ${x.max_value_usd != null ? `<div class="k">Most it can be worth</div><div class="v">${usd(x.max_value_usd)}</div>` : ""}
+        <div class="k">Take profit when worth</div><div class="v">${x.take_profit_value != null ? usd(x.take_profit_value) + " per SOL" : "no take profit"}</div>
+        <div class="k">Close by</div><div class="v">${x.time_exit_date || "expiry"}</div></div>`).join("")}
+      <div class="kv"><div class="k">Big-move budget this month</div><div class="v">${usd(S.budget_month_usd, 0)}</div>
+        <div class="k">Left before / after this trade</div><div class="v">${usd(S.budget_left_usd, 0)} / ${usd(S.budget_left_after_usd, 0)}</div></div>
+      ${S.skipped && S.skipped.length ? `<div class="muted" style="margin-top:6px">Skipped: ${esc(S.skipped.join("; "))}</div>` : ""}
+      <div class="chart" id="${hostId}" style="margin-top:10px"></div>
+      <div class="muted">Result at expiry for the sizes above, in USD. Settles in USDC.</div>
+      <h3 class="sub" style="margin-top:12px">Exit plan</h3><ul class="rules">${S.exit_text.map(t => `<li>${esc(t)}</li>`).join("")}</ul>`;
+    const right = C ? evidenceBox(C) + forAgainst(C) + similarBox(C) : "";
+    return `<section class="card a-idea" id="idea-${esc(row.id)}"><h2><span class="step">2</span>Today's idea: ${esc(row.name.toLowerCase())}</h2>
+      <div class="idea-cols"><div class="idea-left">${left}</div><div class="idea-right">${right}</div></div></section>`;
+  }
   const rows = (L.strategies || []).filter(r => r.status === "suggested" && r.suggestion);
   const ideaRows = rows.length ? rows : (S ? [{id: "bull_put_spread", name: "Bull put spread", suggestion: S}] : []);
-  ideaRows.forEach((r, i) => { html += ideaCard(r, i === 0); });
+  let primaryDone = false;
+  ideaRows.forEach(r => {
+    if (r.suggestion.type === "debit_spread") { html += debitCard(r); return; }
+    html += ideaCard(r, !primaryDone); primaryDone = true;
+  });
   if (!ideaRows.length) {
     const W = L.why_no_trade || {market:[L.no_trade_reason], goals:[]};
     html += `<section class="card a-idea"><h2><span class="step">2</span>Today's idea</h2><div class="no-trade">No trade today</div>
@@ -355,8 +385,22 @@
   let days = 91;
   const pb = document.getElementById("pricebtn"), pl = document.getElementById("pricelegend");
   const syncPrice = () => { pb.classList.toggle("on", showPrice); pb.setAttribute("aria-pressed", showPrice); pl.hidden = !showPrice; };
+  function drawDebitPayoffs() {
+    debitPayoffs.forEach(([hostId, S]) => {
+      const host = document.getElementById(hostId); if (!host) return;
+      const f = frame(host, 190), P = S.payoff_curve;
+      const xs = P.map(p => p[0]), ys = P.map(p => p[1]).concat([0]);
+      const x0 = xs[0], x1 = xs[xs.length - 1], lo = Math.min(...ys), hi = Math.max(...ys), pad = (hi - lo) * 0.08 || 1;
+      const x = v => f.m.l + (v - x0) / (x1 - x0) * f.iw, y = v => f.m.t + (hi + pad - v) / (hi - lo + 2 * pad) * f.ih;
+      axes(f, x, y, niceTicks(lo - pad, hi + pad, 4), v => (v < 0 ? "-$" : "$") + Math.abs(v).toFixed(0), niceTicks(x0, x1, 4), v => "$" + v.toFixed(0));
+      el("line", {x1:f.m.l, x2:f.W - f.m.r, y1:y(0), y2:y(0), stroke:css("--text-muted"), "stroke-width":1}, f.svg);
+      el("line", {x1:x(S.spot), x2:x(S.spot), y1:f.m.t, y2:f.m.t + f.ih, stroke:css("--text-muted"), "stroke-dasharray":"3 3"}, f.svg);
+      el("path", {d:path(P.map(p => [x(p[0]), y(p[1])])), fill:"none", stroke:css("--series-iv"), "stroke-width":2}, f.svg);
+      hover(f, P.map(p => x(p[0])), i => `SOL ${usd(P[i][0])}<br>${usd(P[i][1], 0)}`);
+    });
+  }
   function layoutCharts() {
-    drawHistory(days); drawTerm(); drawPayoff();
+    drawHistory(days); drawTerm(); drawPayoff(); drawDebitPayoffs();
     // Desktop: term structure sits beside the history chart, so stretch it to the same height (price panel on or off)
     // Tablet: term structure sits beside the verdict instead, so match that card.
     if (window.innerWidth >= 700) {

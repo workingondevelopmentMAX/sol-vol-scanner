@@ -1,0 +1,70 @@
+{
+ "model_2025-05-01": {
+  "bearish": {
+   "cost_usd": 974.14,
+   "sides": [
+    {
+     "contracts": 10,
+     "cost": 9.7414,
+     "kind": "put",
+     "long": "SOL_USDC-27JUN25-145-P",
+     "share": 1.0,
+     "short": "SOL_USDC-27JUN25-107.5-P",
+     "take_profit_value": 19.4828,
+     "time_exit": "2025-06-18"
+    }
+   ]
+  },
+  "bullish": {
+   "cost_usd": 975.24,
+   "sides": [
+    {
+     "contracts": 17,
+     "cost": 5.7367,
+     "kind": "call",
+     "long": "SOL_USDC-27JUN25-165-C",
+     "share": 1.0,
+     "short": "SOL_USDC-27JUN25-205-C",
+     "take_profit_value": 11.4734,
+     "time_exit": "2025-06-18"
+    }
+   ]
+  },
+  "neutral": {
+   "cost_usd": 946.01,
+   "sides": [
+    {
+     "contracts": 8,
+     "cost": 5.7367,
+     "kind": "call",
+     "long": "SOL_USDC-27JUN25-165-C",
+     "share": 0.5,
+     "short": "SOL_USDC-27JUN25-205-C",
+     "take_profit_value": 11.4734,
+     "time_exit": "2025-06-18"
+    },
+    {
+     "contracts": 5,
+     "cost": 9.7414,
+     "kind": "put",
+     "long": "SOL_USDC-27JUN25-145-P",
+     "share": 0.5,
+     "short": "SOL_USDC-27JUN25-107.5-P",
+     "take_profit_value": 19.4828,
+     "time_exit": "2025-06-18"
+    }
+   ]
+  }
+ },
+ "real_2026-11-19": {
+  "bearish": {
+   "reason": "IV is cheap, but no debit spread passed the filters: put debit spread: no put expiries between 45 and 75 days."
+  },
+  "bullish": {
+   "reason": "IV is cheap, but no debit spread passed the filters: call debit spread: no call expiries between 45 and 75 days."
+  },
+  "neutral": {
+   "reason": "IV is cheap, but no debit spread passed the filters: call debit spread: no call expiries between 45 and 75 days; put debit spread: no put expiries between 45 and 75 days."
+  }
+ }
+}

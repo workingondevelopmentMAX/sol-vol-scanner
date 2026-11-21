@@ -45,7 +45,11 @@ tilted by `view.toml`. Build order:
    `strategies/direction.toml` + `direction.py`; trend, momentum, drawdown and crash/fear tested with a pass rule set in
    advance: **none passed** (crash/fear came closest: big gains after fear days, but only 2 unseen-period episodes);
    skew and term structure recording only. View and reading recorded daily. Display only.
-2. Call and put debit spreads on cheap-IV days.
+2. ~~Call and put debit spreads on cheap-IV days.~~ **Built 2026-11-20, in testing:** `strategies/debit_spreads.toml`
+   on the shared engine (pre-registered). v1 passed only because its model assumed an expiry every Friday; v2
+   (2026-11-21) uses Deribit's real SOL expiry calendar: "as written" kept (5-trade fallback), unseen 7 trades,
+   +$1,199 per $1,000 -> **not passed** (needs 8 trades), and the owner holds it in testing anyway (`go_live = false`).
+   Paper trades recorded daily from real quotes.
 3. Bear call spread and iron condor on rich-IV days.
 4. Zero-cost protective hedge.
 5. Accumulation helper, benchmarked against plain weekly buying.
@@ -53,4 +57,6 @@ tilted by `view.toml`. Build order:
   and shown on the dashboard only after passing.
 
 ## Decisions waiting on the owner
-- None right now. (The put spread exit rule was decided on 2026-11-20: stop at 2x the credit; see DECISIONS.)
+- **Put spread on the real expiry calendar (urgent).** Re-pricing the live put spread with only the expiries Deribit
+  lists turns its results from +$316 | +$111 (practice | unseen) into -$1,003 | -$349 (14 trades each). Not changed
+  yet: it needs its own pull request (new version, golden files move) and the owner's decision.
