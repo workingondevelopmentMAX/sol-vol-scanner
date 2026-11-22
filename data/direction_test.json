@@ -13,7 +13,7 @@
   ],
   "held_back": [
    "2025-07-01",
-   "2026-11-21"
+   "2026-11-22"
   ]
  },
  "horizon_days": 30,
@@ -29,9 +29,9 @@
    "periods": 13
   },
   "held_back": {
-   "days": 479,
-   "avg_move_pct": -2.25,
-   "pct_up": 46.6,
+   "days": 480,
+   "avg_move_pct": -2.31,
+   "pct_up": 46.5,
    "periods": 16
   }
  },
@@ -94,9 +94,9 @@
       "periods": 5
      },
      "neutral": {
-      "days": 125,
-      "avg_move_pct": -12.93,
-      "pct_up": 20.0,
+      "days": 126,
+      "avg_move_pct": -13.08,
+      "pct_up": 19.8,
       "periods": 10
      },
      "bearish": {
@@ -127,7 +127,7 @@
       ]
      },
      "held_back": {
-      "spread_points": -0.07,
+      "spread_points": 0.15,
       "enough_periods": true,
       "pass": false,
       "compared": [
@@ -173,9 +173,9 @@
       "periods": 12
      },
      "bearish": {
-      "days": 130,
-      "avg_move_pct": -2.38,
-      "pct_up": 49.2,
+      "days": 131,
+      "avg_move_pct": -2.6,
+      "pct_up": 48.9,
       "periods": 9
      },
      "unknown_days": 0
@@ -240,9 +240,9 @@
       "periods": 7
      },
      "neutral": {
-      "days": 174,
-      "avg_move_pct": 0.46,
-      "pct_up": 48.3,
+      "days": 175,
+      "avg_move_pct": 0.28,
+      "pct_up": 48.0,
       "periods": 10
      },
      "bearish": {
@@ -273,7 +273,7 @@
       ]
      },
      "held_back": {
-      "spread_points": 18.82,
+      "spread_points": 18.88,
       "enough_periods": false,
       "pass": false,
       "compared": [
@@ -307,9 +307,9 @@
       "periods": 2
      },
      "other": {
-      "days": 473,
-      "avg_move_pct": -2.48,
-      "pct_up": 46.1,
+      "days": 474,
+      "avg_move_pct": -2.54,
+      "pct_up": 46.0,
       "periods": 16
      },
      "unknown_days": 0
