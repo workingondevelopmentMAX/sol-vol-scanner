@@ -12,6 +12,7 @@ results were already seen (so a weaker test): "Strategy file as written" kept by
 90 days 3, outright 4 practice trades); unseen 7 trades, +$1,199 per $1,000, weekly buying with the same money
 -$2,538 -> **not passed** (needs 8 trades). Practice 4 trades, +$416. v1 for comparison: unseen 8 trades, +$1,308.
 Frozen-slice golden: 7 trades / +$1,532.5 -> 6 / +$1,419.1.
+Calendar check over more days (to 2026-11-26): month-end and quarter-end expiries match every stored day; weeklies are added irregularly (from 11-21 to 11-26 Deribit listed only two Fridays, never the one 15 days out), so the model may list one weekly Deribit has not listed yet. Debit spreads never use expiries under 23 days, so their results are unaffected; the put spread follow-up must model weeklies more carefully (its window starts at 14 days).
 **Put spread affected too, not changed yet:** its model still assumes an expiry every Friday out to 70 days. Re-priced
 on the real calendar (measured, not committed), the live 2x rule goes from 11 trades +$316 | 11 trades +$111
 (practice | unseen) to 14 trades -$1,003 | 14 trades -$349. To be handled in its own pull request with the owner.

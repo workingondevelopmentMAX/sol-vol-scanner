@@ -259,15 +259,24 @@ class ExpiryCalendar(unittest.TestCase):
     CAL = ST["backtest"]["calendar"]
 
     def test_matches_every_stored_chain(self):
+        """Month-end and quarter-end expiries (the ones 23-113 day trades use) must match Deribit exactly on every
+        stored day. Weeklies: Deribit adds them irregularly (from 2026-11-21 to 11-26 it listed only two Fridays,
+        never the one 15 days out), so the model's weeklies (up to 15 days) must contain every real weekly but may
+        include one Deribit has not listed yet. Debit spreads never use an expiry under 23 days, so that cannot
+        change their results."""
         import chain_store
         import vol_gauge
-        from datetime import date
+        from datetime import date, timedelta
         for p in sorted((ROOT / "data" / "chains").glob("*.json.gz")):
             day = p.name[:10]
+            d0 = date.fromisoformat(day)
             real = {o["expiry"] for o in vol_gauge.build_chain(chain_store.load(day))
                     if date.fromisoformat(o["expiry"]).weekday() == 4 and o["expiry"] > day}
-            model = {d.isoformat() for d in engine.listed_expiries(date.fromisoformat(day), self.CAL)}
-            self.assertEqual(model, real, day)
+            model = {d.isoformat() for d in engine.listed_expiries(d0, self.CAL)}
+            far = (d0 + timedelta(days=int(self.CAL["weekly_ahead_days"]))).isoformat()
+            self.assertEqual({e for e in model if e > far}, {e for e in real if e > far}, day)   # month/quarter ends
+            self.assertTrue({e for e in real if e <= far} <= model, day)                          # every real weekly
+            self.assertLessEqual(len({e for e in model if e <= far} - real), 1, day)              # at most one extra
 
     def test_month_and_quarter_ends(self):
         from datetime import date
