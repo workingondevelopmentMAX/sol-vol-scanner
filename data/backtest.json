@@ -8,7 +8,7 @@
  },
  "period": [
   "2024-04-21",
-  "2026-11-26"
+  "2026-11-27"
  ],
  "inputs": {
   "config.toml": "b350b2301ec0ed16f200b4bf664ca4ed4b7e19816cc704771446c5fc8b2bbab2",
@@ -20,11 +20,12 @@
   "data/chains/2026-11-24.json.gz": "5da0d216d58c16d41f3b066816c78600955f0bd283912447074e5c05c439eea8",
   "data/chains/2026-11-25.json.gz": "734dd9f30383f2c852dd3ed7166841a2a564ff3c6f51ecfcd720949de9c66e0d",
   "data/chains/2026-11-26.json.gz": "a1cc07e5de6b4cfe71db63c777ff124212454cd4ef620e302979f687ab46a4cf",
-  "data/iv_history.csv": "2d1f035cc751de97fcb84166a939ca3e6f2e84a6b61fbbfa5e813a8a9c3f2c63",
+  "data/chains/2026-11-27.json.gz": "300a551a52095dc3684dcc27cc3d95db52ee2398aefa0e6d129b7d5f97ea1ae6",
+  "data/iv_history.csv": "809a8bb3bdf8cb8d99ed50b33bc82e0efc2ea511125538337e6dd4b200535611",
   "strategies/bull_put_spread.toml": "233c7ae8c899b58da7fe480a4fff4e580ed5f3fcc2b00fa709fadae02eb26c5c"
  },
- "data_fingerprint": "0849fe553817",
- "stored_chain_days": 8,
+ "data_fingerprint": "d18391e89e65",
+ "stored_chain_days": 9,
  "windows": {
   "in_sample": [
    "2024-06-01",
@@ -32,7 +33,7 @@
   ],
   "held_back": [
    "2025-07-01",
-   "2026-11-26"
+   "2026-11-27"
   ]
  },
  "window_labels": {
@@ -122,15 +123,15 @@
      "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
-      "to": "2026-11-26",
+      "to": "2026-11-27",
       "sol_from": 149.13,
-      "sol_to": 71.4458,
-      "per_1000": -520.9
+      "sol_to": 72.2358,
+      "per_1000": -515.6
      },
      "dca_sol": {
       "buys": 74,
       "every_days": 7,
-      "per_1000": -331.9
+      "per_1000": -324.6
      }
     }
    },
@@ -756,15 +757,15 @@
      "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
-      "to": "2026-11-26",
+      "to": "2026-11-27",
       "sol_from": 149.13,
-      "sol_to": 71.4458,
-      "per_1000": -520.9
+      "sol_to": 72.2358,
+      "per_1000": -515.6
      },
      "dca_sol": {
       "buys": 74,
       "every_days": 7,
-      "per_1000": -331.9
+      "per_1000": -324.6
      }
     }
    },
@@ -1630,15 +1631,15 @@
      "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
-      "to": "2026-11-26",
+      "to": "2026-11-27",
       "sol_from": 149.13,
-      "sol_to": 71.4458,
-      "per_1000": -520.9
+      "sol_to": 72.2358,
+      "per_1000": -515.6
      },
      "dca_sol": {
       "buys": 74,
       "every_days": 7,
-      "per_1000": -331.9
+      "per_1000": -324.6
      }
     }
    },
@@ -2335,15 +2336,15 @@
      "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
-      "to": "2026-11-26",
+      "to": "2026-11-27",
       "sol_from": 149.13,
-      "sol_to": 71.4458,
-      "per_1000": -520.9
+      "sol_to": 72.2358,
+      "per_1000": -515.6
      },
      "dca_sol": {
       "buys": 74,
       "every_days": 7,
-      "per_1000": -331.9
+      "per_1000": -324.6
      }
     }
    },
@@ -2920,15 +2921,15 @@
      "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
-      "to": "2026-11-26",
+      "to": "2026-11-27",
       "sol_from": 149.13,
-      "sol_to": 71.4458,
-      "per_1000": -520.9
+      "sol_to": 72.2358,
+      "per_1000": -515.6
      },
      "dca_sol": {
       "buys": 74,
       "every_days": 7,
-      "per_1000": -331.9
+      "per_1000": -324.6
      }
     }
    },
@@ -3529,15 +3530,15 @@
      "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
-      "to": "2026-11-26",
+      "to": "2026-11-27",
       "sol_from": 149.13,
-      "sol_to": 71.4458,
-      "per_1000": -520.9
+      "sol_to": 72.2358,
+      "per_1000": -515.6
      },
      "dca_sol": {
       "buys": 74,
       "every_days": 7,
-      "per_1000": -331.9
+      "per_1000": -324.6
      }
     }
    },
@@ -4114,15 +4115,15 @@
      "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
-      "to": "2026-11-26",
+      "to": "2026-11-27",
       "sol_from": 149.13,
-      "sol_to": 71.4458,
-      "per_1000": -520.9
+      "sol_to": 72.2358,
+      "per_1000": -515.6
      },
      "dca_sol": {
       "buys": 74,
       "every_days": 7,
-      "per_1000": -331.9
+      "per_1000": -324.6
      }
     }
    },
@@ -4603,15 +4604,15 @@
      "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
-      "to": "2026-11-26",
+      "to": "2026-11-27",
       "sol_from": 149.13,
-      "sol_to": 71.4458,
-      "per_1000": -520.9
+      "sol_to": 72.2358,
+      "per_1000": -515.6
      },
      "dca_sol": {
       "buys": 74,
       "every_days": 7,
-      "per_1000": -331.9
+      "per_1000": -324.6
      }
     }
    },
@@ -5932,15 +5933,15 @@
      "by_condition_label": "What SOL did during the trade: the vol verdict on entry day and whether SOL ended the trade higher or lower. Known only afterwards, so never 'past days like today'.",
      "hold_sol": {
       "from": "2025-07-01",
-      "to": "2026-11-26",
+      "to": "2026-11-27",
       "sol_from": 149.13,
-      "sol_to": 71.4458,
-      "per_1000": -520.9
+      "sol_to": 72.2358,
+      "per_1000": -515.6
      },
      "dca_sol": {
       "buys": 74,
       "every_days": 7,
-      "per_1000": -331.9
+      "per_1000": -324.6
      }
     }
    },

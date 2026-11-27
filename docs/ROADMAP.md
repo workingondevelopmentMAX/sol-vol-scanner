@@ -49,6 +49,8 @@ tilted by `view.toml`. Build order:
    on the shared engine (pre-registered). v1 passed only because its model assumed an expiry every Friday; v2
    (2026-11-21) uses Deribit's real SOL expiry calendar: "as written" kept (5-trade fallback), unseen 7 trades,
    +$1,199 per $1,000 -> **not passed** (needs 8 trades), and the owner holds it in testing anyway (`go_live = false`).
+   2026-11-27 calendar fix (month-end on the day itself): unseen 8 trades, +$1,225 -> passes at the bare minimum;
+   still in testing (`go_live = false`), see DECISIONS 2026-11-27.
    Paper trades recorded daily from real quotes.
 3. Bear call spread and iron condor on rich-IV days.
 4. Zero-cost protective hedge.

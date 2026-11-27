@@ -156,7 +156,9 @@ def _last_friday(year: int, month: int) -> date:
 def listed_expiries(day: date, cal: dict) -> list[date]:
     """Expiry dates as Deribit lists SOL options (strategy file [backtest.calendar]): Fridays up to
     `weekly_ahead_days` away, the last Friday of the current and next `month_ends_ahead - 1` months, and the last
-    Friday of the next `quarter_ends_ahead` quarter months (Mar, Jun, Sep, Dec). Only dates after `day`."""
+    Friday of the next `quarter_ends_ahead` quarter months (Mar, Jun, Sep, Dec). Only dates after `day`.
+    A month- or quarter-end falling ON `day` still counts towards the limit: the daily check runs before that
+    expiry's 08:00 UTC close, and Deribit lists the next series only after it (seen on 2026-11-27)."""
     out = set()
     d = day
     for _ in range(int(cal["weekly_ahead_days"])):
@@ -166,16 +168,18 @@ def listed_expiries(day: date, cal: dict) -> list[date]:
     y, m, n = day.year, day.month, 0
     while n < int(cal["month_ends_ahead"]):
         lf = _last_friday(y, m)
-        if lf > day:
-            out.add(lf)
+        if lf >= day:
+            if lf > day:
+                out.add(lf)
             n += 1
         y, m = (y + 1, 1) if m == 12 else (y, m + 1)
     y, m, n = day.year, day.month, 0
     while n < int(cal["quarter_ends_ahead"]):
         if m in (3, 6, 9, 12):
             lf = _last_friday(y, m)
-            if lf > day:
-                out.add(lf)
+            if lf >= day:
+                if lf > day:
+                    out.add(lf)
                 n += 1
         y, m = (y + 1, 1) if m == 12 else (y, m + 1)
     return sorted(out)

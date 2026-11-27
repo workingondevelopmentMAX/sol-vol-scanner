@@ -2,6 +2,18 @@
 
 Newest first. Each entry: what was decided, and why. Numbers are from the analysis at the time.
 
+### 2026-11-27 · Expiry calendar: a month-end on the day itself still counts
+On 2026-11-27 (the last Friday of November) the stored chain, fetched at 02:24 UTC, still listed that day's 08:00
+expiry and did not yet list the January month-end; the model had added January a day early. The calendar rule in
+`engine.listed_expiries` now counts a month- or quarter-end falling on the day itself towards the limit (the daily
+check runs before that 08:00 close), so the model matches Deribit again. The quarter-end case is assumed to work the same
+way (not yet seen). This is a realism fix found by new data, not a tuning step, but it changes debit spread
+results, all from last-Friday entry days that now enter a day later: practice 4 trades +$416 -> 4 trades +$421; unseen
+7 trades +$1,199 -> 8 trades +$1,225 (weekly buying with the same money -$2,272 -> -$2,597). That reaches exactly the
+8-trade minimum, so the pass rule now reads "passed". Because the fix came after v2's results were seen, and the
+pass is at the bare minimum, this is weak evidence; `go_live = false` keeps it in testing either way. The put spread is
+unchanged (it has no `[backtest.calendar]`). Debit backtest golden file updated deliberately.
+
 ### 2026-11-21 · Debit spreads v2: Deribit's real expiry calendar; held in testing
 The owner chose to keep the debit spreads in testing and to make the backtest's model chain use the expiries Deribit
 really lists for SOL. Seen in the stored chains of 2026-11-19/20/21: Fridays up to about 15 days away, the last Friday

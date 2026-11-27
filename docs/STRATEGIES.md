@@ -65,7 +65,7 @@ data signal only. From now on, every daily run records the view in force, so its
   neutral = both at half size (one trade).
 - **Expiries (v2, 2026-11-21):** the model chain now lists only the expiries Deribit really lists for SOL (Fridays up
   to about 15 days, this and next month-end, the next two quarter-ends). With that, 60-day spreads find an expiry in
-  fewer months: unseen 7 trades, +$1,199 per $1,000 -> not passed (needs 8). **Status: in testing** (owner, 2026-11-21).
+  fewer months: unseen 7 trades, +$1,199 per $1,000 -> not passed (needs 8); after the 2026-11-27 calendar fix 8 trades, +$1,225 -> passes at the bare minimum. **Status: in testing** (owner, 2026-11-21).
 
 ## How each strategy is judged
 Same scorecard for all (ROADMAP step 3): trades, win rate, average and total per $1,000 risked, worst trade,
