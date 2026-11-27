@@ -170,7 +170,7 @@ class AtAGlance(unittest.TestCase):                                             
         self.assertEqual(st["bull_put_spread"]["status"], "suggested")
         self.assertEqual(st["bull_put_spread"]["card"], "idea-bull_put_spread")
         self.assertEqual(st["fair_no_trade"]["text"], "Wrong conditions today: for FAIR IV days; IV is RICH")
-        self.assertEqual(st["call_debit_spread"]["text"], "Not built yet (roadmap step 5.2)")
+        self.assertEqual(st["iron_condor"]["text"], "Not built yet (roadmap step 5.3)")
         self.assertIsNone(r["glance"]["footer"])
         self.assertEqual(len(r["cards"]), 1)
         self.assertEqual(r["banners"], [])

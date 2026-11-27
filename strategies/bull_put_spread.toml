@@ -6,6 +6,8 @@
 name = "bull_put_spread"
 title = "Bull put spread: sell rich put premium"
 version = 2                         # v2 (2026-11-20): stop moved from 1.5x to 2x the credit
+type = "bull_put_spread"            # engine path (label only, added 2026-11-20; no rule change)
+budget_pool = "premium"             # per-trade max loss + total cap in config.toml [risk]
 
 [entry]
 require_verdict = "RICH"            # only trade when IV is rich (12-month percentile, see config.toml [vol])

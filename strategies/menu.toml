@@ -10,6 +10,7 @@
 #          "owner-set"                          set by the owner
 #          "none"
 # roadmap_step: where it is built (docs/ROADMAP.md), shown while not built
+# side:    for strategy files that buy calls, puts or both (debit spreads): which side this menu row stands for
 # judged_on: the scorecard it is (or will be) judged on, from docs/STRATEGIES.md "How each strategy is judged":
 #          "standard"      the step 3 scorecard (premium and debit trades)
 #          "hedge"         how much it reduced core-holding drawdowns versus its cost
@@ -62,8 +63,10 @@ name = "Call debit spread"
 market = "cheap"
 purpose = "Cheap exposure to a big move up."
 budget = "big-move budget (1% of portfolio per month)"
-status = "not_built"
+status = "in_testing"                # live idea only while its pass rule holds (data/backtest_debit_spreads.json)
 roadmap_step = "5.2"
+file = "debit_spreads.toml"
+side = "call"
 judged_on = "standard"
 
 [[strategy]]
@@ -72,8 +75,10 @@ name = "Put debit spread"
 market = "cheap"
 purpose = "Cheap exposure to a big drop, or a cheap hedge."
 budget = "big-move budget (1% of portfolio per month)"
-status = "not_built"
+status = "in_testing"                # live idea only while its pass rule holds (data/backtest_debit_spreads.json)
 roadmap_step = "5.2"
+file = "debit_spreads.toml"
+side = "put"
 judged_on = "standard"
 
 [[strategy]]
@@ -82,8 +87,10 @@ name = "No-direction big-move trade"
 market = "cheap"
 purpose = "Paid on a large move either way (long strangle or both debit spreads)."
 budget = "big-move budget (1% of portfolio per month)"
-status = "not_built"
+status = "in_testing"                # live idea only while its pass rule holds (data/backtest_debit_spreads.json)
 roadmap_step = "5.2"
+file = "debit_spreads.toml"
+side = "both"
 judged_on = "standard"
 
 [[strategy]]

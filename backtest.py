@@ -77,6 +77,8 @@ def run(cfg: dict, st: dict, days: list[dict], one_at_a_time: bool = True, chain
             cache[day] = engine.stored_chain(day, chains_dir)
         return cache[day]
 
+    if engine.strategy_type(st) == "debit_spread":
+        return run_debit(cfg, st, days, real)
     trades, busy_until = [], ""
     need = st["entry"].get("require_verdict")
     for i, d in enumerate(days):
@@ -111,6 +113,135 @@ def run(cfg: dict, st: dict, days: list[dict], one_at_a_time: bool = True, chain
                        "S_exit": later["S"], "entry_conditions": entry_conditions(days, i)})
         busy_until = exit_day
     return trades
+
+
+# ------------------------------------------------------------------ debit spreads (big move)
+_READINGS: dict = {}
+
+
+def direction_readings(days: list[dict]) -> list[str]:
+    """The DATA direction reading for every past day (no view was recorded before 2026-11-20): the average of the
+    factors that passed testing (data/direction_test.json), each from that day and earlier only."""
+    import direction
+    passed = tuple((direction.load_test() or {}).get("passed", []))
+    key = (days[0]["date"], days[-1]["date"], len(days), passed)
+    if key not in _READINGS:
+        rules = direction.load_rules()
+        ddays = [{"date": d["date"], "S": d["S"], "iv": d["iv"]} for d in days]
+        out = []
+        for i in range(len(ddays)):
+            states = {n: direction.factor_state(rules, n, ddays, i) for n in passed}
+            out.append(direction.combine(rules, states, list(passed), {})["data_reading"])
+        _READINGS[key] = out
+    return _READINGS[key]
+
+
+def run_debit(cfg: dict, st: dict, days: list[dict], real) -> list[dict]:
+    """One big-move entry per calendar month (first eligible day, none open), every side managed to its own exit
+    with engine.manage_debit; a trade's result is per $1,000 spent, its sides' shares added together."""
+    readings = direction_readings(days)
+    need = st["entry"].get("require_verdict")
+    trades, open_until, months = [], None, set()
+    for i, d in enumerate(days):
+        if d["iv"] is None or (need and d["verdict"]["label"] != need):
+            continue
+        ok, _ = engine.debit_entry_allowed(st, d["date"], open_until, months)
+        if not ok:
+            continue
+        chain = real(d["date"])
+        source = "stored" if chain else "model"
+        if chain is None:
+            chain = engine.synthetic_chain(st, d["date"], d["S"], d["iv"])
+        dec = engine.decide(cfg, st, d["verdict"], chain, readings[i])
+        if dec["trade"] is None:
+            continue
+        legs = engine.open_debit(st, dec["trade"], d["S"])
+        done = []
+        for pos in legs:
+            result = None
+            for later in days[i + 1:]:
+                result = engine.manage_debit(st, pos, later["date"], later["S"],
+                                             later["iv"] if later["iv"] is not None else d["iv"], real(later["date"]))
+                if result:
+                    done.append((pos, result, later))
+                    break
+            if not result:
+                break
+        if len(done) < len(legs):
+            continue                                  # still open at the end of the data
+        exit_day = max(x[2]["date"] for x in done)
+        last = next(x[2] for x in done if x[2]["date"] == exit_day)
+        sides = []
+        for pos, (why, value), later in done:
+            part = pos["share"] * (value - pos["cost"]) / pos["cost"] * 1000
+            sides.append({"kind": pos["kind"], "Kl": pos["Kl"], "Ks": pos["Ks"], "share": pos["share"],
+                          "cost": round(pos["cost"], 4), "value": round(value, 4), "exit": why,
+                          "exit_date": later["date"], "pnl_per_1000": round(part, 1)})
+        first = sides[0]
+        trades.append({"date": d["date"], "S": d["S"], "expiry": legs[0]["expiry"], "direction": readings[i],
+                       "Kl": first["Kl"], "Ks": first["Ks"], "credit": None,
+                       "strikes_text": " + ".join(f"{x['kind']} {x['Kl']:g}" + (f"/{x['Ks']:g}" if x["Ks"] is not None
+                                                                                 else "") for x in sides),
+                       "sides": sides, "max_loss": 1000.0,
+                       "pnl_per_1000": round(sum(x["pnl_per_1000"] for x in sides), 1),
+                       "exit": " / ".join(dict.fromkeys(x["exit"] for x in sides)), "exit_date": exit_day,
+                       "days": (date.fromisoformat(exit_day) - date.fromisoformat(d["date"])).days,
+                       "chain": source, "verdict": d["verdict"]["label"], "S_exit": last["S"],
+                       "entry_conditions": entry_conditions(days, i)})
+        open_until, months = exit_day, months | {d["date"][:7]}
+    return trades
+
+
+def select_version(st: dict, variants: list[dict]) -> dict | None:
+    """[selection]: pick the live version on the PRACTICE period only (never the unseen period)."""
+    sel = st.get("selection")
+    if not sel:
+        return None
+    by = {v["name"]: v for v in variants}
+    rows = [{"name": n, "trades": by[n]["scorecard"][sel["window"]]["trades"],
+             "total_per_1000": by[n]["scorecard"][sel["window"]].get(sel["metric"], 0.0) if
+             by[n]["scorecard"][sel["window"]]["trades"] else 0.0} for n in sel["candidates"]]
+    few = [r["name"] for r in rows if r["trades"] < int(sel["min_trades"])]
+    if few:
+        chosen = sel["fallback"]
+        reason = (f"Kept \"{chosen}\": {', '.join(few)} had fewer than {sel['min_trades']} practice-period trades, "
+                  "so the practice period cannot choose between the versions.")
+    else:
+        best = max(rows, key=lambda r: (r["total_per_1000"], -sel["candidates"].index(r["name"])))
+        chosen = best["name"]
+        reason = (f"\"{chosen}\" had the best practice-period total ({best['total_per_1000']:+,.0f} per $1,000 over "
+                  f"{best['trades']} trades) among {', '.join(sel['candidates'])}.")
+    return {"chosen": chosen, "reason": reason, "window": sel["window"], "candidates": rows,
+            "rule": (f"Chosen on the practice period only: best total per $1,000 among {', '.join(sel['candidates'])}; "
+                     f"if any has fewer than {sel['min_trades']} practice trades, keep \"{sel['fallback']}\".")}
+
+
+def pass_check(st: dict, variants: list[dict], chosen: str | None) -> dict | None:
+    """[pass_rule] on the unseen period for the chosen version: trades, positive total, beats weekly buying with the
+    same total money (trades x weekly buying's result per $1,000)."""
+    pr = st.get("pass_rule")
+    if not pr or not chosen:
+        return None
+    v = next(x for x in variants if x["name"] == chosen)
+    sc = v["scorecard"][pr["window"]]
+    n, total = sc["trades"], (sc.get("total_per_1000") or 0.0) if sc["trades"] else 0.0
+    dca = (sc.get("dca_sol") or {}).get("per_1000")
+    same_money = None if dca is None else round(n * dca, 1)
+    checks = {"min_trades": n >= int(pr["min_trades"]), "positive": total > float(pr["total_above"]),
+              "beats_weekly": (not pr.get("beat_weekly_buying")) or (same_money is not None and total > same_money)}
+    ok = all(checks.values())
+    go_live = bool(pr.get("go_live", True))
+    text = (f"Unseen period, \"{chosen}\": {n} trades (needs at least {pr['min_trades']}), total "
+            f"{total:+,.0f} per $1,000 (needs above {pr['total_above']:g}), weekly buying with the same money "
+            + ("n/a" if same_money is None else f"{same_money:+,.0f}") + " (must beat it). "
+            + (("PASSED: it can be shown as a live idea." if go_live else
+                "PASSED, but held \"in testing\" by the owner's decision (go_live = false): paper trades only.")
+               if ok else "Not passed: stays \"in testing\" and records paper trades every day."))
+    return {"chosen": chosen, "trades": n, "total_per_1000": total, "weekly_same_money": same_money,
+            "checks": checks, "passed": ok, "go_live": go_live,
+            "status": "live" if ok and go_live else "in_testing", "text": text,
+            "rule": (f"At least {pr['min_trades']} unseen-period trades, a total above {pr['total_above']:g} per $1,000, "
+                     "and better than buying SOL weekly with the same total money.")}
 
 
 def summarise(trades: list[dict]) -> dict:
@@ -231,10 +362,10 @@ def evidence(sc: dict, report_cfg: dict) -> dict:
     return {"label": label, "thin": thin, "held_back_trades": n, "thin_below": thin_below, "text": text}
 
 
-def input_files(strategy_path, history_path, chains_dir, days) -> tuple[dict, str]:
+def input_files(strategy_path, history_path, chains_dir, days, extra=()) -> tuple[dict, str]:
     """SHA-256 of every file the backtest reads, and one short fingerprint of the data files."""
     chains = [chain_store.path_for(d, chains_dir) for d in stored_days(days, chains_dir)]
-    fps = chain_store.fingerprints([main.CONFIG, strategy_path, history_path, *chains])
+    fps = chain_store.fingerprints([main.CONFIG, strategy_path, history_path, *chains, *extra])
     data = {k: v for k, v in fps.items() if k not in chain_store.fingerprints([main.CONFIG, strategy_path])}
     return fps, chain_store.combined(data)
 
@@ -246,7 +377,11 @@ def run_all(strategy_path=None, quiet=False, history_path=None, chains_dir=None)
     cfg = main.load_config(strategy_path, local=False)
     st = cfg["_strategy"]
     days = load_days(cfg, history_path)
-    inputs, data_fp = input_files(strategy_path, history_path, chains_dir, days)
+    extra = ()
+    if engine.strategy_type(st) == "debit_spread":                 # it reads the direction rules and test too
+        import direction
+        extra = (direction.RULES, direction.TEST_OUT)
+    inputs, data_fp = input_files(strategy_path, history_path, chains_dir, days, extra)
     out = {"strategy": st["_stamp"], "period": [days[0]["date"], days[-1]["date"]],
            "inputs": inputs, "data_fingerprint": data_fp,
            "stored_chain_days": len(stored_days(days, chains_dir))}
@@ -263,7 +398,14 @@ def run_all(strategy_path=None, quiet=False, history_path=None, chains_dir=None)
         sc = {k: scorecard(trades, days, *win[k]) for k in ("in_sample", "held_back")}
         out["variants"].append({"name": v["name"], "settings": v["settings"], "scorecard": sc,
                                 "evidence": evidence(sc, cfg["report"]), "trades": trades})
+    sel = select_version(st, out["variants"])
+    if sel:
+        out["selection"] = sel
+        out["pass"] = pass_check(st, out["variants"], sel["chosen"])
     say(report(out))
+    if sel:
+        say(sel["reason"])
+        say(out["pass"]["text"])
     return out
 
 
@@ -329,9 +471,15 @@ def publish(res: dict, site_data: Path = SITE_DATA) -> dict:
     return pub
 
 
+def out_path(strategy_path=None) -> Path:
+    """data/backtest.json for the default strategy (the put spread), data/backtest_<name>.json for the others."""
+    p = Path(strategy_path or engine.DEFAULT_STRATEGY)
+    return OUT if p.resolve() == engine.DEFAULT_STRATEGY.resolve() else ROOT / "data" / f"backtest_{p.stem}.json"
+
+
 if __name__ == "__main__":   # python backtest.py [strategy file] [--publish]
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     res = run_all(args[0] if args else None)
-    OUT.write_bytes(dumps(res).encode("utf-8"))
-    if "--publish" in sys.argv:
+    out_path(args[0] if args else None).write_bytes(dumps(res).encode("utf-8"))
+    if "--publish" in sys.argv and out_path(args[0] if args else None) == OUT:   # site evidence = default strategy
         print(publish(res)["rules_check"]["note"])

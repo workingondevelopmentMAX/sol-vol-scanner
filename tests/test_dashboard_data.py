@@ -90,7 +90,7 @@ class MenuStatuses(unittest.TestCase):
         self.assertEqual(s["bull_put_spread"]["status"], "not_eligible")
         self.assertEqual(s["bull_put_spread"]["reason"], "IV is FAIR; this strategy is for RICH days.")
         self.assertEqual(s["fair_no_trade"]["status"], "suggested")
-        self.assertEqual(s["call_debit_spread"]["reason"], "Not built yet: step 5.2 on the roadmap.")
+        self.assertEqual(s["iron_condor"]["reason"], "Not built yet: step 5.3 on the roadmap.")
 
     def test_rich_day_without_a_trade(self):
         s = self.by_id("RICH")

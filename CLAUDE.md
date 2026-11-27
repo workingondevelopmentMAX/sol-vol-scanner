@@ -53,11 +53,13 @@ The owner reviews outcomes, not code. In every session and pull request:
 | Path | Role |
 |---|---|
 | `main.py` | Daily entry point: fetch, analyse, write history/log/dashboard data. `--sample` runs offline, `--backfill` fills past IV |
-| `engine.py` | The decision engine: `decide()`, `exit_plan()`, `synthetic_chain()`, `manage()`, `open_position()` |
+| `engine.py` | The decision engine for every strategy type (`type` in the strategy file): `decide()`, `exit_plan()`, `synthetic_chain()`, `manage()`/`manage_debit()`, `open_position()`/`open_debit()` |
 | `strategies/bull_put_spread.toml` | Put spread rules: entry, strikes, filters, exits, backtest pricing; `[evaluation]` windows and `[[variants]]` to compare |
 | `strategies/direction.toml` | Direction rules (factors, view tilt, pass test set in advance); versioned and fingerprinted; display only for now |
 | `direction.py` | Direction factors (no look-ahead), the pass test (`python direction.py` -> `data/direction_test.json`), today's reading, daily recording |
 | `data/view_history.csv`, `data/direction_history.csv` | The owner's view and the direction reading, one row per UTC day (first run wins; public, so no private notes) |
+| `strategies/debit_spreads.toml` | Debit spreads on cheap-IV days (call / put / both by direction), "big move" budget pool; pre-registered selection and pass rules |
+| `paper.py`, `logs/paper_trades.csv` | Paper trades for strategies in testing: one open row, one close row per side, one no-entry row per day; append-only |
 | `strategies/menu.toml` | The agreed strategy menu (docs/STRATEGIES.md) with status; display only, never changes a decision |
 | `report.py` | The daily page's explanations (at a glance, evidence box, cautions, similar past days): numbers + templates, display only; `python report.py` refreshes them after the backtest |
 | `strategy_menu.py` | Loads the menu and turns today's verdict and the scan's result into one status per strategy (templates) |
@@ -84,10 +86,14 @@ python main.py --sample                # offline run on stored sample data
 python main.py                         # live run (needs internet access to deribit.com)
 python backtest.py                     # backtest the default strategy file
 python backtest.py --publish           # ...and publish it to site/data/ (the daily job does this)
+python backtest.py strategies/debit_spreads.toml   # another strategy file -> data/backtest_debit_spreads.json
 ```
 Python 3.11+ standard library only. No pip installs.
 
 ## Data notes
+- Deribit lists SOL expiries only about 15 days out weekly, plus this and next month-end and the next two quarter-ends.
+  Strategy files with `[backtest.calendar]` (debit spreads v2) model only those; files without it (the put spread,
+  for now) still assume an expiry every Friday, which flatters their backtest (see DECISIONS 2026-11-21).
 - Deribit publishes no SOL volatility index (the `get_volatility_index_data` currencies are BTC, ETH, USDC, USDT, EURR).
 - The backtest uses a stored real chain (`data/chains/`) on days that have one, the model chain otherwise. It
   reads only committed files (never `config.local.toml`) and has no timestamps: same files, byte-identical output.

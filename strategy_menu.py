@@ -18,9 +18,10 @@ MENU = ROOT / "strategies" / "menu.toml"
 
 MARKETS = {"rich", "cheap", "fair", "any"}
 STATUSES = {"live", "in_testing", "not_built"}
+SIDES = {"call", "put", "both"}
 BUDGETS = {"premium caps", "big-move budget (1% of portfolio per month)", "core-holding share", "owner-set", "none"}
 JUDGED_ON = {"standard", "hedge", "accumulation", "none"}
-FIELDS = {"id", "name", "market", "purpose", "budget", "status", "file", "roadmap_step", "judged_on"}
+FIELDS = {"id", "name", "market", "purpose", "budget", "status", "file", "roadmap_step", "judged_on", "side"}
 
 
 def load(path: Path | str = MENU) -> list[dict]:
@@ -48,6 +49,8 @@ def load(path: Path | str = MENU) -> list[dict]:
             raise ValueError(f"{where}: budget must be one of {sorted(BUDGETS)}")
         if e.get("file") and not (Path(path).parent / e["file"]).exists():
             raise ValueError(f"{where}: strategy file {e['file']} does not exist")
+        if e.get("side") and e["side"] not in SIDES:
+            raise ValueError(f"{where}: side must be one of {sorted(SIDES)}")
         if e["status"] != "live" and not e.get("roadmap_step"):
             raise ValueError(f"{where}: an entry that is not live needs a roadmap_step")
     if not entries:
@@ -69,6 +72,7 @@ def statuses(entries: list[dict], verdict_label: str | None, ran: dict) -> list[
     for e in entries:
         row = {k: e.get(k) for k in ("id", "name", "market", "purpose", "budget", "file", "roadmap_step")}
         row["menu_status"] = e["status"]
+        row["side"] = e.get("side")
         row["strategy"] = None
         row["suggestion"] = None
         r = ran.get(e.get("file")) if e.get("file") else None
@@ -77,6 +81,8 @@ def statuses(entries: list[dict], verdict_label: str | None, ran: dict) -> list[
         if e["status"] == "not_built":
             row["status"] = "not_built"
             row["reason"] = f"Not built yet: step {e['roadmap_step']} on the roadmap."
+        elif r and r.get("debit") is not None and e.get("side"):
+            _debit_row(row, e, r["debit"], shown)
         elif e["status"] == "in_testing":
             row["status"] = "not_built"
             row["reason"] = (f"In testing (step {e['roadmap_step']} on the roadmap): "
@@ -105,3 +111,31 @@ def statuses(entries: list[dict], verdict_label: str | None, ran: dict) -> list[
             row["reason"] = r["no_trade_reason"] or "No trade passed the rules today."
         out.append(row)
     return out
+
+
+READING_SIDE = {"bullish": "call", "bearish": "put", "neutral": "both"}
+
+
+def _debit_row(row: dict, e: dict, d: dict, shown: str) -> None:
+    """Debit spreads: one strategy file, three menu rows (call / put / both). The row whose side matches today's
+    trade shows it: a live idea while the pass rule holds, otherwise a paper idea (in testing)."""
+    if d["reason"] and not d["trade"]:
+        verdict_issue = d["reason"].startswith("IV is ")
+        row["status"] = "not_eligible" if verdict_issue else "no_trade"
+        row["reason"] = d["reason"]
+        return
+    v = d["view"]
+    today_side = READING_SIDE.get(v["direction"], "both")
+    if e["side"] != today_side:
+        row["status"] = "not_eligible"
+        row["reason"] = (f"Direction reading is {v['direction']}: today's big-move trade is the "
+                         + {"call": "call debit spread", "put": "put debit spread",
+                            "both": "no-direction trade (both sides)"}[today_side] + ".")
+        return
+    if d["status"] == "live":
+        row["status"] = "suggested"
+        row["reason"] = f"IV is {shown}, direction {v['direction']}: today's idea passed every rule in {e['file']}."
+        row["suggestion"] = v
+    else:
+        row["status"] = "paper_idea"
+        row["reason"] = "In testing: paper trade recorded."
